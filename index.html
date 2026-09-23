@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.6.3">
+  <meta name="application-version" content="0.7.0">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -198,6 +198,8 @@
     .feed-heading { padding-top: 24px; border-top: 1px solid #ffffff16; }
     .submission-card { margin-top: 14px; }
     .submission-meta { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+    .review-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .review-result { color: var(--muted); font-size: 13px; }
     .version-stamp { margin: 18px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
     @media (max-width: 780px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -249,7 +251,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.6.3</p>
+      <p class="version-stamp">Lockspace v0.7.0</p>
     </section>
   </main>
 
@@ -339,7 +341,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.6.3</p>
+      <p class="version-stamp">Lockspace v0.7.0</p>
     </form>
   </main>
 
@@ -368,7 +370,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.6.3</p>
+    <p class="version-stamp">Lockspace v0.7.0</p>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -390,7 +392,7 @@
         </form>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.6.3</p>
+    <p class="version-stamp">Lockspace v0.7.0</p>
   </main>
 
   <dialog id="birthDateDialog" class="calendar-dialog">
@@ -405,7 +407,7 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.6.3";
+    const APP_VERSION = "0.7.0";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
@@ -422,7 +424,8 @@
       member: null,
       pendingCredentials: null,
       previewUrl: "",
-      posts: []
+      posts: [],
+      reviews: []
     };
 
     const authPage = document.getElementById("authPage");
@@ -764,8 +767,9 @@
     }
 
     async function loadSubmissions() {
-      const snapshot = await getDocs(collection(db, "submissions"));
+      const [snapshot, reviewSnapshot] = await Promise.all([getDocs(collection(db, "submissions")), getDocs(collection(db, "reviews"))]);
       state.posts = snapshot.docs.map(item => ({ id: item.id, ...item.data() })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+      state.reviews = reviewSnapshot.docs.map(item => ({ id: item.id, ...item.data() }));
       renderFeed();
     }
 
@@ -776,6 +780,15 @@
         return;
       }
       feed.innerHTML = state.posts.map(post => {
+        const reviews = state.reviews.filter(review => review.submissionId === post.id);
+        const approved = reviews.filter(review => review.decision === "approved").length;
+        const rejected = reviews.filter(review => review.decision === "rejected").length;
+        const mine = reviews.find(review => review.reviewerId === state.member.uid);
+        const reviewControls = post.ownerId === state.member.uid
+          ? `<span class="review-result">通過 ${approved} · 駁回 ${rejected}</span>`
+          : mine
+            ? `<span class="review-result">你已${mine.decision === "approved" ? "通過" : "駁回"}此任務 · 通過 ${approved} · 駁回 ${rejected}</span>`
+            : `<button class="button primary" type="button" data-review="approved" data-submission="${escapeHtml(post.id)}">通過</button><button class="button danger" type="button" data-review="rejected" data-submission="${escapeHtml(post.id)}">駁回</button>`;
         return `<article class="submission-card">
           <div class="submission-meta">
             <strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong>
@@ -783,10 +796,28 @@
           </div>
           <div class="public-details"><span>任務碼 ${escapeHtml(post.taskCode || "—")}</span></div>
           <figure class="preview-frame"><img src="${post.imageDataUrl}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片"></figure>
-          <button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button>
+          <div class="review-actions">${reviewControls}<button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button></div>
         </article>`;
       }).join("");
+      feed.querySelectorAll("[data-review]").forEach(button => button.addEventListener("click", () => reviewSubmission(button)));
       feed.querySelectorAll("[data-report]").forEach(button => button.addEventListener("click", () => reportSubmission(button)));
+    }
+
+    async function reviewSubmission(button) {
+      button.disabled = true;
+      const submissionId = button.dataset.submission;
+      try {
+        await setDoc(doc(db, "reviews", `${submissionId}_${state.member.uid}`), {
+          submissionId,
+          reviewerId: state.member.uid,
+          decision: button.dataset.review,
+          createdAt: new Date().toISOString()
+        });
+        await loadSubmissions();
+      } catch {
+        button.disabled = false;
+        alert("無法送出審核，請稍後再試。");
+      }
     }
 
     async function reportSubmission(button) {
