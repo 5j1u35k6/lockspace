@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.5.0">
+  <meta name="application-version" content="0.6.0">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -95,8 +95,6 @@
       padding-right: 38px;
     }
     select option { background: var(--panel-2); color: var(--text); }
-    input[type="date"] { color-scheme: dark; accent-color: var(--lime); }
-    input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(88%) sepia(72%) saturate(430%) hue-rotate(35deg); }
     input[type="file"] { padding: 7px; }
     input[type="file"]::file-selector-button {
       margin-right: 10px;
@@ -135,6 +133,24 @@
     .check-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: #d6d3dd; font-size: 14px; }
     .check-row input { width: 18px; height: 18px; flex: none; margin: 0; accent-color: var(--lime); }
     .field-help { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 500; }
+    .custom-select { position: relative; margin-top: 6px; }
+    .select-trigger, .date-trigger { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 5px; background: #101017; color: var(--text); text-align: left; }
+    .select-trigger::after { content: "▾"; color: var(--lime); }
+    .select-trigger[aria-expanded="true"], .date-trigger[aria-expanded="true"] { border-color: var(--lime); box-shadow: 0 0 0 2px #b6ff701c; }
+    .option-menu { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px; border: 1px solid #b6ff7055; border-radius: 6px; background: var(--panel-2); box-shadow: 0 16px 36px #000b; }
+    .option-menu button { min-height: 40px; padding: 8px 10px; border: 1px solid transparent; border-radius: 4px; background: #ffffff08; color: var(--text); text-align: left; }
+    .option-menu button:hover, .option-menu button[aria-selected="true"] { border-color: var(--lime); background: #b6ff7014; color: var(--lime); }
+    .calendar-dialog { width: min(420px, calc(100% - 28px)); padding: 0; border: 1px solid #b6ff704d; border-radius: 8px; background: var(--panel); color: var(--text); }
+    .calendar-dialog::backdrop { background: #000c; }
+    .calendar-head { display: grid; grid-template-columns: 42px 1fr 42px; gap: 8px; align-items: center; padding: 14px; border-bottom: 1px solid #ffffff16; }
+    .calendar-head input { margin: 0; text-align: center; border-color: #b6ff7040; }
+    .calendar-week, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+    .calendar-week { padding: 12px 14px 4px; color: var(--muted); font-size: 12px; text-align: center; }
+    .calendar-grid { padding: 8px 14px 14px; }
+    .calendar-day { aspect-ratio: 1; border: 1px solid transparent; border-radius: 4px; background: #ffffff08; color: var(--text); }
+    .calendar-day:hover, .calendar-day.selected { border-color: var(--lime); color: var(--lime); background: #b6ff7014; }
+    .calendar-day:disabled { opacity: .25; cursor: not-allowed; }
+    .calendar-actions { display: flex; justify-content: flex-end; padding: 0 14px 14px; }
     .error { color: #ffb0bf; background: #ff617510; border: 1px solid #ff617538; padding: 11px 13px; border-radius: 11px; font-size: 14px; }
     .fineprint { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
     .site-shell { max-width: 1280px; margin: auto; padding: 22px 30px 60px; }
@@ -233,7 +249,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.5.0</p>
+      <p class="version-stamp">Lockspace v0.6.0</p>
     </section>
   </main>
 
@@ -251,7 +267,8 @@
             <input name="displayName" required maxlength="32">
           </label>
           <label>生日
-            <input name="birthDate" type="date" required>
+            <input name="birthDate" type="hidden">
+            <button id="birthDateButton" class="date-trigger" type="button" aria-expanded="false"><span>選擇出生日期</span><b>日曆</b></button>
             <span class="field-help">僅開放年滿 18 歲的出生日期。</span>
           </label>
           <label>身高 <span class="public-tag">公開</span>
@@ -261,16 +278,10 @@
             <span class="input-with-unit"><input name="weightKg" type="number" min="0" max="400" step="0.1"><span>kg</span></span>
           </label>
           <label>膚色 <span class="public-tag">公開</span>
-            <select name="skinTone" required>
-              <option value="">請選擇</option>
-              <option>白皙</option><option>偏白</option><option>自然</option><option>小麥</option><option>棕色</option><option>深色</option>
-            </select>
+            <span class="custom-select" data-custom-select="skinTone"><input name="skinTone" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="白皙">白皙</button><button type="button" data-value="偏白">偏白</button><button type="button" data-value="自然">自然</button><button type="button" data-value="小麥">小麥</button><button type="button" data-value="棕色">棕色</button><button type="button" data-value="深色">深色</button></span></span>
           </label>
           <label>身材 <span class="public-tag">公開</span>
-            <select name="bodyType" required>
-              <option value="">請選擇</option>
-              <option>纖細</option><option>精實</option><option>標準</option><option>壯碩</option><option>微肉</option><option>豐滿</option>
-            </select>
+            <span class="custom-select" data-custom-select="bodyType"><input name="bodyType" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="纖細">纖細</button><button type="button" data-value="精實">精實</button><button type="button" data-value="標準">標準</button><button type="button" data-value="壯碩">壯碩</button><button type="button" data-value="微肉">微肉</button><button type="button" data-value="豐滿">豐滿</button></span></span>
           </label>
         </div>
       </div>
@@ -330,7 +341,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.5.0</p>
+      <p class="version-stamp">Lockspace v0.6.0</p>
     </form>
   </main>
 
@@ -386,15 +397,22 @@
         <div id="feed"></div>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.5.0</p>
+    <p class="version-stamp">Lockspace v0.6.0</p>
   </main>
+
+  <dialog id="birthDateDialog" class="calendar-dialog">
+    <div class="calendar-head"><button id="calendarPrev" class="button" type="button" aria-label="上個月">‹</button><input id="calendarMonth" aria-label="年份與月份"><button id="calendarNext" class="button" type="button" aria-label="下個月">›</button></div>
+    <div class="calendar-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+    <div id="calendarGrid" class="calendar-grid"></div>
+    <div class="calendar-actions"><button id="calendarClose" class="button" type="button">取消</button></div>
+  </dialog>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.5.0";
+    const APP_VERSION = "0.6.0";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
@@ -424,7 +442,11 @@
     const signupTab = document.getElementById("signupTab");
     const adultCutoff = new Date();
     adultCutoff.setFullYear(adultCutoff.getFullYear() - 18);
-    profileForm.elements.birthDate.max = adultCutoff.toISOString().slice(0, 10);
+    let calendarYear = adultCutoff.getFullYear();
+    let calendarMonth = adultCutoff.getMonth();
+
+    setupCustomSelects();
+    setupBirthDatePicker();
 
     loginTab.addEventListener("click", () => setAuthMode("login"));
     signupTab.addEventListener("click", () => setAuthMode("signup"));
@@ -458,6 +480,7 @@
       }
       state.pendingCredentials = { account: data.account, password: data.password };
       profileForm.reset();
+      syncCustomFields();
       profileForm.elements.birthProof.required = true;
       profileForm.elements.displayName.value = String(data.account).split("@")[0];
       showOnly(registrationPage);
@@ -468,6 +491,10 @@
       const profile = Object.fromEntries(new FormData(profileForm).entries());
       if (!profile.birthDate || new Date(`${profile.birthDate}T00:00:00`) > adultCutoff) {
         alert("註冊者必須年滿 18 歲。");
+        return;
+      }
+      if (!profile.skinTone || !profile.bodyType) {
+        alert("請選擇膚色與身材。");
         return;
       }
       const submitButton = profileForm.querySelector('button[type="submit"]');
@@ -572,7 +599,101 @@
       profileForm.elements.publicDataConsent.checked = true;
       profileForm.elements.proofRedacted.checked = true;
       profileForm.elements.birthProof.required = false;
+      syncCustomFields();
       showOnly(registrationPage);
+    }
+
+    function setupCustomSelects() {
+      document.querySelectorAll("[data-custom-select]").forEach(select => {
+        const trigger = select.querySelector(".select-trigger");
+        const menu = select.querySelector(".option-menu");
+        const input = select.querySelector('input[type="hidden"]');
+        trigger.addEventListener("click", event => {
+          event.stopPropagation();
+          document.querySelectorAll(".option-menu").forEach(other => { if (other !== menu) other.classList.add("hidden"); });
+          menu.classList.toggle("hidden");
+          trigger.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
+        });
+        menu.querySelectorAll("[data-value]").forEach(option => option.addEventListener("click", () => {
+          input.value = option.dataset.value;
+          trigger.querySelector("span").textContent = option.dataset.value;
+          menu.querySelectorAll("[data-value]").forEach(item => item.setAttribute("aria-selected", String(item === option)));
+          menu.classList.add("hidden");
+          trigger.setAttribute("aria-expanded", "false");
+        }));
+      });
+      document.addEventListener("click", () => document.querySelectorAll("[data-custom-select]").forEach(select => {
+        select.querySelector(".option-menu").classList.add("hidden");
+        select.querySelector(".select-trigger").setAttribute("aria-expanded", "false");
+      }));
+    }
+
+    function syncCustomFields() {
+      document.querySelectorAll("[data-custom-select]").forEach(select => {
+        const value = select.querySelector('input[type="hidden"]').value;
+        select.querySelector(".select-trigger span").textContent = value || "請選擇";
+        select.querySelectorAll("[data-value]").forEach(item => item.setAttribute("aria-selected", String(item.dataset.value === value)));
+      });
+      const value = profileForm.elements.birthDate.value;
+      document.querySelector("#birthDateButton span").textContent = value || "選擇出生日期";
+    }
+
+    function setupBirthDatePicker() {
+      const dialog = document.getElementById("birthDateDialog");
+      const monthInput = document.getElementById("calendarMonth");
+      document.getElementById("birthDateButton").addEventListener("click", () => {
+        const selected = profileForm.elements.birthDate.value;
+        if (selected) {
+          const [year, month] = selected.split("-").map(Number);
+          calendarYear = year;
+          calendarMonth = month - 1;
+        }
+        renderCalendar();
+        dialog.showModal();
+        document.getElementById("birthDateButton").setAttribute("aria-expanded", "true");
+      });
+      document.getElementById("calendarClose").addEventListener("click", () => dialog.close());
+      dialog.addEventListener("close", () => document.getElementById("birthDateButton").setAttribute("aria-expanded", "false"));
+      document.getElementById("calendarPrev").addEventListener("click", () => changeMonth(-1));
+      document.getElementById("calendarNext").addEventListener("click", () => changeMonth(1));
+      monthInput.addEventListener("change", () => {
+        const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(monthInput.value);
+        if (!match) return renderCalendar();
+        calendarYear = Number(match[1]);
+        calendarMonth = Number(match[2]) - 1;
+        if (new Date(calendarYear, calendarMonth, 1) > adultCutoff) {
+          calendarYear = adultCutoff.getFullYear();
+          calendarMonth = adultCutoff.getMonth();
+        }
+        renderCalendar();
+      });
+    }
+
+    function changeMonth(delta) {
+      const next = new Date(calendarYear, calendarMonth + delta, 1);
+      if (next > adultCutoff) return;
+      calendarYear = next.getFullYear();
+      calendarMonth = next.getMonth();
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      document.getElementById("calendarMonth").value = `${calendarYear}-${String(calendarMonth + 1).padStart(2, "0")}`;
+      const grid = document.getElementById("calendarGrid");
+      const firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
+      const days = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+      const selected = profileForm.elements.birthDate.value;
+      grid.innerHTML = `${'<span></span>'.repeat(firstDay)}${Array.from({ length: days }, (_, index) => {
+        const day = index + 1;
+        const value = `${calendarYear}-${String(calendarMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        const disabled = new Date(`${value}T00:00:00`) > adultCutoff;
+        return `<button class="calendar-day${value === selected ? " selected" : ""}" type="button" data-date="${value}"${disabled ? " disabled" : ""}>${day}</button>`;
+      }).join("")}`;
+      grid.querySelectorAll("[data-date]").forEach(button => button.addEventListener("click", () => {
+        profileForm.elements.birthDate.value = button.dataset.date;
+        document.querySelector("#birthDateButton span").textContent = button.dataset.date;
+        document.getElementById("birthDateDialog").close();
+      }));
     }
 
     async function logout() {
@@ -659,8 +780,27 @@
           </div>
           <div class="public-details"><span>任務碼 ${escapeHtml(post.taskCode || "—")}</span></div>
           <figure class="preview-frame"><img src="${post.imageDataUrl}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片"></figure>
+          <button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button>
         </article>`;
       }).join("");
+      feed.querySelectorAll("[data-report]").forEach(button => button.addEventListener("click", () => reportSubmission(button)));
+    }
+
+    async function reportSubmission(button) {
+      button.disabled = true;
+      try {
+        const submissionId = button.dataset.report;
+        await setDoc(doc(db, "reports", `${submissionId}_${state.member.uid}`), {
+          submissionId,
+          reporterId: state.member.uid,
+          createdAt: new Date().toISOString(),
+          status: "open"
+        });
+        button.textContent = "已送出檢舉";
+      } catch {
+        button.disabled = false;
+        button.textContent = "檢舉失敗，請重試";
+      }
     }
 
     async function watermark(file) {
