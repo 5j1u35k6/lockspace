@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.6.2">
+  <meta name="application-version" content="0.6.3">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -249,7 +249,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.6.2</p>
+      <p class="version-stamp">Lockspace v0.6.3</p>
     </section>
   </main>
 
@@ -315,10 +315,10 @@
             <span class="input-with-unit"><input name="ringDiameterMm" type="number" min="0" max="200" step="0.1"><span>mm</span></span>
           </label>
           <label>材質
-            <select name="lockMaterial"><option value="">請選擇</option><option>樹脂</option><option>不鏽鋼</option><option>鈦</option><option>矽膠</option><option>其他</option></select>
+            <span class="custom-select" data-custom-select="lockMaterial"><input name="lockMaterial" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="樹脂">樹脂</button><button type="button" data-value="不鏽鋼">不鏽鋼</button><button type="button" data-value="鈦">鈦</button><button type="button" data-value="矽膠">矽膠</button><button type="button" data-value="其他">其他</button></span></span>
           </label>
           <label>鎖定方式
-            <select name="lockingMethod"><option value="">請選擇</option><option>掛鎖</option><option>內嵌鎖</option><option>一次性編號鎖</option><option>其他</option></select>
+            <span class="custom-select" data-custom-select="lockingMethod"><input name="lockingMethod" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="掛鎖">掛鎖</button><button type="button" data-value="內嵌鎖">內嵌鎖</button><button type="button" data-value="一次性編號鎖">一次性編號鎖</button><button type="button" data-value="其他">其他</button></span></span>
           </label>
         </div>
       </div>
@@ -339,7 +339,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.6.2</p>
+      <p class="version-stamp">Lockspace v0.6.3</p>
     </form>
   </main>
 
@@ -368,7 +368,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.6.2</p>
+    <p class="version-stamp">Lockspace v0.6.3</p>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -390,7 +390,7 @@
         </form>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.6.2</p>
+    <p class="version-stamp">Lockspace v0.6.3</p>
   </main>
 
   <dialog id="birthDateDialog" class="calendar-dialog">
@@ -405,7 +405,7 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.6.2";
+    const APP_VERSION = "0.6.3";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
