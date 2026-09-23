@@ -475,10 +475,12 @@
       }
       const submitButton = profileForm.querySelector('button[type="submit"]');
       submitButton.disabled = true;
+      const pendingCredentials = state.pendingCredentials;
+      const account = pendingCredentials?.account || state.member?.account || auth.currentUser?.email?.split("@")[0];
       try {
         let user = auth.currentUser;
-        if (state.pendingCredentials) {
-          const credential = await createUserWithEmailAndPassword(auth, accountEmail(state.pendingCredentials.account), state.pendingCredentials.password);
+        if (pendingCredentials) {
+          const credential = await createUserWithEmailAndPassword(auth, accountEmail(pendingCredentials.account), pendingCredentials.password);
           user = credential.user;
         }
         if (!user) throw new Error("not-authenticated");
@@ -495,12 +497,12 @@
         delete profile.birthProof;
         delete profile.proofRedacted;
         await setDoc(doc(db, "members", user.uid), {
-          username: state.pendingCredentials?.account || state.member?.account,
+          username: account,
           profile,
-          verification: proofFile ? { status: "pending", proofReady, submittedAt: new Date().toISOString() } : state.member.verification,
+          verification: proofFile ? { status: "pending", proofReady, submittedAt: new Date().toISOString() } : state.member?.verification,
           updatedAt: serverTimestamp()
         }, { merge: true });
-        state.member = { uid: user.uid, account: state.pendingCredentials?.account || state.member?.account, profile, verification: proofFile ? { status: "pending", proofReady } : state.member.verification };
+        state.member = { uid: user.uid, account, profile, verification: proofFile ? { status: "pending", proofReady } : state.member?.verification };
         state.pendingCredentials = null;
         renderDashboard();
       } catch (error) {
