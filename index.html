@@ -424,6 +424,7 @@
     const state = {
       member: null,
       pendingCredentials: null,
+      authNotice: "",
       previewUrl: "",
       posts: [],
       reviews: []
@@ -784,12 +785,14 @@
         const reviews = state.reviews.filter(review => review.submissionId === post.id);
         const approved = reviews.filter(review => review.decision === "approved").length;
         const rejected = reviews.filter(review => review.decision === "rejected").length;
+        const totalReviews = approved + rejected;
+        const matchRate = totalReviews ? Math.round((approved / totalReviews) * 100) : 0;
         const mine = reviews.find(review => review.reviewerId === state.member.uid);
         const reviewControls = post.ownerId === state.member.uid
-          ? `<span class="review-result">通過 ${approved} · 駁回 ${rejected}</span>`
+          ? `<span class="review-result">符合率 ${matchRate}% · ${totalReviews} 人驗證</span>`
           : mine
-            ? `<span class="review-result">你已${mine.decision === "approved" ? "通過" : "駁回"}此任務 · 通過 ${approved} · 駁回 ${rejected}</span>`
-            : `<button class="button primary" type="button" data-review="approved" data-submission="${escapeHtml(post.id)}">通過</button><button class="button danger" type="button" data-review="rejected" data-submission="${escapeHtml(post.id)}">駁回</button>`;
+            ? `<span class="review-result">你已選擇${mine.decision === "approved" ? "符合條件" : "不符合條件"} · 符合率 ${matchRate}% · ${totalReviews} 人驗證</span>`
+            : `<button class="button primary" type="button" data-review="approved" data-submission="${escapeHtml(post.id)}">符合條件</button><button class="button danger" type="button" data-review="rejected" data-submission="${escapeHtml(post.id)}">不符合條件</button>`;
         return `<article class="submission-card">
           <div class="submission-meta">
             <strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong>
@@ -898,9 +901,18 @@
         state.member = null;
         showOnly(authPage);
         setAuthMode("login");
+        if (state.authNotice) {
+          showError("loginError", state.authNotice);
+          state.authNotice = "";
+        }
         return;
       }
       const snapshot = await getDoc(doc(db, "members", user.uid));
+      if (snapshot.exists() && snapshot.data().deleted === true) {
+        state.authNotice = "此會員帳號已停用。";
+        await signOut(auth);
+        return;
+      }
       if (!snapshot.exists()) {
         state.pendingCredentials = null;
         profileForm.reset();
