@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.7.0">
+  <meta name="application-version" content="0.7.1">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -140,6 +140,8 @@
     .option-menu { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px; border: 1px solid #b6ff7055; border-radius: 6px; background: var(--panel-2); box-shadow: 0 16px 36px #000b; }
     .option-menu button { min-height: 40px; padding: 8px 10px; border: 1px solid transparent; border-radius: 4px; background: #ffffff08; color: var(--text); text-align: left; }
     .option-menu button:hover, .option-menu button[aria-selected="true"] { border-color: var(--lime); background: #b6ff7014; color: var(--lime); }
+    .other-field { margin-top: 8px; }
+    .age-display { color: var(--lime); }
     .calendar-dialog { width: min(420px, calc(100% - 28px)); padding: 0; border: 1px solid #b6ff704d; border-radius: 8px; background: var(--panel); color: var(--text); }
     .calendar-dialog::backdrop { background: #000c; }
     .calendar-head { display: grid; grid-template-columns: 42px 1fr 42px; gap: 8px; align-items: center; padding: 14px; border-bottom: 1px solid #ffffff16; }
@@ -251,7 +253,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.7.0</p>
+      <p class="version-stamp">Lockspace v0.7.1</p>
     </section>
   </main>
 
@@ -273,6 +275,7 @@
             <input name="birthDate" type="hidden">
             <button id="birthDateButton" class="date-trigger" type="button" aria-expanded="false"><span>選擇出生日期</span><b>日曆</b></button>
             <span class="field-help">僅開放年滿 18 歲的出生日期。</span>
+            <span id="ageDisplay" class="field-help age-display hidden" aria-live="polite"></span>
           </label>
           <label>身高 <span class="public-tag">公開</span>
             <span class="input-with-unit"><input name="heightCm" type="number" min="0" max="260" step="1"><span>cm</span></span>
@@ -281,10 +284,12 @@
             <span class="input-with-unit"><input name="weightKg" type="number" min="0" max="400" step="0.1"><span>kg</span></span>
           </label>
           <label>膚色 <span class="public-tag">公開</span>
-            <span class="custom-select" data-custom-select="skinTone"><input name="skinTone" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="白皙">白皙</button><button type="button" data-value="偏白">偏白</button><button type="button" data-value="自然">自然</button><button type="button" data-value="小麥">小麥</button><button type="button" data-value="棕色">棕色</button><button type="button" data-value="深色">深色</button></span></span>
+            <span class="custom-select" data-custom-select="skinTone" data-other-target="skinToneOther"><input name="skinTone" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="白皙">白皙</button><button type="button" data-value="偏白">偏白</button><button type="button" data-value="自然">自然</button><button type="button" data-value="小麥">小麥</button><button type="button" data-value="棕色">棕色</button><button type="button" data-value="深色">深色</button><button type="button" data-value="其他">其他</button></span></span>
+            <input class="other-field hidden" name="skinToneOther" maxlength="24" placeholder="簡要填寫膚色">
           </label>
           <label>身材 <span class="public-tag">公開</span>
-            <span class="custom-select" data-custom-select="bodyType"><input name="bodyType" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="纖細">纖細</button><button type="button" data-value="精實">精實</button><button type="button" data-value="標準">標準</button><button type="button" data-value="壯碩">壯碩</button><button type="button" data-value="微肉">微肉</button><button type="button" data-value="豐滿">豐滿</button></span></span>
+            <span class="custom-select" data-custom-select="bodyType" data-other-target="bodyTypeOther"><input name="bodyType" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="纖細">纖細</button><button type="button" data-value="精實">精實</button><button type="button" data-value="標準">標準</button><button type="button" data-value="壯碩">壯碩</button><button type="button" data-value="微肉">微肉</button><button type="button" data-value="豐滿">豐滿</button><button type="button" data-value="其他">其他</button></span></span>
+            <input class="other-field hidden" name="bodyTypeOther" maxlength="24" placeholder="簡要填寫身材">
           </label>
         </div>
       </div>
@@ -302,7 +307,8 @@
         <h2>貞操鎖資料 <span class="public-tag">公開</span></h2>
         <div class="form-grid">
           <label>品牌
-            <input name="lockBrand" maxlength="64">
+            <span class="custom-select" data-custom-select="lockBrand" data-other-target="lockBrandOther"><input name="lockBrand" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="CB-X">CB-X</button><button type="button" data-value="Holy Trainer">Holy Trainer</button><button type="button" data-value="KINK3D">KINK3D</button><button type="button" data-value="其他">其他</button></span></span>
+            <input class="other-field hidden" name="lockBrandOther" maxlength="64" placeholder="簡要填寫品牌">
           </label>
           <label>顏色
             <input name="lockColor" maxlength="32">
@@ -317,10 +323,12 @@
             <span class="input-with-unit"><input name="ringDiameterMm" type="number" min="0" max="200" step="0.1"><span>mm</span></span>
           </label>
           <label>材質
-            <span class="custom-select" data-custom-select="lockMaterial"><input name="lockMaterial" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="樹脂">樹脂</button><button type="button" data-value="不鏽鋼">不鏽鋼</button><button type="button" data-value="鈦">鈦</button><button type="button" data-value="矽膠">矽膠</button><button type="button" data-value="其他">其他</button></span></span>
+            <span class="custom-select" data-custom-select="lockMaterial" data-other-target="lockMaterialOther"><input name="lockMaterial" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="樹脂">樹脂</button><button type="button" data-value="不鏽鋼">不鏽鋼</button><button type="button" data-value="鈦">鈦</button><button type="button" data-value="矽膠">矽膠</button><button type="button" data-value="其他">其他</button></span></span>
+            <input class="other-field hidden" name="lockMaterialOther" maxlength="32" placeholder="簡要填寫材質">
           </label>
           <label>鎖定方式
-            <span class="custom-select" data-custom-select="lockingMethod"><input name="lockingMethod" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="掛鎖">掛鎖</button><button type="button" data-value="內嵌鎖">內嵌鎖</button><button type="button" data-value="一次性編號鎖">一次性編號鎖</button><button type="button" data-value="其他">其他</button></span></span>
+            <span class="custom-select" data-custom-select="lockingMethod" data-other-target="lockingMethodOther"><input name="lockingMethod" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="掛鎖">掛鎖</button><button type="button" data-value="內嵌鎖">內嵌鎖</button><button type="button" data-value="一次性編號鎖">一次性編號鎖</button><button type="button" data-value="其他">其他</button></span></span>
+            <input class="other-field hidden" name="lockingMethodOther" maxlength="32" placeholder="簡要填寫鎖定方式">
           </label>
         </div>
       </div>
@@ -341,7 +349,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.7.0</p>
+      <p class="version-stamp">Lockspace v0.7.1</p>
     </form>
   </main>
 
@@ -628,6 +636,7 @@
           input.value = option.dataset.value;
           trigger.querySelector("span").textContent = option.dataset.value;
           menu.querySelectorAll("[data-value]").forEach(item => item.setAttribute("aria-selected", String(item === option)));
+          syncOtherField(select);
           menu.classList.add("hidden");
           trigger.setAttribute("aria-expanded", "false");
         }));
@@ -643,9 +652,37 @@
         const value = select.querySelector('input[type="hidden"]').value;
         select.querySelector(".select-trigger span").textContent = value || "請選擇";
         select.querySelectorAll("[data-value]").forEach(item => item.setAttribute("aria-selected", String(item.dataset.value === value)));
+        syncOtherField(select);
       });
       const value = profileForm.elements.birthDate.value;
       document.querySelector("#birthDateButton span").textContent = value || "選擇出生日期";
+      updateAgeDisplay();
+    }
+
+    function syncOtherField(select) {
+      const targetName = select.dataset.otherTarget;
+      if (!targetName) return;
+      const otherInput = profileForm.elements[targetName];
+      const isOther = select.querySelector('input[type="hidden"]').value === "其他";
+      otherInput.classList.toggle("hidden", !isOther);
+      otherInput.required = isOther;
+      if (!isOther) otherInput.value = "";
+    }
+
+    function updateAgeDisplay() {
+      const output = document.getElementById("ageDisplay");
+      const value = profileForm.elements.birthDate.value;
+      if (!value) {
+        output.textContent = "";
+        output.classList.add("hidden");
+        return;
+      }
+      const [year, month, day] = value.split("-").map(Number);
+      const today = new Date();
+      let age = today.getFullYear() - year;
+      if (today.getMonth() + 1 < month || (today.getMonth() + 1 === month && today.getDate() < day)) age -= 1;
+      output.textContent = `目前年齡：${age} 歲`;
+      output.classList.remove("hidden");
     }
 
     function setupBirthDatePicker() {
@@ -702,6 +739,7 @@
       grid.querySelectorAll("[data-date]").forEach(button => button.addEventListener("click", () => {
         profileForm.elements.birthDate.value = button.dataset.date;
         document.querySelector("#birthDateButton span").textContent = button.dataset.date;
+        updateAgeDisplay();
         document.getElementById("birthDateDialog").close();
       }));
     }
