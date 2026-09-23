@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.3.0">
+  <meta name="application-version" content="0.4.0">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -147,7 +147,10 @@
     }
     .private-tag { color: var(--cyan); background: #86e8ff12; border: 0; }
     .public-tag { color: var(--lime); background: #b6ff7018; font-size: 11px; margin-left: 6px; }
-    .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; margin-top: 23px; }
+    .dashboard-main { width: min(760px, 100%); margin: 32px auto 0; }
+    .upload-entry { display: grid; place-items: center; padding: 34px 0 42px; }
+    .upload-entry .button { min-width: min(320px, 100%); min-height: 52px; font-size: 17px; }
+    .task-flow { display: grid; gap: 14px; margin-bottom: 34px; }
     .page-title, .section-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; margin-bottom: 18px; }
     .task-panel, .upload-panel, .panel, .submission-card { padding: 20px 22px; box-shadow: none; }
     .task-label { color: var(--lime); font-size: 12px; font-weight: 800; letter-spacing: .13em; }
@@ -173,15 +176,14 @@
     .profile-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid #ffffff0e; font-size: 13px; }
     .profile-row dt { color: var(--muted); }
     .profile-row dd { margin: 0; text-align: right; font-weight: 700; }
-    .side-column { align-self: start; position: sticky; top: 15px; }
-    .side-column .panel { margin-bottom: 14px; }
-    .safety-list { padding-left: 18px; color: #cecad5; font-size: 13px; }
-    .safety-list li { margin: 9px 0; }
+    .feed-heading { padding-top: 24px; border-top: 1px solid #ffffff16; }
+    .submission-card { margin-top: 14px; }
+    .submission-meta { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
     .version-stamp { margin: 18px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
     @media (max-width: 780px) {
-      .dashboard-grid, .form-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
       .site-shell { padding: 15px 15px 45px; }
-      .topbar, .page-title, .section-heading { align-items: flex-start; flex-direction: column; }
+      .topbar, .page-title, .section-heading, .submission-meta { align-items: flex-start; flex-direction: column; }
       .header-actions { width: 100%; flex-wrap: wrap; }
       .member-chip { display: none; }
       .auth-page, .registration-page { padding: 14px; }
@@ -227,7 +229,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.3.0</p>
+      <p class="version-stamp">Lockspace v0.4.0</p>
     </section>
   </main>
 
@@ -311,7 +313,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.3.0</p>
+      <p class="version-stamp">Lockspace v0.4.0</p>
     </form>
   </main>
 
@@ -325,18 +327,12 @@
         <button id="logoutButton" class="button quiet" type="button">登出</button>
       </div>
     </header>
-    <div class="callout warning"><strong>僅限成年會員。</strong> 上傳前確認所有入鏡者皆已同意。</div>
+    <div class="dashboard-main">
+      <section class="upload-entry">
+        <button id="openTaskButton" class="button primary" type="button">上傳驗證照片</button>
+      </section>
 
-    <div class="dashboard-grid">
-      <section>
-        <div class="page-title">
-          <div>
-            <p class="eyebrow">TODAY · ASIA/TAIPEI</p>
-            <h1>今日唯一任務</h1>
-            <p class="muted">完成任務並提交驗證。</p>
-          </div>
-          <button class="button primary" type="button" onclick="document.getElementById('upload').scrollIntoView({behavior:'smooth'})">上傳驗證照片</button>
-        </div>
+      <section id="taskFlow" class="task-flow hidden">
         <section class="task-panel">
           <div class="task-label">ONE TASK TODAY</div>
           <h2>將今日隨機數字寫在紙條上，與鎖具外觀同框拍照。</h2>
@@ -361,47 +357,29 @@
           </figure>
           <label class="check-row"><input id="uploadConsent" type="checkbox"><span>我已年滿 18 歲，是照片中的本人或取得所有入鏡成年人的明確同意，並同意將照片提供給已註冊會員驗證。</span></label>
           <p id="uploadError" class="error hidden" role="alert"></p>
-          <button class="button primary" type="submit">加入今日提交預覽</button>
+          <button class="button primary full" type="submit">送出驗證紀錄</button>
         </form>
-
-        <section>
-          <div class="section-heading">
-            <div>
-              <h2>今日提交</h2>
-              <p class="muted">你的今日紀錄。</p>
-            </div>
-          </div>
-          <div id="feed"></div>
-        </section>
       </section>
 
-      <aside class="side-column">
-        <section class="panel">
-          <p class="eyebrow">公開會員檔案</p>
-          <h2 id="profileName">會員</h2>
-          <p id="verificationStatus" class="muted"></p>
-          <dl id="profileList"></dl>
-        </section>
-        <section class="panel">
-          <h2>影像安全</h2>
-          <ul class="safety-list">
-            <li>僅允許成年本人自願上傳，禁止未經同意或未成年影像。</li>
-            <li>照片只供已登入會員查看。</li>
-            <li>浮水印是提醒與歸屬標示，不能防止截圖。</li>
-          </ul>
-          <button id="deleteAccountButton" class="button danger" type="button">刪除帳戶</button>
-        </section>
-      </aside>
+      <section>
+        <div class="section-heading feed-heading">
+          <div>
+            <h2>大家的驗證紀錄</h2>
+            <p class="muted">包含你的提交，最新紀錄優先。</p>
+          </div>
+        </div>
+        <div id="feed"></div>
+      </section>
     </div>
-    <p class="version-stamp">Lockspace v0.3.0</p>
+    <p class="version-stamp">Lockspace v0.4.0</p>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.3.0";
+    const APP_VERSION = "0.4.0";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
@@ -437,7 +415,7 @@
     signupTab.addEventListener("click", () => setAuthMode("signup"));
     document.getElementById("logoutButton").addEventListener("click", logout);
     document.getElementById("editProfileButton").addEventListener("click", editProfile);
-    document.getElementById("deleteAccountButton").addEventListener("click", deleteAccount);
+    document.getElementById("openTaskButton").addEventListener("click", openTask);
     document.getElementById("photoInput").addEventListener("change", event => choosePhoto(event.target.files[0]));
     document.getElementById("upload").addEventListener("submit", submitPreview);
 
@@ -542,27 +520,19 @@
       document.getElementById(id).classList.add("hidden");
     }
 
-    function renderDashboard() {
+    async function renderDashboard() {
       const profile = state.member.profile;
       document.getElementById("memberChip").textContent = `${profile.displayName || state.member.account} · 已註冊`;
-      document.getElementById("profileName").textContent = profile.displayName || state.member.account;
-      const status = state.member.verification?.status || "pending";
-      document.getElementById("verificationStatus").textContent = ({ pending: "生日查驗中", approved: "生日查驗完成", rejected: "生日資料需重新提交" })[status];
       document.getElementById("taskCode").textContent = dailyCode();
-      const rows = [
-        ["貞操鎖品牌", profile.lockBrand],
-        ["顏色", profile.lockColor],
-        ["籠長 × 籠寬", pair(profile.cageLengthCm, profile.cageWidthCm, "cm")],
-        ["未配戴長度／周長", pair(profile.bodyLengthCm, profile.bodyGirthCm, "cm")],
-        ["身高", format(profile.heightCm, "cm")],
-        ["體重", format(profile.weightKg, "kg")],
-        ["膚色", profile.skinTone],
-        ["身材", profile.bodyType]
-      ];
-      document.getElementById("profileList").innerHTML = rows.map(([label, value]) => `<div class="profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value || "未填")}</dd></div>`).join("");
-      renderFeed();
       checkAdmin();
       showOnly(dashboardPage);
+      await loadSubmissions();
+    }
+
+    function openTask() {
+      document.getElementById("taskFlow").classList.remove("hidden");
+      document.getElementById("openTaskButton").classList.add("hidden");
+      document.getElementById("taskFlow").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function dailyCode() {
@@ -618,40 +588,58 @@
       }
     }
 
-    function submitPreview(event) {
+    async function submitPreview(event) {
       event.preventDefault();
       if (!state.previewUrl || !document.getElementById("uploadConsent").checked) {
         showError("uploadError", "請選照片並確認成年、所有權與分享同意。");
         return;
       }
-      state.posts.unshift({ imageUrl: state.previewUrl, createdAt: Date.now(), profile: state.member.profile });
+      const button = event.submitter;
+      button.disabled = true;
+      try {
+        const date = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Taipei" });
+        await setDoc(doc(db, "submissions", `${state.member.uid}_${date}`), {
+          ownerId: state.member.uid,
+          displayName: state.member.profile.displayName || state.member.account,
+          imageDataUrl: state.previewUrl,
+          taskCode: dailyCode(),
+          submittedDate: date,
+          createdAt: new Date().toISOString(),
+          updatedAt: serverTimestamp()
+        });
+        document.getElementById("upload").reset();
+        document.getElementById("previewFrame").classList.add("hidden");
+        document.getElementById("taskFlow").classList.add("hidden");
+        document.getElementById("openTaskButton").classList.remove("hidden");
+        state.previewUrl = "";
+        await loadSubmissions();
+      } catch {
+        showError("uploadError", "提交失敗，請稍後再試。");
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function loadSubmissions() {
+      const snapshot = await getDocs(collection(db, "submissions"));
+      state.posts = snapshot.docs.map(item => ({ id: item.id, ...item.data() })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
       renderFeed();
-      document.getElementById("upload").reset();
-      document.getElementById("previewFrame").classList.add("hidden");
-      state.previewUrl = "";
     }
 
     function renderFeed() {
       const feed = document.getElementById("feed");
       if (!state.posts.length) {
-        feed.innerHTML = '<div class="panel"><p class="muted">今天還沒有提交預覽。你可以成為第一位。</p></div>';
+        feed.innerHTML = '<div class="panel"><p class="muted">目前還沒有驗證紀錄。</p></div>';
         return;
       }
       feed.innerHTML = state.posts.map(post => {
-        const profile = post.profile;
         return `<article class="submission-card">
-          <strong>${escapeHtml(profile.displayName || "會員")}</strong>
-          <span class="muted"> · ${new Date(post.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}</span>
-          <div class="public-details">
-            <span>${escapeHtml(profile.lockBrand || "未填品牌")}</span>
-            <span>${escapeHtml(profile.lockColor || "未填顏色")}</span>
-            <span>籠 ${escapeHtml(profile.cageLengthCm || "—")} × ${escapeHtml(profile.cageWidthCm || "—")} cm</span>
-            <span>身高 ${escapeHtml(profile.heightCm || "—")} cm</span>
-            <span>體重 ${escapeHtml(profile.weightKg || "—")} kg</span>
+          <div class="submission-meta">
+            <strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong>
+            <span class="muted">${new Date(post.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}</span>
           </div>
-          <figure class="preview-frame"><img src="${post.imageUrl}" alt="會員提交的任務驗證照片"></figure>
-          <button class="button secondary" type="button">通過 (0)</button>
-          <button class="button secondary" type="button">請補件 (0)</button>
+          <div class="public-details"><span>任務碼 ${escapeHtml(post.taskCode || "—")}</span></div>
+          <figure class="preview-frame"><img src="${post.imageDataUrl}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片"></figure>
         </article>`;
       }).join("");
     }
@@ -663,10 +651,11 @@
         image.src = source;
         await image.decode();
         const canvas = document.createElement("canvas");
-        canvas.width = image.naturalWidth;
-        canvas.height = image.naturalHeight;
+        const scale = Math.min(1, 1280 / Math.max(image.naturalWidth, image.naturalHeight));
+        canvas.width = Math.round(image.naturalWidth * scale);
+        canvas.height = Math.round(image.naturalHeight * scale);
         const context = canvas.getContext("2d");
-        context.drawImage(image, 0, 0);
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
         context.save();
         context.translate(canvas.width / 2, canvas.height / 2);
         context.rotate(-Math.PI / 8);
@@ -684,7 +673,9 @@
           }
         }
         context.restore();
-        return canvas.toDataURL("image/jpeg", 0.9);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.72);
+        if (dataUrl.length > 850000) throw new Error("image-too-large");
+        return dataUrl;
       } finally {
         URL.revokeObjectURL(source);
       }
@@ -724,7 +715,7 @@
         return;
       }
       state.member = { uid: user.uid, account: snapshot.data().username || user.email.split("@")[0], ...snapshot.data() };
-      renderDashboard();
+      await renderDashboard();
     });
 
     function accountEmail(username) {
