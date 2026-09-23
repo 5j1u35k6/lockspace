@@ -1,19 +1,663 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lockspace 會員登入</title>
-<style>
-:root{color-scheme:dark;--bg:#101017;--panel:#191922;--line:#343440;--text:#f5f4f7;--muted:#afacba;--lime:#b6ff70;--cyan:#86e8ff;--red:#ff91a6}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 10% -14%,#29223a 0,transparent 34%),var(--bg);color:var(--text);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea{font:inherit}button{cursor:pointer;color:inherit}.hidden{display:none!important}.auth-page,.registration-page{min-height:100vh;display:grid;place-items:center;padding:22px}.card,.panel,.task,.upload,.post{background:linear-gradient(145deg,#1d1b27,#191922 75%);border:1px solid #ffffff17;border-radius:18px;padding:22px;box-shadow:0 24px 90px #0005}.card{width:min(580px,100%)}.registration-page .card{width:min(820px,100%)}.brand{display:flex;align-items:center;gap:11px;font-size:22px;font-weight:800}.mark{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:var(--lime);color:#151711}.dot{color:var(--lime);margin-left:-10px}.eyebrow{margin:28px 0 0;color:var(--lime);font-size:12px;font-weight:800;letter-spacing:.13em}h1{margin:12px 0 8px;font-size:clamp(28px,4vw,38px);line-height:1.15}h2{margin:0 0 13px;font-size:18px}.muted{color:var(--muted);font-size:14px;margin:5px 0 0}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:22px 0 16px}.tab,.button{border:1px solid var(--line);border-radius:12px;background:#ffffff08;padding:10px 14px;font-weight:700}.tab.active,.button.primary{background:var(--lime);border-color:var(--lime);color:#151711}.button{display:inline-flex;justify-content:center;align-items:center;text-decoration:none}.full{width:100%}label{display:block;margin:10px 0;color:#d9d6e1;font-size:14px;font-weight:650}input,textarea{display:block;width:100%;min-height:44px;margin-top:6px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:#101017;color:var(--text)}textarea{resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 16px}.section{margin-top:22px;padding-top:16px;border-top:1px solid #ffffff16}.callout{padding:13px 15px;border-radius:13px;margin:17px 0;font-size:14px;background:#f4be630d;border:1px solid #f4be6331;color:#ead7ae}.check{display:flex;align-items:flex-start;gap:10px;margin:14px 0;color:#d6d3dd;font-size:14px}.check input{width:18px;height:18px;flex:none;accent-color:var(--lime)}.error{color:#ffb0bf;background:#ff617510;border:1px solid #ff617538;padding:11px 13px;border-radius:11px;font-size:14px}.fine{color:var(--muted);font-size:12px}.shell{max-width:1200px;margin:auto;padding:22px 30px 60px}.top{display:flex;justify-content:space-between;gap:18px;align-items:center;padding-bottom:19px;border-bottom:1px solid #ffffff18}.actions{display:flex;gap:9px;align-items:center}.chip,.tag{padding:6px 10px;border-radius:999px;background:#ffffff10;color:#d8d5e0;font-size:13px}.tag{color:var(--cyan);background:#86e8ff12}.layout{display:grid;grid-template-columns:minmax(0,1fr)300px;gap:22px;margin-top:23px}.title,.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:18px}.task-code{width:max-content;max-width:100%;margin:13px 0;padding:10px 15px;border:1px dashed #b6ff7065;border-radius:12px;background:#101017;color:var(--lime);font-size:32px;font-weight:800;letter-spacing:.14em}.public{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0;padding:10px 0;border-block:1px solid #ffffff10}.public span{font-size:12px;color:#cfccd7;background:#ffffff08;padding:5px 8px;border-radius:8px}.preview{margin:14px 0;padding:12px;border-radius:12px;background:#101017;border:1px solid #ffffff18;text-align:center}.preview img{display:block;width:auto;height:auto;max-width:100%;max-height:70vh;object-fit:contain;margin:auto}.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #ffffff0e;font-size:13px}.row dt{color:var(--muted)}.row dd{margin:0;text-align:right;font-weight:700}@media(max-width:780px){.layout,.grid{grid-template-columns:1fr}.top,.title,.heading{align-items:flex-start;flex-direction:column}.shell{padding:15px}.actions{flex-wrap:wrap}.chip{display:none}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lockspace 會員登入</title>
+  <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090a09;
+      --panel: #121412;
+      --panel-2: #181b18;
+      --line: #30352f;
+      --text: #f5f4f7;
+      --muted: #afacba;
+      --lime: #b6ff70;
+      --cyan: #86e8ff;
+      --amber: #efd59e;
+      --red: #ff91a6;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--bg); scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    button, input, textarea, select { font: inherit; }
+    button, a, input, textarea, select { outline-offset: 3px; }
+    button { color: inherit; cursor: pointer; }
+    .hidden { display: none !important; }
+    .auth-page, .registration-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+    }
+    .auth-card, .registration-card, .panel, .task-panel, .upload-panel, .submission-card {
+      background: var(--panel);
+      border: 1px solid #ffffff17;
+      border-radius: 8px;
+      box-shadow: 0 18px 60px #0006;
+    }
+    .auth-card { width: min(580px, 100%); padding: 24px; }
+    .registration-card { width: min(820px, 100%); padding: 24px; margin: 30px auto; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 22px; font-weight: 800; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: var(--lime);
+      color: #151711;
+      font-size: 20px;
+    }
+    .brand-dot { color: var(--lime); margin-left: -10px; }
+    .eyebrow { margin: 28px 0 0; color: var(--lime); font-size: 12px; font-weight: 800; }
+    h1 { margin: 12px 0 8px; font-size: clamp(28px, 4vw, 38px); line-height: 1.15; }
+    h2 { margin: 0 0 13px; font-size: 18px; }
+    .muted { color: var(--muted); font-size: 14px; margin: 5px 0 0; }
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 22px 0 16px; }
+    .tab {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff08;
+      padding: 10px 12px;
+      font-weight: 700;
+    }
+    .tab.active { background: var(--lime); color: #151711; border-color: var(--lime); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 16px; }
+    .form-section { margin-top: 22px; padding-top: 16px; border-top: 1px solid #ffffff16; }
+    label { display: block; margin: 10px 0; color: #d9d6e1; font-size: 14px; font-weight: 650; }
+    input, textarea, select {
+      display: block;
+      width: 100%;
+      margin-top: 6px;
+      min-height: 44px;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #101017;
+      color: var(--text);
+    }
+    textarea { resize: vertical; }
+    .input-with-unit { display: flex; align-items: center; gap: 9px; }
+    .input-with-unit input { min-width: 0; }
+    .input-with-unit span { color: var(--muted); font-size: 13px; }
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff08;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .button:hover { background: #ffffff13; border-color: #747182; }
+    .button.primary { background: var(--lime); border-color: var(--lime); color: #151711; }
+    .button.secondary { background: #ffffff08; }
+    .button.quiet { border-color: transparent; color: var(--muted); }
+    .button.danger { border-color: #ff91a64f; color: var(--red); }
+    .full { width: 100%; }
+    .callout { padding: 13px 15px; border-radius: 13px; margin: 17px 0; font-size: 14px; }
+    .warning { background: #f4be630d; border: 1px solid #f4be6331; color: #ead7ae; }
+    .check-row { display: flex; align-items: flex-start; gap: 10px; margin: 14px 0; color: #d6d3dd; font-size: 14px; }
+    .check-row input { width: 18px; height: 18px; flex: none; margin: 2px 0 0; accent-color: var(--lime); }
+    .error { color: #ffb0bf; background: #ff617510; border: 1px solid #ff617538; padding: 11px 13px; border-radius: 11px; font-size: 14px; }
+    .fineprint { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
+    .site-shell { max-width: 1280px; margin: auto; padding: 22px 30px 60px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 19px; border-bottom: 1px solid #ffffff18; }
+    .header-actions { display: flex; align-items: center; gap: 9px; }
+    .member-chip, .private-tag, .public-tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #ffffff10;
+      border: 1px solid #ffffff16;
+      color: #d8d5e0;
+      font-size: 13px;
+    }
+    .private-tag { color: var(--cyan); background: #86e8ff12; border: 0; }
+    .public-tag { color: var(--lime); background: #b6ff7018; font-size: 11px; margin-left: 6px; }
+    .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; margin-top: 23px; }
+    .page-title, .section-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; margin-bottom: 18px; }
+    .task-panel, .upload-panel, .panel, .submission-card { padding: 20px 22px; box-shadow: none; }
+    .task-label { color: var(--lime); font-size: 12px; font-weight: 800; letter-spacing: .13em; }
+    .task-code {
+      width: max-content;
+      max-width: 100%;
+      margin: 13px 0;
+      padding: 10px 15px;
+      border: 1px dashed #b6ff7065;
+      border-radius: 12px;
+      background: #101017;
+      color: var(--lime);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      font-variant-numeric: tabular-nums;
+    }
+    .upload-picker { padding: 14px; border: 1px dashed #676575; border-radius: 12px; cursor: pointer; }
+    .preview-frame { margin: 14px 0; padding: 12px; border-radius: 12px; background: #101017; border: 1px solid #ffffff18; text-align: center; }
+    .preview-frame img { display: block; width: auto; height: auto; max-width: 100%; max-height: 70vh; object-fit: contain; margin: auto; }
+    .public-details { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; padding: 10px 0; border-block: 1px solid #ffffff10; }
+    .public-details span { font-size: 12px; color: #cfccd7; background: #ffffff08; padding: 5px 8px; border-radius: 8px; }
+    .profile-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid #ffffff0e; font-size: 13px; }
+    .profile-row dt { color: var(--muted); }
+    .profile-row dd { margin: 0; text-align: right; font-weight: 700; }
+    .side-column { align-self: start; position: sticky; top: 15px; }
+    .side-column .panel { margin-bottom: 14px; }
+    .safety-list { padding-left: 18px; color: #cecad5; font-size: 13px; }
+    .safety-list li { margin: 9px 0; }
+    @media (max-width: 780px) {
+      .dashboard-grid, .form-grid { grid-template-columns: 1fr; }
+      .site-shell { padding: 15px 15px 45px; }
+      .topbar, .page-title, .section-heading { align-items: flex-start; flex-direction: column; }
+      .header-actions { width: 100%; flex-wrap: wrap; }
+      .member-chip { display: none; }
+      .auth-page, .registration-page { padding: 14px; }
+      .auth-card, .registration-card { padding: 19px 16px; }
+    }
+  </style>
 </head>
 <body>
-<main id="auth" class="auth-page"><section class="card"><div class="brand"><span class="mark">⌑</span>lockspace<span class="dot">.</span></div><p class="eyebrow">MEMBER ACCESS</p><h1>先登入或註冊，才進入會員平台</h1><p class="muted">請輸入帳號密碼登入；第一次使用請先註冊並填寫會員公開資料。GitHub Pages 版為靜態原型，資料只存在你的瀏覽器。</p><div class="callout"><b>成人會員限定</b><br>平台情境包含會員驗證照片與公開身體／鎖具資料。正式上線前仍需要後端驗證、管理員審核與年齡保障流程。</div><div class="tabs"><button class="tab active" id="loginTab" type="button">帳號登入</button><button class="tab" id="signupTab" type="button">註冊會員</button></div><form id="loginForm"><label>帳號或 Email<input name="account" autocomplete="username" required></label><label>密碼<input name="password" type="password" autocomplete="current-password" required minlength="6"></label><p id="loginError" class="error hidden"></p><button class="button primary full">登入並繼續</button><p class="fine">測試用：可用剛註冊的帳密登入；若尚未註冊，請切換到「註冊會員」。</p></form><form id="signupForm" class="hidden"><label>帳號或 Email<input name="account" autocomplete="username" required></label><label>密碼<input name="password" type="password" autocomplete="new-password" required minlength="6"></label><label>確認密碼<input name="confirm" type="password" autocomplete="new-password" required minlength="6"></label><p id="signupError" class="error hidden"></p><button class="button primary full">下一步：填寫個人資料</button></form></section></main>
-<main id="reg" class="registration-page hidden"><form id="profileForm" class="card"><div class="brand"><span class="mark">⌑</span>lockspace<span class="dot">.</span></div><p class="eyebrow">MEMBER REGISTRATION</p><h1>完成會員註冊資料</h1><p class="muted">填寫後才能進入任務區；公開資料會顯示給已註冊會員。</p><div class="section"><h2>基本資料</h2><div class="grid"><label>公開顯示名稱<input name="displayName" required maxlength="32"></label><label>代名詞<input name="pronouns" maxlength="32"></label><label>身高（公開）<input name="heightCm" type="number" min="0" max="260" step="1"></label><label>體重（公開）<input name="weightKg" type="number" min="0" max="400" step="0.1"></label><label>膚色（公開）<input name="skinTone" maxlength="40"></label><label>身材（公開）<input name="bodyType" maxlength="60"></label></div><label>自我介紹<textarea name="bio" rows="3" maxlength="240"></textarea></label></div><div class="section"><h2>貞操鎖資料（公開）</h2><div class="grid"><label>品牌<input name="lockBrand" maxlength="64"></label><label>顏色<input name="lockColor" maxlength="32"></label><label>籠長 cm<input name="cageLengthCm" type="number" min="0" max="80" step="0.1"></label><label>籠寬 cm<input name="cageWidthCm" type="number" min="0" max="80" step="0.1"></label></div></div><div class="section"><h2>未配戴時身體尺寸（公開）</h2><div class="grid"><label>陰莖長度 cm<input name="bodyLengthCm" type="number" min="0" max="80" step="0.1"></label><label>陰莖周長 cm<input name="bodyGirthCm" type="number" min="0" max="80" step="0.1"></label></div></div><div class="callout"><b>公開範圍提醒</b><br>已填的鎖具與身體資料會顯示在會員公開檔案。年齡確認是自我聲明，不等於證件驗證。</div><label class="check"><input type="checkbox" name="adult" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label><label class="check"><input type="checkbox" name="consent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label><button class="button primary full">完成註冊並進入任務</button></form></main>
-<main id="dash" class="shell hidden"><header class="top"><div class="brand"><span class="mark">⌑</span>lockspace<span class="dot">.</span></div><div class="actions"><span id="chip" class="chip">已登入</span><button id="edit" class="button" type="button">編輯公開檔案</button><button id="logout" class="button" type="button">登出</button></div></header><div class="callout"><b>成人會員限定。</b>驗證影像含個人私密內容，只供已登入會員查看；上傳前確認影像中的每位成年人都同意提交。</div><div class="layout"><section><div class="title"><div><p class="eyebrow">TODAY · ASIA/TAIPEI</p><h1>今日唯一任務</h1><p class="muted">每天一項任務。完成後提交證明，其他會員可檢視並驗證。</p></div><button class="button primary" onclick="document.getElementById('upload').scrollIntoView({behavior:'smooth'})">上傳驗證照片</button></div><section class="task"><p class="eyebrow">ONE TASK TODAY</p><h2>將今日隨機數字寫在紙條上，與鎖具外觀同框拍照。</h2><div id="code" class="task-code">000 000</div><p class="muted">靜態版只會在本機預覽，不會上傳到伺服器。</p></section><form id="upload" class="upload"><div class="heading"><div><h2>提交照片</h2><p class="muted">浮水印會嵌入照片；畫面依原始長寬比例呈現。</p></div><span class="tag">登入會員可見</span></div><label>選擇圖片（JPEG、PNG、WebP，12 MB 以內）<input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></label><figure id="frame" class="preview hidden"><img id="img" alt="已嵌入浮水印的照片預覽"><figcaption class="muted">LOCKSPACE · 任務驗證浮水印已嵌入</figcaption></figure><label class="check"><input id="uploadConsent" type="checkbox"><span>我已年滿 18 歲，是照片中的本人或取得所有入鏡成年人的明確同意，並同意將照片提供給已註冊會員驗證。</span></label><p id="uploadError" class="error hidden"></p><button class="button primary">加入今日提交預覽</button></form><section><div class="heading"><div><h2>今日提交</h2><p class="muted">靜態版只顯示你在此瀏覽器加入的預覽項目。</p></div></div><div id="feed"></div></section></section><aside><section class="panel"><p class="eyebrow">公開會員檔案</p><h2 id="name">會員</h2><p id="pronouns" class="muted"></p><dl id="profile"></dl></section><section class="panel"><h2>影像安全</h2><p class="muted">正式版照片應存於非公開儲存區，須登入註冊後才可讀取。浮水印不能防止截圖。</p><button id="delete" class="button" type="button">刪除本機帳戶資料</button></section></aside></div></main>
-<script>
-const key="lockspace.static.member",S={member:read(),pending:null,preview:"",posts:[]};const $=id=>document.getElementById(id);function show(page){["auth","reg","dash"].forEach(id=>$(id).classList.add("hidden"));page.classList.remove("hidden")}function read(){try{return JSON.parse(localStorage.getItem(key))}catch{return null}}function err(id,msg){$(id).textContent=msg;$(id).classList.remove("hidden")}function clear(id){$(id).classList.add("hidden")}function mode(signup){$("loginTab").classList.toggle("active",!signup);$("signupTab").classList.toggle("active",signup);$("loginForm").classList.toggle("hidden",signup);$("signupForm").classList.toggle("hidden",!signup);clear("loginError");clear("signupError")}$("loginTab").onclick=()=>mode(false);$("signupTab").onclick=()=>mode(true);$("loginForm").onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target));const m=read();if(!m||m.account!==d.account||m.password!==d.password)return err("loginError","帳號或密碼不正確；第一次使用請先註冊。");S.member=m;render()};$("signupForm").onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target));if(d.password!==d.confirm)return err("signupError","兩次輸入的密碼不一致。");S.pending={account:d.account,password:d.password};$("profileForm").reset();$("profileForm").elements.displayName.value=String(d.account).split("@")[0];show($("reg"))};$("profileForm").onsubmit=e=>{e.preventDefault();const profile=Object.fromEntries(new FormData(e.target));const cur=S.member||{};S.member={account:S.pending?.account||cur.account||"member",password:S.pending?.password||cur.password||"",profile};localStorage.setItem(key,JSON.stringify(S.member));S.pending=null;render()};$("logout").onclick=()=>{S.member=read();mode(false);show($("auth"))};$("edit").onclick=()=>{const p=S.member.profile;$("profileForm").reset();Object.entries(p).forEach(([k,v])=>{if($("profileForm").elements[k]&&typeof v==="string")$("profileForm").elements[k].value=v});$("profileForm").elements.adult.checked=true;$("profileForm").elements.consent.checked=true;show($("reg"))};$("delete").onclick=()=>{if(confirm("刪除這台瀏覽器中的 Lockspace 帳戶與預覽資料？")){localStorage.removeItem(key);S.member=null;S.posts=[];mode(true);show($("auth"))}};$("photo").onchange=e=>choose(e.target.files[0]);$("upload").onsubmit=e=>{e.preventDefault();if(!S.preview||!$("uploadConsent").checked)return err("uploadError","請選照片並確認成年、所有權與分享同意。");S.posts.unshift({imageUrl:S.preview,createdAt:Date.now(),profile:S.member.profile});feed();e.target.reset();$("frame").classList.add("hidden");S.preview=""};function render(){const p=S.member.profile;$("chip").textContent=`${p.displayName||S.member.account} · 已註冊`;$("name").textContent=p.displayName||S.member.account;$("pronouns").textContent=p.pronouns||"未填代名詞";$("code").textContent=daily();const rows=[["貞操鎖品牌",p.lockBrand],["顏色",p.lockColor],["籠長 × 籠寬",pair(p.cageLengthCm,p.cageWidthCm,"cm")],["未配戴長度／周長",pair(p.bodyLengthCm,p.bodyGirthCm,"cm")],["身高",fmt(p.heightCm,"cm")],["體重",fmt(p.weightKg,"kg")],["膚色",p.skinTone],["身材",p.bodyType]];$("profile").innerHTML=rows.map(([l,v])=>`<div class="row"><dt>${esc(l)}</dt><dd>${esc(v||"未填")}</dd></div>`).join("");feed();show($("dash"))}function daily(){const t=new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Taipei"});let h=0;for(const c of t)h=((h<<5)-h+c.charCodeAt(0))|0;const code=String(Math.abs(h)%1e6).padStart(6,"0");return code.slice(0,3)+" "+code.slice(3)}async function choose(file){clear("uploadError");if(!file)return;if(!file.type.startsWith("image/")||file.size>12*1024*1024)return err("uploadError","請選擇 12 MB 以內的圖片。");try{S.preview=await watermark(file);$("img").src=S.preview;$("frame").classList.remove("hidden")}catch{err("uploadError","無法處理這張圖片，請換一張再試。")}}function feed(){if(!S.posts.length){$("feed").innerHTML='<div class="panel"><p class="muted">今天還沒有提交預覽。你可以成為第一位。</p></div>';return}$("feed").innerHTML=S.posts.map(post=>{const p=post.profile;return `<article class="post"><strong>${esc(p.displayName||"會員")}</strong><span class="muted"> · ${new Date(post.createdAt).toLocaleString("zh-TW",{timeZone:"Asia/Taipei"})}</span><div class="public"><span>${esc(p.lockBrand||"未填品牌")}</span><span>${esc(p.lockColor||"未填顏色")}</span><span>籠 ${esc(p.cageLengthCm||"—")} × ${esc(p.cageWidthCm||"—")} cm</span><span>身高 ${esc(p.heightCm||"—")} cm</span><span>體重 ${esc(p.weightKg||"—")} kg</span></div><figure class="preview"><img src="${post.imageUrl}" alt="會員提交的任務驗證照片"></figure><button class="button" type="button">通過 (0)</button> <button class="button" type="button">請補件 (0)</button></article>`}).join("")}async function watermark(file){const src=URL.createObjectURL(file);try{const im=new Image();im.src=src;await im.decode();const c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext("2d");x.drawImage(im,0,0);x.save();x.translate(c.width/2,c.height/2);x.rotate(-Math.PI/8);x.font=`700 ${Math.max(18,Math.round(c.width*.025))}px sans-serif`;x.fillStyle="rgba(255,255,255,.52)";x.strokeStyle="rgba(0,0,0,.55)";x.lineWidth=Math.max(2,Math.round(c.width*.002));const m=`LOCKSPACE · ${new Date().toLocaleDateString("zh-TW")} · 任務驗證`,sx=Math.max(260,Math.round(c.width*.55)),sy=Math.max(110,Math.round(c.width*.12));for(let y=-c.height;y<c.height*2;y+=sy)for(let xx=-c.width;xx<c.width*2;xx+=sx){x.strokeText(m,xx,y);x.fillText(m,xx,y)}x.restore();return c.toDataURL("image/jpeg",.9)}finally{URL.revokeObjectURL(src)}}function fmt(v,u){return v?`${v} ${u}`:""}function pair(a,b,u){return a||b?`${a||"—"} × ${b||"—"} ${u}`:""}function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[c])}if(S.member?.profile)render();
-</script>
+  <main id="authPage" class="auth-page">
+    <section class="auth-card">
+      <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
+      <p class="eyebrow">MEMBER ACCESS</p>
+      <h1>登入 Lockspace</h1>
+      <p class="muted">私人任務與會員驗證空間。</p>
+      <div class="callout warning"><strong>僅限年滿 18 歲使用</strong></div>
+
+      <div class="tabs" role="tablist" aria-label="會員入口">
+        <button class="tab active" id="loginTab" type="button">帳號登入</button>
+        <button class="tab" id="signupTab" type="button">註冊會員</button>
+      </div>
+
+      <form id="loginForm">
+        <label>Email
+          <input name="account" type="email" autocomplete="username" required>
+        </label>
+        <label>密碼
+          <input name="password" type="password" autocomplete="current-password" required minlength="6">
+        </label>
+        <p id="loginError" class="error hidden" role="alert"></p>
+        <button class="button primary full" type="submit">登入並繼續</button>
+      </form>
+
+      <form id="quickSignupForm" class="hidden">
+        <label>Email
+          <input name="account" type="email" autocomplete="username" required>
+        </label>
+        <label>密碼
+          <input name="password" type="password" autocomplete="new-password" required minlength="6">
+        </label>
+        <label>確認密碼
+          <input name="confirmPassword" type="password" autocomplete="new-password" required minlength="6">
+        </label>
+        <p id="signupError" class="error hidden" role="alert"></p>
+        <button class="button primary full" type="submit">下一步：填寫個人資料</button>
+      </form>
+    </section>
+  </main>
+
+  <main id="registrationPage" class="registration-page hidden">
+    <form id="profileForm" class="registration-card">
+      <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
+      <p class="eyebrow">MEMBER REGISTRATION</p>
+      <h1>完成會員註冊資料</h1>
+      <p class="muted">建立你的會員檔案。</p>
+
+      <div class="form-section">
+        <h2>基本資料</h2>
+        <div class="form-grid">
+          <label>公開顯示名稱
+            <input name="displayName" required maxlength="32">
+          </label>
+          <label>代名詞
+            <input name="pronouns" maxlength="32" placeholder="選填">
+          </label>
+          <label>身高 <span class="public-tag">公開</span>
+            <span class="input-with-unit"><input name="heightCm" type="number" min="0" max="260" step="1"><span>cm</span></span>
+          </label>
+          <label>體重 <span class="public-tag">公開</span>
+            <span class="input-with-unit"><input name="weightKg" type="number" min="0" max="400" step="0.1"><span>kg</span></span>
+          </label>
+          <label>膚色 <span class="public-tag">公開</span>
+            <input name="skinTone" maxlength="40">
+          </label>
+          <label>身材 <span class="public-tag">公開</span>
+            <input name="bodyType" maxlength="60">
+          </label>
+        </div>
+        <label>自我介紹
+          <textarea name="bio" rows="3" maxlength="240" placeholder="選填"></textarea>
+        </label>
+      </div>
+
+      <div class="form-section">
+        <h2>貞操鎖資料 <span class="public-tag">公開</span></h2>
+        <div class="form-grid">
+          <label>品牌
+            <input name="lockBrand" maxlength="64">
+          </label>
+          <label>顏色
+            <input name="lockColor" maxlength="32">
+          </label>
+          <label>籠長
+            <span class="input-with-unit"><input name="cageLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+          </label>
+          <label>籠寬
+            <span class="input-with-unit"><input name="cageWidthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>未配戴時身體尺寸 <span class="public-tag">公開</span></h2>
+        <div class="form-grid">
+          <label>陰莖長度
+            <span class="input-with-unit"><input name="bodyLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+          </label>
+          <label>陰莖周長
+            <span class="input-with-unit"><input name="bodyGirthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="callout warning">標示公開的資料會顯示給已登入會員。</div>
+      <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
+      <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
+      <button class="button primary full" type="submit">完成註冊並進入任務</button>
+    </form>
+  </main>
+
+  <main id="dashboardPage" class="site-shell hidden">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
+      <div class="header-actions">
+        <span id="memberChip" class="member-chip">已登入</span>
+        <button id="editProfileButton" class="button secondary" type="button">編輯公開檔案</button>
+        <button id="logoutButton" class="button quiet" type="button">登出</button>
+      </div>
+    </header>
+    <div class="callout warning"><strong>僅限成年會員。</strong> 上傳前確認所有入鏡者皆已同意。</div>
+
+    <div class="dashboard-grid">
+      <section>
+        <div class="page-title">
+          <div>
+            <p class="eyebrow">TODAY · ASIA/TAIPEI</p>
+            <h1>今日唯一任務</h1>
+            <p class="muted">完成任務並提交驗證。</p>
+          </div>
+          <button class="button primary" type="button" onclick="document.getElementById('upload').scrollIntoView({behavior:'smooth'})">上傳驗證照片</button>
+        </div>
+        <section class="task-panel">
+          <div class="task-label">ONE TASK TODAY</div>
+          <h2>將今日隨機數字寫在紙條上，與鎖具外觀同框拍照。</h2>
+          <div id="taskCode" class="task-code">000 000</div>
+          <p class="muted">避免拍入臉部、住址與其他識別資料。</p>
+        </section>
+
+        <form id="upload" class="upload-panel">
+          <div class="section-heading">
+            <div>
+              <h2>提交照片</h2>
+              <p class="muted">浮水印會嵌入照片；畫面依原始長寬比例呈現。</p>
+            </div>
+            <span class="private-tag">登入會員可見</span>
+          </div>
+          <label class="upload-picker">選擇圖片（JPEG、PNG、WebP，12 MB 以內）
+            <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp">
+          </label>
+          <figure id="previewFrame" class="preview-frame hidden">
+            <img id="photoPreview" alt="已嵌入浮水印的照片預覽">
+            <figcaption class="muted">LOCKSPACE · 任務驗證浮水印已嵌入</figcaption>
+          </figure>
+          <label class="check-row"><input id="uploadConsent" type="checkbox"><span>我已年滿 18 歲，是照片中的本人或取得所有入鏡成年人的明確同意，並同意將照片提供給已註冊會員驗證。</span></label>
+          <p id="uploadError" class="error hidden" role="alert"></p>
+          <button class="button primary" type="submit">加入今日提交預覽</button>
+        </form>
+
+        <section>
+          <div class="section-heading">
+            <div>
+              <h2>今日提交</h2>
+              <p class="muted">你的今日紀錄。</p>
+            </div>
+          </div>
+          <div id="feed"></div>
+        </section>
+      </section>
+
+      <aside class="side-column">
+        <section class="panel">
+          <p class="eyebrow">公開會員檔案</p>
+          <h2 id="profileName">會員</h2>
+          <p id="profilePronouns" class="muted"></p>
+          <dl id="profileList"></dl>
+        </section>
+        <section class="panel">
+          <h2>影像安全</h2>
+          <ul class="safety-list">
+            <li>僅允許成年本人自願上傳，禁止未經同意或未成年影像。</li>
+            <li>照片只供已登入會員查看。</li>
+            <li>浮水印是提醒與歸屬標示，不能防止截圖。</li>
+          </ul>
+          <button id="deleteAccountButton" class="button danger" type="button">刪除帳戶</button>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
+      authDomain: "lockspace-19edc.firebaseapp.com",
+      projectId: "lockspace-19edc",
+      storageBucket: "lockspace-19edc.firebasestorage.app",
+      messagingSenderId: "726438557640",
+      appId: "1:726438557640:web:d0e51ec0280cd1066e32fd"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const state = {
+      member: null,
+      pendingCredentials: null,
+      previewUrl: "",
+      posts: []
+    };
+
+    const authPage = document.getElementById("authPage");
+    const registrationPage = document.getElementById("registrationPage");
+    const dashboardPage = document.getElementById("dashboardPage");
+    const loginForm = document.getElementById("loginForm");
+    const quickSignupForm = document.getElementById("quickSignupForm");
+    const profileForm = document.getElementById("profileForm");
+    const loginTab = document.getElementById("loginTab");
+    const signupTab = document.getElementById("signupTab");
+
+    loginTab.addEventListener("click", () => setAuthMode("login"));
+    signupTab.addEventListener("click", () => setAuthMode("signup"));
+    document.getElementById("logoutButton").addEventListener("click", logout);
+    document.getElementById("editProfileButton").addEventListener("click", editProfile);
+    document.getElementById("deleteAccountButton").addEventListener("click", deleteAccount);
+    document.getElementById("photoInput").addEventListener("change", event => choosePhoto(event.target.files[0]));
+    document.getElementById("upload").addEventListener("submit", submitPreview);
+
+    loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(loginForm).entries());
+      hideError("loginError");
+      try {
+        await signInWithEmailAndPassword(auth, data.account.trim(), data.password);
+      } catch {
+        showError("loginError", "Email 或密碼不正確。");
+      }
+    });
+
+    quickSignupForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(quickSignupForm).entries());
+      if (data.password !== data.confirmPassword) {
+        showError("signupError", "兩次輸入的密碼不一致。");
+        return;
+      }
+      state.pendingCredentials = { account: data.account, password: data.password };
+      profileForm.reset();
+      profileForm.elements.displayName.value = String(data.account).split("@")[0];
+      showOnly(registrationPage);
+    });
+
+    profileForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      const profile = Object.fromEntries(new FormData(profileForm).entries());
+      const submitButton = profileForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      try {
+        let user = auth.currentUser;
+        if (state.pendingCredentials) {
+          const credential = await createUserWithEmailAndPassword(auth, state.pendingCredentials.account.trim(), state.pendingCredentials.password);
+          user = credential.user;
+        }
+        if (!user) throw new Error("not-authenticated");
+        await setDoc(doc(db, "members", user.uid), {
+          email: user.email,
+          profile,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        state.member = { uid: user.uid, account: user.email, profile };
+        state.pendingCredentials = null;
+        renderDashboard();
+      } catch (error) {
+        showOnly(authPage);
+        setAuthMode("signup");
+        showError("signupError", error?.code === "auth/email-already-in-use" ? "這個 Email 已註冊。" : "註冊失敗，請稍後再試。");
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+
+    function setAuthMode(mode) {
+      const signup = mode === "signup";
+      loginTab.classList.toggle("active", !signup);
+      signupTab.classList.toggle("active", signup);
+      loginForm.classList.toggle("hidden", signup);
+      quickSignupForm.classList.toggle("hidden", !signup);
+      hideError("loginError");
+      hideError("signupError");
+    }
+
+    function showOnly(page) {
+      authPage.classList.add("hidden");
+      registrationPage.classList.add("hidden");
+      dashboardPage.classList.add("hidden");
+      page.classList.remove("hidden");
+    }
+
+    function showError(id, message) {
+      const element = document.getElementById(id);
+      element.textContent = message;
+      element.classList.remove("hidden");
+    }
+
+    function hideError(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+
+    function renderDashboard() {
+      const profile = state.member.profile;
+      document.getElementById("memberChip").textContent = `${profile.displayName || state.member.account} · 已註冊`;
+      document.getElementById("profileName").textContent = profile.displayName || state.member.account;
+      document.getElementById("profilePronouns").textContent = profile.pronouns || "未填代名詞";
+      document.getElementById("taskCode").textContent = dailyCode();
+      const rows = [
+        ["貞操鎖品牌", profile.lockBrand],
+        ["顏色", profile.lockColor],
+        ["籠長 × 籠寬", pair(profile.cageLengthCm, profile.cageWidthCm, "cm")],
+        ["未配戴長度／周長", pair(profile.bodyLengthCm, profile.bodyGirthCm, "cm")],
+        ["身高", format(profile.heightCm, "cm")],
+        ["體重", format(profile.weightKg, "kg")],
+        ["膚色", profile.skinTone],
+        ["身材", profile.bodyType]
+      ];
+      document.getElementById("profileList").innerHTML = rows.map(([label, value]) => `<div class="profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value || "未填")}</dd></div>`).join("");
+      renderFeed();
+      showOnly(dashboardPage);
+    }
+
+    function dailyCode() {
+      const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Taipei" });
+      let hash = 0;
+      for (const char of today) hash = ((hash << 5) - hash + char.charCodeAt(0)) | 0;
+      const code = String(Math.abs(hash) % 1000000).padStart(6, "0");
+      return `${code.slice(0, 3)} ${code.slice(3)}`;
+    }
+
+    function editProfile() {
+      const profile = state.member.profile;
+      profileForm.reset();
+      for (const [key, value] of Object.entries(profile)) {
+        if (profileForm.elements[key] && typeof value === "string") profileForm.elements[key].value = value;
+      }
+      profileForm.elements.adultConfirmed.checked = true;
+      profileForm.elements.publicDataConsent.checked = true;
+      showOnly(registrationPage);
+    }
+
+    async function logout() {
+      await signOut(auth);
+    }
+
+    async function deleteAccount() {
+      if (!confirm("永久刪除 Lockspace 帳戶與會員資料？")) return;
+      const user = auth.currentUser;
+      if (!user) return;
+      try {
+        await deleteDoc(doc(db, "members", user.uid));
+        await deleteUser(user);
+      } catch {
+        alert("請先重新登入，再刪除帳戶。");
+      }
+    }
+
+    async function choosePhoto(file) {
+      hideError("uploadError");
+      if (!file) return;
+      if (!file.type.startsWith("image/") || file.size > 12 * 1024 * 1024) {
+        showError("uploadError", "請選擇 12 MB 以內的圖片。");
+        return;
+      }
+      try {
+        state.previewUrl = await watermark(file);
+        document.getElementById("photoPreview").src = state.previewUrl;
+        document.getElementById("previewFrame").classList.remove("hidden");
+      } catch {
+        showError("uploadError", "無法處理這張圖片，請換一張再試。");
+      }
+    }
+
+    function submitPreview(event) {
+      event.preventDefault();
+      if (!state.previewUrl || !document.getElementById("uploadConsent").checked) {
+        showError("uploadError", "請選照片並確認成年、所有權與分享同意。");
+        return;
+      }
+      state.posts.unshift({ imageUrl: state.previewUrl, createdAt: Date.now(), profile: state.member.profile });
+      renderFeed();
+      document.getElementById("upload").reset();
+      document.getElementById("previewFrame").classList.add("hidden");
+      state.previewUrl = "";
+    }
+
+    function renderFeed() {
+      const feed = document.getElementById("feed");
+      if (!state.posts.length) {
+        feed.innerHTML = '<div class="panel"><p class="muted">今天還沒有提交預覽。你可以成為第一位。</p></div>';
+        return;
+      }
+      feed.innerHTML = state.posts.map(post => {
+        const profile = post.profile;
+        return `<article class="submission-card">
+          <strong>${escapeHtml(profile.displayName || "會員")}</strong>
+          <span class="muted"> · ${new Date(post.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}</span>
+          <div class="public-details">
+            <span>${escapeHtml(profile.lockBrand || "未填品牌")}</span>
+            <span>${escapeHtml(profile.lockColor || "未填顏色")}</span>
+            <span>籠 ${escapeHtml(profile.cageLengthCm || "—")} × ${escapeHtml(profile.cageWidthCm || "—")} cm</span>
+            <span>身高 ${escapeHtml(profile.heightCm || "—")} cm</span>
+            <span>體重 ${escapeHtml(profile.weightKg || "—")} kg</span>
+          </div>
+          <figure class="preview-frame"><img src="${post.imageUrl}" alt="會員提交的任務驗證照片"></figure>
+          <button class="button secondary" type="button">通過 (0)</button>
+          <button class="button secondary" type="button">請補件 (0)</button>
+        </article>`;
+      }).join("");
+    }
+
+    async function watermark(file) {
+      const source = URL.createObjectURL(file);
+      try {
+        const image = new Image();
+        image.src = source;
+        await image.decode();
+        const canvas = document.createElement("canvas");
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        const context = canvas.getContext("2d");
+        context.drawImage(image, 0, 0);
+        context.save();
+        context.translate(canvas.width / 2, canvas.height / 2);
+        context.rotate(-Math.PI / 8);
+        context.font = `700 ${Math.max(18, Math.round(canvas.width * 0.025))}px sans-serif`;
+        context.fillStyle = "rgba(255,255,255,.52)";
+        context.strokeStyle = "rgba(0,0,0,.55)";
+        context.lineWidth = Math.max(2, Math.round(canvas.width * 0.002));
+        const mark = `LOCKSPACE · ${new Date().toLocaleDateString("zh-TW")} · 任務驗證`;
+        const stepX = Math.max(260, Math.round(canvas.width * 0.55));
+        const stepY = Math.max(110, Math.round(canvas.width * 0.12));
+        for (let y = -canvas.height; y < canvas.height * 2; y += stepY) {
+          for (let x = -canvas.width; x < canvas.width * 2; x += stepX) {
+            context.strokeText(mark, x, y);
+            context.fillText(mark, x, y);
+          }
+        }
+        context.restore();
+        return canvas.toDataURL("image/jpeg", 0.9);
+      } finally {
+        URL.revokeObjectURL(source);
+      }
+    }
+
+    function format(value, unit) {
+      return value ? `${value} ${unit}` : "";
+    }
+
+    function pair(a, b, unit) {
+      return a || b ? `${a || "—"} × ${b || "—"} ${unit}` : "";
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        state.member = null;
+        showOnly(authPage);
+        setAuthMode("login");
+        return;
+      }
+      const snapshot = await getDoc(doc(db, "members", user.uid));
+      if (!snapshot.exists()) {
+        state.pendingCredentials = null;
+        profileForm.reset();
+        profileForm.elements.displayName.value = user.email.split("@")[0];
+        showOnly(registrationPage);
+        return;
+      }
+      state.member = { uid: user.uid, account: user.email, ...snapshot.data() };
+      renderDashboard();
+    });
+  </script>
 </body>
 </html>
