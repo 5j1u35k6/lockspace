@@ -13,7 +13,9 @@ service cloud.firestore {
 
     function isRegistered() {
       return signedIn()
-        && exists(/databases/$(database)/documents/members/$(request.auth.uid));
+        && exists(/databases/$(database)/documents/members/$(request.auth.uid))
+        && (!("deleted" in get(/databases/$(database)/documents/members/$(request.auth.uid)).data)
+          || get(/databases/$(database)/documents/members/$(request.auth.uid)).data.deleted != true);
     }
 
     match /admins/{adminId} {
@@ -24,8 +26,15 @@ service cloud.firestore {
     match /members/{memberId} {
       allow read: if signedIn()
         && (request.auth.uid == memberId || isRegistered() || isAdmin());
-      allow create: if signedIn() && request.auth.uid == memberId;
-      allow update, delete: if (signedIn() && request.auth.uid == memberId) || isAdmin();
+      allow create: if signedIn()
+        && request.auth.uid == memberId
+        && (!("deleted" in request.resource.data) || request.resource.data.deleted != true);
+      allow update: if isAdmin()
+        || (signedIn()
+          && request.auth.uid == memberId
+          && (!("deleted" in resource.data) || resource.data.deleted != true)
+          && (!("deleted" in request.resource.data) || request.resource.data.deleted != true));
+      allow delete: if (signedIn() && request.auth.uid == memberId) || isAdmin();
     }
 
     match /birthProofs/{memberId} {
