@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.4.0">
+  <meta name="application-version" content="0.5.0">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -94,7 +94,9 @@
       background-repeat: no-repeat;
       padding-right: 38px;
     }
-    input[type="date"] { color-scheme: dark; }
+    select option { background: var(--panel-2); color: var(--text); }
+    input[type="date"] { color-scheme: dark; accent-color: var(--lime); }
+    input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(88%) sepia(72%) saturate(430%) hue-rotate(35deg); }
     input[type="file"] { padding: 7px; }
     input[type="file"]::file-selector-button {
       margin-right: 10px;
@@ -130,8 +132,9 @@
     .full { width: 100%; }
     .callout { padding: 13px 15px; border-radius: 13px; margin: 17px 0; font-size: 14px; }
     .warning { background: #f4be630d; border: 1px solid #f4be6331; color: #ead7ae; }
-    .check-row { display: flex; align-items: flex-start; gap: 10px; margin: 14px 0; color: #d6d3dd; font-size: 14px; }
-    .check-row input { width: 18px; height: 18px; flex: none; margin: 2px 0 0; accent-color: var(--lime); }
+    .check-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: #d6d3dd; font-size: 14px; }
+    .check-row input { width: 18px; height: 18px; flex: none; margin: 0; accent-color: var(--lime); }
+    .field-help { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 500; }
     .error { color: #ffb0bf; background: #ff617510; border: 1px solid #ff617538; padding: 11px 13px; border-radius: 11px; font-size: 14px; }
     .fineprint { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
     .site-shell { max-width: 1280px; margin: auto; padding: 22px 30px 60px; }
@@ -221,15 +224,16 @@
           <input name="account" autocomplete="username" pattern="[A-Za-z0-9._-]{3,24}" minlength="3" maxlength="24" required>
         </label>
         <label>密碼
-          <input name="password" type="password" autocomplete="new-password" required minlength="6">
+          <input name="password" type="password" autocomplete="new-password" required minlength="8" pattern="(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}" title="至少 8 個字元，包含一個英文大寫字母與一個特殊符號">
+          <span class="field-help">至少 8 個字元，須包含 1 個英文大寫字母與 1 個特殊符號。</span>
         </label>
         <label>確認密碼
-          <input name="confirmPassword" type="password" autocomplete="new-password" required minlength="6">
+          <input name="confirmPassword" type="password" autocomplete="new-password" required minlength="8">
         </label>
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.4.0</p>
+      <p class="version-stamp">Lockspace v0.5.0</p>
     </section>
   </main>
 
@@ -248,6 +252,7 @@
           </label>
           <label>生日
             <input name="birthDate" type="date" required>
+            <span class="field-help">僅開放年滿 18 歲的出生日期。</span>
           </label>
           <label>身高 <span class="public-tag">公開</span>
             <span class="input-with-unit"><input name="heightCm" type="number" min="0" max="260" step="1"><span>cm</span></span>
@@ -294,6 +299,18 @@
           <label>籠寬
             <span class="input-with-unit"><input name="cageWidthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
           </label>
+          <label>環內徑
+            <span class="input-with-unit"><input name="ringDiameterMm" type="number" min="0" max="200" step="0.1"><span>mm</span></span>
+          </label>
+          <label>重量
+            <span class="input-with-unit"><input name="lockWeightG" type="number" min="0" max="3000" step="1"><span>g</span></span>
+          </label>
+          <label>材質
+            <select name="lockMaterial"><option value="">請選擇</option><option>樹脂</option><option>不鏽鋼</option><option>鈦</option><option>矽膠</option><option>其他</option></select>
+          </label>
+          <label>鎖定方式
+            <select name="lockingMethod"><option value="">請選擇</option><option>掛鎖</option><option>內嵌鎖</option><option>一次性編號鎖</option><option>其他</option></select>
+          </label>
         </div>
       </div>
 
@@ -313,7 +330,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.4.0</p>
+      <p class="version-stamp">Lockspace v0.5.0</p>
     </form>
   </main>
 
@@ -337,14 +354,12 @@
           <div class="task-label">ONE TASK TODAY</div>
           <h2>將今日隨機數字寫在紙條上，與鎖具外觀同框拍照。</h2>
           <div id="taskCode" class="task-code">000 000</div>
-          <p class="muted">避免拍入臉部、住址與其他識別資料。</p>
         </section>
 
         <form id="upload" class="upload-panel">
           <div class="section-heading">
             <div>
               <h2>提交照片</h2>
-              <p class="muted">浮水印會嵌入照片；畫面依原始長寬比例呈現。</p>
             </div>
             <span class="private-tag">登入會員可見</span>
           </div>
@@ -371,7 +386,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.4.0</p>
+    <p class="version-stamp">Lockspace v0.5.0</p>
   </main>
 
   <script type="module">
@@ -379,7 +394,7 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.4.0";
+    const APP_VERSION = "0.5.0";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
@@ -433,6 +448,10 @@
     quickSignupForm.addEventListener("submit", event => {
       event.preventDefault();
       const data = Object.fromEntries(new FormData(quickSignupForm).entries());
+      if (!/(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}/.test(data.password)) {
+        showError("signupError", "密碼須至少 8 個字元，包含一個英文大寫字母與一個特殊符號。");
+        return;
+      }
       if (data.password !== data.confirmPassword) {
         showError("signupError", "兩次輸入的密碼不一致。");
         return;
