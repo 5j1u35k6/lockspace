@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.3.0">
+  <meta name="application-version" content="0.4.0">
   <title>Lockspace 後台管理</title>
   <style>
     :root{color-scheme:dark;--bg:#090a09;--panel:#121412;--line:#30352f;--text:#f5f6f3;--muted:#aeb4ab;--lime:#b6ff70;--red:#ff91a6;--amber:#efd59e}
@@ -20,11 +20,11 @@
       <p id="loginError" class="error hidden"></p>
       <button class="button primary" type="submit">登入</button>
     </form>
-    <p class="version-stamp">Lockspace Admin v0.3.0</p>
+    <p class="version-stamp">Lockspace Admin v0.4.0</p>
   </main>
 
   <main id="dashboard" class="shell hidden">
-    <header class="top"><div><div class="brand">lockspace<b>.</b> 管理</div><span class="version-stamp">v0.3.0</span></div><div class="actions"><a class="button" href="index.html">會員頁</a><button id="logout" class="button" type="button">登出</button></div></header>
+    <header class="top"><div><div class="brand">lockspace<b>.</b> 管理</div><span class="version-stamp">v0.4.0</span></div><div class="actions"><a class="button" href="index.html">會員頁</a><button id="logout" class="button" type="button">登出</button></div></header>
     <section class="stats"><div class="stat"><span class="muted">會員</span><strong id="total">0</strong></div><div class="stat"><span class="muted">待查驗</span><strong id="pending">0</strong></div><div class="stat"><span class="muted">已通過</span><strong id="approved">0</strong></div></section>
     <div class="table-wrap"><table><thead><tr><th>帳號</th><th>顯示名稱</th><th>生日</th><th>膚色</th><th>身材</th><th>狀態</th><th>操作</th></tr></thead><tbody id="memberRows"></tbody></table><div id="empty" class="empty hidden">尚無會員資料</div></div>
   </main>
@@ -33,7 +33,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-    const APP_VERSION="0.3.0";
+    const APP_VERSION="0.4.0";
     const config={apiKey:"AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",authDomain:"lockspace-19edc.firebaseapp.com",projectId:"lockspace-19edc",storageBucket:"lockspace-19edc.firebasestorage.app",messagingSenderId:"726438557640",appId:"1:726438557640:web:d0e51ec0280cd1066e32fd"};
     const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
     const login=document.getElementById("login"),dashboard=document.getElementById("dashboard"),rows=document.getElementById("memberRows");
