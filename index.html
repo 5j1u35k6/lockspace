@@ -85,6 +85,26 @@
       background: #101017;
       color: var(--text);
     }
+    select {
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, var(--lime) 50%), linear-gradient(135deg, var(--lime) 50%, transparent 50%);
+      background-position: calc(100% - 18px) 19px, calc(100% - 13px) 19px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      padding-right: 38px;
+    }
+    input[type="date"] { color-scheme: dark; }
+    input[type="file"] { padding: 7px; }
+    input[type="file"]::file-selector-button {
+      margin-right: 10px;
+      padding: 7px 10px;
+      border: 0;
+      border-radius: 4px;
+      background: var(--lime);
+      color: #111410;
+      font-weight: 750;
+      cursor: pointer;
+    }
     textarea { resize: vertical; }
     .input-with-unit { display: flex; align-items: center; gap: 9px; }
     .input-with-unit input { min-width: 0; }
@@ -182,8 +202,8 @@
       </div>
 
       <form id="loginForm">
-        <label>Email
-          <input name="account" type="email" autocomplete="username" required>
+        <label>帳號
+          <input name="account" autocomplete="username" pattern="[A-Za-z0-9._-]{3,24}" minlength="3" maxlength="24" required>
         </label>
         <label>密碼
           <input name="password" type="password" autocomplete="current-password" required minlength="6">
@@ -193,8 +213,8 @@
       </form>
 
       <form id="quickSignupForm" class="hidden">
-        <label>Email
-          <input name="account" type="email" autocomplete="username" required>
+        <label>帳號
+          <input name="account" autocomplete="username" pattern="[A-Za-z0-9._-]{3,24}" minlength="3" maxlength="24" required>
         </label>
         <label>密碼
           <input name="password" type="password" autocomplete="new-password" required minlength="6">
@@ -221,8 +241,8 @@
           <label>公開顯示名稱
             <input name="displayName" required maxlength="32">
           </label>
-          <label>代名詞
-            <input name="pronouns" maxlength="32" placeholder="選填">
+          <label>生日
+            <input name="birthDate" type="date" required>
           </label>
           <label>身高 <span class="public-tag">公開</span>
             <span class="input-with-unit"><input name="heightCm" type="number" min="0" max="260" step="1"><span>cm</span></span>
@@ -231,15 +251,27 @@
             <span class="input-with-unit"><input name="weightKg" type="number" min="0" max="400" step="0.1"><span>kg</span></span>
           </label>
           <label>膚色 <span class="public-tag">公開</span>
-            <input name="skinTone" maxlength="40">
+            <select name="skinTone" required>
+              <option value="">請選擇</option>
+              <option>白皙</option><option>偏白</option><option>自然</option><option>小麥</option><option>棕色</option><option>深色</option>
+            </select>
           </label>
           <label>身材 <span class="public-tag">公開</span>
-            <input name="bodyType" maxlength="60">
+            <select name="bodyType" required>
+              <option value="">請選擇</option>
+              <option>纖細</option><option>精實</option><option>標準</option><option>壯碩</option><option>微肉</option><option>豐滿</option>
+            </select>
           </label>
         </div>
-        <label>自我介紹
-          <textarea name="bio" rows="3" maxlength="240" placeholder="選填"></textarea>
+      </div>
+
+      <div class="form-section">
+        <h2>生日查驗</h2>
+        <p class="muted">上傳只露出生日的證件照片。請遮住姓名、證號、地址、照片與其他資料。</p>
+        <label>證件生日照片
+          <input name="birthProof" type="file" accept="image/jpeg,image/png,image/webp" required>
         </label>
+        <label class="check-row"><input type="checkbox" name="proofRedacted" required><span>我已遮住生日以外的所有個人資料。</span></label>
       </div>
 
       <div class="form-section">
@@ -284,6 +316,7 @@
       <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
       <div class="header-actions">
         <span id="memberChip" class="member-chip">已登入</span>
+        <a id="adminLink" class="button secondary hidden" href="admin.html">後台管理</a>
         <button id="editProfileButton" class="button secondary" type="button">編輯公開檔案</button>
         <button id="logoutButton" class="button quiet" type="button">登出</button>
       </div>
@@ -342,7 +375,7 @@
         <section class="panel">
           <p class="eyebrow">公開會員檔案</p>
           <h2 id="profileName">會員</h2>
-          <p id="profilePronouns" class="muted"></p>
+          <p id="verificationStatus" class="muted"></p>
           <dl id="profileList"></dl>
         </section>
         <section class="panel">
@@ -389,6 +422,9 @@
     const profileForm = document.getElementById("profileForm");
     const loginTab = document.getElementById("loginTab");
     const signupTab = document.getElementById("signupTab");
+    const adultCutoff = new Date();
+    adultCutoff.setFullYear(adultCutoff.getFullYear() - 18);
+    profileForm.elements.birthDate.max = adultCutoff.toISOString().slice(0, 10);
 
     loginTab.addEventListener("click", () => setAuthMode("login"));
     signupTab.addEventListener("click", () => setAuthMode("signup"));
@@ -403,7 +439,7 @@
       const data = Object.fromEntries(new FormData(loginForm).entries());
       hideError("loginError");
       try {
-        await signInWithEmailAndPassword(auth, data.account.trim(), data.password);
+        await signInWithEmailAndPassword(auth, accountEmail(data.account), data.password);
       } catch {
         showError("loginError", "Email 或密碼不正確。");
       }
@@ -418,6 +454,7 @@
       }
       state.pendingCredentials = { account: data.account, password: data.password };
       profileForm.reset();
+      profileForm.elements.birthProof.required = true;
       profileForm.elements.displayName.value = String(data.account).split("@")[0];
       showOnly(registrationPage);
     });
@@ -425,27 +462,45 @@
     profileForm.addEventListener("submit", async event => {
       event.preventDefault();
       const profile = Object.fromEntries(new FormData(profileForm).entries());
+      if (!profile.birthDate || new Date(`${profile.birthDate}T00:00:00`) > adultCutoff) {
+        alert("註冊者必須年滿 18 歲。");
+        return;
+      }
       const submitButton = profileForm.querySelector('button[type="submit"]');
       submitButton.disabled = true;
       try {
         let user = auth.currentUser;
         if (state.pendingCredentials) {
-          const credential = await createUserWithEmailAndPassword(auth, state.pendingCredentials.account.trim(), state.pendingCredentials.password);
+          const credential = await createUserWithEmailAndPassword(auth, accountEmail(state.pendingCredentials.account), state.pendingCredentials.password);
           user = credential.user;
         }
         if (!user) throw new Error("not-authenticated");
+        const proofFile = profileForm.elements.birthProof.files[0];
+        if (!state.member && (!proofFile || proofFile.size > 8 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(proofFile.type))) {
+          throw new Error("invalid-proof");
+        }
+        let proofReady = Boolean(state.member?.verification?.proofReady);
+        if (proofFile) {
+          const dataUrl = await compressProof(proofFile);
+          await setDoc(doc(db, "birthProofs", user.uid), { dataUrl, updatedAt: serverTimestamp() });
+          proofReady = true;
+        }
+        delete profile.birthProof;
+        delete profile.proofRedacted;
         await setDoc(doc(db, "members", user.uid), {
-          email: user.email,
+          username: state.pendingCredentials?.account || state.member?.account,
           profile,
+          verification: proofFile ? { status: "pending", proofReady, submittedAt: new Date().toISOString() } : state.member.verification,
           updatedAt: serverTimestamp()
         }, { merge: true });
-        state.member = { uid: user.uid, account: user.email, profile };
+        state.member = { uid: user.uid, account: state.pendingCredentials?.account || state.member?.account, profile, verification: proofFile ? { status: "pending", proofReady } : state.member.verification };
         state.pendingCredentials = null;
         renderDashboard();
       } catch (error) {
         showOnly(authPage);
         setAuthMode("signup");
-        showError("signupError", error?.code === "auth/email-already-in-use" ? "這個 Email 已註冊。" : "註冊失敗，請稍後再試。");
+        const message = error?.code === "auth/email-already-in-use" ? "這個帳號已註冊。" : error?.message === "invalid-proof" ? "請上傳 8 MB 以內的 JPG、PNG 或 WebP 圖片。" : "註冊失敗，請稍後再試。";
+        showError("signupError", message);
       } finally {
         submitButton.disabled = false;
       }
@@ -482,7 +537,8 @@
       const profile = state.member.profile;
       document.getElementById("memberChip").textContent = `${profile.displayName || state.member.account} · 已註冊`;
       document.getElementById("profileName").textContent = profile.displayName || state.member.account;
-      document.getElementById("profilePronouns").textContent = profile.pronouns || "未填代名詞";
+      const status = state.member.verification?.status || "pending";
+      document.getElementById("verificationStatus").textContent = ({ pending: "生日查驗中", approved: "生日查驗完成", rejected: "生日資料需重新提交" })[status];
       document.getElementById("taskCode").textContent = dailyCode();
       const rows = [
         ["貞操鎖品牌", profile.lockBrand],
@@ -496,6 +552,7 @@
       ];
       document.getElementById("profileList").innerHTML = rows.map(([label, value]) => `<div class="profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value || "未填")}</dd></div>`).join("");
       renderFeed();
+      checkAdmin();
       showOnly(dashboardPage);
     }
 
@@ -515,6 +572,8 @@
       }
       profileForm.elements.adultConfirmed.checked = true;
       profileForm.elements.publicDataConsent.checked = true;
+      profileForm.elements.proofRedacted.checked = true;
+      profileForm.elements.birthProof.required = false;
       showOnly(registrationPage);
     }
 
@@ -655,9 +714,43 @@
         showOnly(registrationPage);
         return;
       }
-      state.member = { uid: user.uid, account: user.email, ...snapshot.data() };
+      state.member = { uid: user.uid, account: snapshot.data().username || user.email.split("@")[0], ...snapshot.data() };
       renderDashboard();
     });
+
+    function accountEmail(username) {
+      return `${String(username).trim().toLowerCase()}@members.lockspace.app`;
+    }
+
+    async function compressProof(file) {
+      const image = new Image();
+      const source = URL.createObjectURL(file);
+      try {
+        image.src = source;
+        await image.decode();
+        const scale = Math.min(1, 1280 / Math.max(image.naturalWidth, image.naturalHeight));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(image.naturalWidth * scale);
+        canvas.height = Math.round(image.naturalHeight * scale);
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.72);
+        if (dataUrl.length > 900000) throw new Error("invalid-proof");
+        return dataUrl;
+      } finally {
+        URL.revokeObjectURL(source);
+      }
+    }
+
+    async function checkAdmin() {
+      const user = auth.currentUser;
+      if (!user) return;
+      try {
+        const admin = await getDoc(doc(db, "admins", user.uid));
+        document.getElementById("adminLink").classList.toggle("hidden", !admin.exists());
+      } catch {
+        document.getElementById("adminLink").classList.add("hidden");
+      }
+    }
   </script>
 </body>
 </html>
