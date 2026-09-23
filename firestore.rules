@@ -1,0 +1,80 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isRegistered() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/members/$(request.auth.uid));
+    }
+
+    match /admins/{adminId} {
+      allow read: if signedIn() && request.auth.uid == adminId;
+      allow write: if false;
+    }
+
+    match /members/{memberId} {
+      allow read: if signedIn()
+        && (request.auth.uid == memberId || isRegistered() || isAdmin());
+      allow create: if signedIn() && request.auth.uid == memberId;
+      allow update, delete: if (signedIn() && request.auth.uid == memberId) || isAdmin();
+    }
+
+    match /birthProofs/{memberId} {
+      allow read: if (signedIn() && request.auth.uid == memberId) || isAdmin();
+      allow create, update: if signedIn() && request.auth.uid == memberId;
+      allow delete: if (signedIn() && request.auth.uid == memberId) || isAdmin();
+    }
+
+    match /submissions/{submissionId} {
+      allow read: if isRegistered() || isAdmin();
+      allow create: if isRegistered()
+        && request.resource.data.ownerId == request.auth.uid;
+      allow update: if false;
+      allow delete: if isAdmin()
+        || (isRegistered() && resource.data.ownerId == request.auth.uid);
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if isRegistered() || isAdmin();
+      allow create: if isRegistered()
+        && request.resource.data.reviewerId == request.auth.uid
+        && reviewId == request.resource.data.submissionId + "_" + request.auth.uid
+        && request.resource.data.decision in ["approved", "rejected"]
+        && exists(/databases/$(database)/documents/submissions/$(request.resource.data.submissionId))
+        && get(/databases/$(database)/documents/submissions/$(request.resource.data.submissionId)).data.ownerId != request.auth.uid;
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    match /reports/{reportId} {
+      allow read: if isAdmin();
+      allow create: if isRegistered()
+        && request.resource.data.reporterId == request.auth.uid
+        && reportId == request.resource.data.submissionId + "_" + request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    match /feedback/{feedbackId} {
+      allow create: if isRegistered()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.opinion is string
+        && request.resource.data.content is string;
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
