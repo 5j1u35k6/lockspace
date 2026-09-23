@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.6.0">
+  <meta name="application-version" content="0.6.2">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -249,16 +249,17 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.6.0</p>
+      <p class="version-stamp">Lockspace v0.6.2</p>
     </section>
   </main>
 
   <main id="registrationPage" class="registration-page hidden">
     <form id="profileForm" class="registration-card">
+      <button id="profileBackButton" class="button quiet hidden" type="button">← 返回</button>
       <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
       <p class="eyebrow">MEMBER REGISTRATION</p>
-      <h1>完成會員註冊資料</h1>
-      <p class="muted">建立你的會員檔案。</p>
+      <h1 id="profilePageTitle">完成會員註冊資料</h1>
+      <p id="profilePageDescription" class="muted">建立你的會員檔案。</p>
 
       <div class="form-section">
         <h2>基本資料</h2>
@@ -313,9 +314,6 @@
           <label>環內徑
             <span class="input-with-unit"><input name="ringDiameterMm" type="number" min="0" max="200" step="0.1"><span>mm</span></span>
           </label>
-          <label>重量
-            <span class="input-with-unit"><input name="lockWeightG" type="number" min="0" max="3000" step="1"><span>g</span></span>
-          </label>
           <label>材質
             <select name="lockMaterial"><option value="">請選擇</option><option>樹脂</option><option>不鏽鋼</option><option>鈦</option><option>矽膠</option><option>其他</option></select>
           </label>
@@ -340,8 +338,8 @@
       <div class="callout warning">標示公開的資料會顯示給已登入會員。</div>
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
-      <button class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.6.0</p>
+      <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
+      <p class="version-stamp">Lockspace v0.6.2</p>
     </form>
   </main>
 
@@ -360,33 +358,6 @@
         <button id="openTaskButton" class="button primary" type="button">上傳驗證照片</button>
       </section>
 
-      <section id="taskFlow" class="task-flow hidden">
-        <section class="task-panel">
-          <div class="task-label">ONE TASK TODAY</div>
-          <h2>將今日隨機數字寫在紙條上，與鎖具外觀同框拍照。</h2>
-          <div id="taskCode" class="task-code">000 000</div>
-        </section>
-
-        <form id="upload" class="upload-panel">
-          <div class="section-heading">
-            <div>
-              <h2>提交照片</h2>
-            </div>
-            <span class="private-tag">登入會員可見</span>
-          </div>
-          <label class="upload-picker">選擇圖片（JPEG、PNG、WebP，12 MB 以內）
-            <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp">
-          </label>
-          <figure id="previewFrame" class="preview-frame hidden">
-            <img id="photoPreview" alt="已嵌入浮水印的照片預覽">
-            <figcaption class="muted">LOCKSPACE · 任務驗證浮水印已嵌入</figcaption>
-          </figure>
-          <label class="check-row"><input id="uploadConsent" type="checkbox"><span>我已年滿 18 歲，是照片中的本人或取得所有入鏡成年人的明確同意，並同意將照片提供給已註冊會員驗證。</span></label>
-          <p id="uploadError" class="error hidden" role="alert"></p>
-          <button class="button primary full" type="submit">送出驗證紀錄</button>
-        </form>
-      </section>
-
       <section>
         <div class="section-heading feed-heading">
           <div>
@@ -397,7 +368,29 @@
         <div id="feed"></div>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.6.0</p>
+    <p class="version-stamp">Lockspace v0.6.2</p>
+  </main>
+
+  <main id="taskPage" class="site-shell hidden">
+    <header class="topbar"><button id="taskBackButton" class="button quiet" type="button">← 返回</button><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div></header>
+    <div class="dashboard-main">
+      <section id="taskFlow" class="task-flow">
+        <section class="task-panel">
+          <div class="task-label">ONE TASK TODAY</div>
+          <h2>將今日隨機數字寫在紙條上，與鎖具外觀同框拍照。</h2>
+          <div id="taskCode" class="task-code">000 000</div>
+        </section>
+        <form id="upload" class="upload-panel">
+          <div class="section-heading"><h2>提交照片</h2><span class="private-tag">登入會員可見</span></div>
+          <label class="upload-picker">選擇圖片（JPEG、PNG、WebP，12 MB 以內）<input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp"></label>
+          <figure id="previewFrame" class="preview-frame hidden"><img id="photoPreview" alt="已嵌入浮水印的照片預覽"><figcaption class="muted">LOCKSPACE · 任務驗證浮水印已嵌入</figcaption></figure>
+          <label class="check-row"><input id="uploadConsent" type="checkbox"><span>我已年滿 18 歲，是照片中的本人或取得所有入鏡成年人的明確同意，並同意將照片提供給已註冊會員驗證。</span></label>
+          <p id="uploadError" class="error hidden" role="alert"></p>
+          <button class="button primary full" type="submit">送出驗證紀錄</button>
+        </form>
+      </section>
+    </div>
+    <p class="version-stamp">Lockspace v0.6.2</p>
   </main>
 
   <dialog id="birthDateDialog" class="calendar-dialog">
@@ -412,7 +405,7 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.6.0";
+    const APP_VERSION = "0.6.2";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
@@ -435,6 +428,7 @@
     const authPage = document.getElementById("authPage");
     const registrationPage = document.getElementById("registrationPage");
     const dashboardPage = document.getElementById("dashboardPage");
+    const taskPage = document.getElementById("taskPage");
     const loginForm = document.getElementById("loginForm");
     const quickSignupForm = document.getElementById("quickSignupForm");
     const profileForm = document.getElementById("profileForm");
@@ -453,6 +447,8 @@
     document.getElementById("logoutButton").addEventListener("click", logout);
     document.getElementById("editProfileButton").addEventListener("click", editProfile);
     document.getElementById("openTaskButton").addEventListener("click", openTask);
+    document.getElementById("profileBackButton").addEventListener("click", renderDashboard);
+    document.getElementById("taskBackButton").addEventListener("click", renderDashboard);
     document.getElementById("photoInput").addEventListener("change", event => choosePhoto(event.target.files[0]));
     document.getElementById("upload").addEventListener("submit", submitPreview);
 
@@ -483,6 +479,7 @@
       syncCustomFields();
       profileForm.elements.birthProof.required = true;
       profileForm.elements.displayName.value = String(data.account).split("@")[0];
+      setProfileMode(false);
       showOnly(registrationPage);
     });
 
@@ -553,6 +550,7 @@
       authPage.classList.add("hidden");
       registrationPage.classList.add("hidden");
       dashboardPage.classList.add("hidden");
+      taskPage.classList.add("hidden");
       page.classList.remove("hidden");
     }
 
@@ -576,9 +574,8 @@
     }
 
     function openTask() {
-      document.getElementById("taskFlow").classList.remove("hidden");
-      document.getElementById("openTaskButton").classList.add("hidden");
-      document.getElementById("taskFlow").scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("taskCode").textContent = dailyCode();
+      showOnly(taskPage);
     }
 
     function dailyCode() {
@@ -600,7 +597,15 @@
       profileForm.elements.proofRedacted.checked = true;
       profileForm.elements.birthProof.required = false;
       syncCustomFields();
+      setProfileMode(true);
       showOnly(registrationPage);
+    }
+
+    function setProfileMode(editing) {
+      document.getElementById("profileBackButton").classList.toggle("hidden", !editing);
+      document.getElementById("profilePageTitle").textContent = editing ? "修改會員資料" : "完成會員註冊資料";
+      document.getElementById("profilePageDescription").textContent = editing ? "更新你的會員檔案。" : "建立你的會員檔案。";
+      document.getElementById("profileSubmitButton").textContent = editing ? "儲存" : "完成註冊並進入任務";
     }
 
     function setupCustomSelects() {
@@ -749,10 +754,8 @@
         });
         document.getElementById("upload").reset();
         document.getElementById("previewFrame").classList.add("hidden");
-        document.getElementById("taskFlow").classList.add("hidden");
-        document.getElementById("openTaskButton").classList.remove("hidden");
         state.previewUrl = "";
-        await loadSubmissions();
+        await renderDashboard();
       } catch {
         showError("uploadError", "提交失敗，請稍後再試。");
       } finally {
@@ -870,6 +873,7 @@
         state.pendingCredentials = null;
         profileForm.reset();
         profileForm.elements.displayName.value = user.email.split("@")[0];
+        setProfileMode(false);
         showOnly(registrationPage);
         return;
       }
