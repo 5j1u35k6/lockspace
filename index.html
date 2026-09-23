@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="application-version" content="0.3.0">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -176,6 +177,7 @@
     .side-column .panel { margin-bottom: 14px; }
     .safety-list { padding-left: 18px; color: #cecad5; font-size: 13px; }
     .safety-list li { margin: 9px 0; }
+    .version-stamp { margin: 18px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
     @media (max-width: 780px) {
       .dashboard-grid, .form-grid { grid-template-columns: 1fr; }
       .site-shell { padding: 15px 15px 45px; }
@@ -225,6 +227,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
+      <p class="version-stamp">Lockspace v0.3.0</p>
     </section>
   </main>
 
@@ -308,6 +311,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button class="button primary full" type="submit">完成註冊並進入任務</button>
+      <p class="version-stamp">Lockspace v0.3.0</p>
     </form>
   </main>
 
@@ -389,12 +393,15 @@
         </section>
       </aside>
     </div>
+    <p class="version-stamp">Lockspace v0.3.0</p>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+    const APP_VERSION = "0.3.0";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
@@ -441,7 +448,7 @@
       try {
         await signInWithEmailAndPassword(auth, accountEmail(data.account), data.password);
       } catch {
-        showError("loginError", "Email 或密碼不正確。");
+        showError("loginError", "帳號或密碼不正確。");
       }
     });
 
