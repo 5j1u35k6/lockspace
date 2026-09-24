@@ -1,6 +1,5 @@
 import { env } from "cloudflare:workers";
 import { currentRegisteredMember, json } from "@/lib/member";
-import { generateDailyTask } from "@/lib/task-generator";
 
 export const dynamic = "force-dynamic";
 
@@ -40,22 +39,6 @@ export async function GET() {
         "SELECT task_date, code FROM daily_tasks WHERE task_date = ?1",
       ).bind(date).first<{ task_date: string; code: string }>();
     }
-
-    const recentTaskRows = await env.DB.prepare(
-      "SELECT task_date, code FROM daily_tasks WHERE task_date < ?1 ORDER BY task_date DESC LIMIT 7",
-    ).bind(date).all<{ task_date: string; code: string }>();
-
-    const recentSignatures = (recentTaskRows.results ?? []).map((row) =>
-      generateDailyTask(`${row.task_date}:${row.code}`).signature,
-    );
-
-    const generatedTask = task
-      ? generateDailyTask(`${task.task_date}:${task.code}`, {
-          avoidSignatures: recentSignatures,
-          // Prop selection stays disabled until members can declare which props they own.
-          ownedProps: [],
-        })
-      : null;
 
     const result = await env.DB.prepare(`
       SELECT s.id, s.user_id, s.created_at, p.display_name, p.pronouns,
@@ -104,13 +87,7 @@ export async function GET() {
     }));
 
     return json({
-      task: task && generatedTask ? {
-        date: task.task_date,
-        code: task.code,
-        instruction: generatedTask.instruction,
-        difficulty: generatedTask.difficulty,
-        exposureLevel: generatedTask.exposureLevel,
-      } : null,
+      task: task ? { date: task.task_date, code: task.code, instruction: "將今日隨機數字寫在紙條上，與鎖具外觀同框拍照。" } : null,
       posts,
       member: { userId: member.userId, displayName: member.displayName },
     });
