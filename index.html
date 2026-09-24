@@ -171,8 +171,8 @@
     .private-tag { color: var(--cyan); background: #86e8ff12; border: 0; }
     .public-tag { color: var(--lime); background: #b6ff7018; font-size: 11px; margin-left: 6px; }
     .dashboard-main { width: min(760px, 100%); margin: 32px auto 0; }
-    .upload-entry { display: grid; place-items: center; padding: 34px 0 42px; }
-    .upload-entry .button { min-width: min(320px, 100%); min-height: 52px; font-size: 17px; }
+    .upload-entry { display: flex; justify-content: center; align-items: stretch; flex-wrap: wrap; gap: 10px; padding: 34px 0 42px; }
+    .upload-entry .button { min-width: min(250px, 100%); min-height: 52px; font-size: 17px; }
     .task-flow { display: grid; gap: 14px; margin-bottom: 34px; }
     .page-title, .section-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; margin-bottom: 18px; }
     .task-panel, .upload-panel, .panel, .submission-card { padding: 20px 22px; box-shadow: none; }
@@ -395,7 +395,8 @@
     </header>
     <div class="dashboard-main">
       <section class="upload-entry">
-        <button id="openTaskButton" class="button primary" type="button">上傳驗證照片</button>
+        <button id="openTaskButton" class="button primary" type="button">上傳驗證任務</button>
+        <button id="taskIdeaButton" class="button secondary" type="button">提供任務想法</button>
       </section>
 
       <section>
@@ -420,7 +421,7 @@
           <p id="taskType" class="task-label">驗證任務碼</p>
           <h2 id="taskInstruction">載入今日任務中…</h2>
           <div id="taskCode" class="task-code">000 000</div>
-          <p class="muted">任務碼與指定動作會依會員每日固定；隔日重新抽選。</p>
+          <p class="muted">每天只會收到一種任務；同一天固定不變，隔日重新從三種類型中抽選。</p>
         </section>
         <form id="upload" class="upload-panel">
           <div class="section-heading"><h2>提交照片</h2><span class="private-tag">登入會員可見</span></div>
@@ -429,12 +430,6 @@
           <label class="check-row"><input id="uploadConsent" type="checkbox"><span>我已年滿 18 歲，是照片中的本人或取得所有入鏡成年人的明確同意，並同意將照片提供給已註冊會員驗證。</span></label>
           <p id="uploadError" class="error hidden" role="alert"></p>
           <button class="button primary full" type="submit">送出驗證紀錄</button>
-        </form>
-        <form id="taskIdeaForm" class="panel task-idea-panel">
-          <div class="section-heading"><div><h2>提供任務想法</h2><p class="muted">通過管理員審核後，會加入之後的每日任務。</p></div></div>
-          <label class="field-label">指定動作<textarea name="content" maxlength="180" rows="3" placeholder="簡短描述動作與拍攝方式" required></textarea></label>
-          <p id="taskIdeaMessage" class="muted"></p>
-          <button class="button secondary" type="submit">送出想法</button>
         </form>
       </section>
     </div>
@@ -458,6 +453,18 @@
       <section id="feedbackRepliesSection" class="version-rules hidden"><h2 style="color:var(--text);font-size:18px">問題回饋</h2><div id="notificationsList" class="notification-list"></div></section>
       <section class="version-rules"><h2 style="color:var(--text);font-size:18px">版本編號規則</h2><p class="muted"><strong>主版本號</strong>：不相容的 API 或資料契約修改。</p><p class="muted"><strong>次版本號</strong>：向下相容的新功能。</p><p class="muted"><strong>修訂號</strong>：向下相容的問題修正。</p></section>
     </div>
+  </dialog>
+
+  <dialog id="taskIdeaDialog" class="modal-dialog">
+    <div class="modal-head"><strong>提供任務想法</strong><button id="closeTaskIdea" class="button quiet" type="button">關閉</button></div>
+    <form id="taskIdeaForm">
+      <div class="modal-body">
+        <p class="muted">通過管理員審核後，會加入之後的「用戶提供」每日任務池。</p>
+        <label class="field-label">任務內容<textarea name="content" maxlength="180" rows="4" placeholder="簡短描述動作與拍攝方式" required></textarea></label>
+        <p id="taskIdeaMessage" class="muted"></p>
+      </div>
+      <div class="modal-actions"><button class="button primary" type="submit">送出想法</button></div>
+    </form>
   </dialog>
 
   <dialog id="birthDateDialog" class="calendar-dialog">
@@ -502,59 +509,88 @@
       dailyTask: null
     };
 
-    const CODE_TASK = { type: "驗證任務碼", instruction: "將今日隨機驗證碼寫在紙條上，與鎖具外觀同框拍照。" };
+    const CODE_TASK = { type: "驗證任務碼", instruction: "將今日隨機任務碼寫在紙條上，與鎖具外觀同框拍照。" };
     const ACTION_TASKS = [
-      { type: "指定動作", instruction: "在私人空間做出小狗抬起一隻腳的姿勢，讓寫有任務碼的紙條清楚入鏡。" },
-      { type: "指定動作", instruction: "在私人空間跪坐，雙手放在背後，讓任務碼紙條與鎖具同框。" },
-      { type: "指定動作", instruction: "面向牆壁站立，雙手高舉，讓任務碼紙條清楚入鏡。" },
-      { type: "指定動作", instruction: "採四足跪姿，將任務碼紙條放在身旁並與鎖具同框。" },
-      { type: "指定動作", instruction: "單膝跪地，另一腳向前，手持任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "採蹲姿並低頭，將任務碼紙條放在胸前完成拍攝。" },
-      { type: "指定動作", instruction: "背對鏡頭站立並回頭看向任務碼紙條，與鎖具同框。" },
-      { type: "指定動作", instruction: "坐在地面抱膝，將任務碼紙條放在膝前完成拍攝。" },
-      { type: "指定動作", instruction: "雙膝跪地、手掌向上，手持任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "側身站立並抬起一條腿，讓任務碼紙條清楚入鏡。" },
-      { type: "指定動作", instruction: "以伏地姿勢支撐身體，將任務碼紙條放在前方完成拍攝。" },
-      { type: "指定動作", instruction: "坐在椅子邊緣、雙腿分開，手持任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "雙手扶牆、身體前傾，將任務碼紙條放在身側完成拍攝。" },
-      { type: "指定動作", instruction: "以鞠躬姿勢面向鏡頭，手持任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "盤腿坐下並將雙手放在膝上，讓任務碼紙條與鎖具同框。" },
-      { type: "指定動作", instruction: "單手遮住眼睛、另一手拿任務碼紙條，與鎖具同框。" },
-      { type: "指定動作", instruction: "雙手交叉放在胸前、低頭站立，讓任務碼紙條清楚入鏡。" },
-      { type: "指定動作", instruction: "以側躺姿勢屈膝，將任務碼紙條放在腰側完成拍攝。" },
-      { type: "指定動作", instruction: "平躺並將雙腿屈起，手持任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "跪在坐墊上並向前伏低，讓任務碼紙條與鎖具同框。" },
-      { type: "指定動作", instruction: "站在鏡子前，讓鏡中鎖具與手持的任務碼紙條同時清楚可見。" },
-      { type: "指定動作", instruction: "用雙手比出愛心並框住任務碼紙條，與鎖具同框。" },
-      { type: "指定動作", instruction: "手持寫有「今日已完成」及任務碼的紙條，與鎖具同框。" },
-      { type: "指定動作", instruction: "將任務碼寫在兩張紙上，分別拿在左右手並與鎖具同框。" },
-      { type: "指定動作", instruction: "將任務碼紙條放在鎖具正下方，採端正站姿完成拍攝。" },
-      { type: "指定動作", instruction: "以跪姿將任務碼紙條舉過頭頂，與鎖具同框。" },
-      { type: "指定動作", instruction: "坐在地上伸直雙腿，將任務碼紙條放在腳邊完成拍攝。" },
-      { type: "指定動作", instruction: "背靠牆壁半蹲，手持任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "單腳站立，雙手捧住任務碼紙條，與鎖具同框。" },
-      { type: "指定動作", instruction: "以低頭認錯的站姿手持任務碼紙條，與鎖具同框。" },
-      { type: "指定動作", instruction: "在私人空間戴上眼罩，手持任務碼紙條並與鎖具同框；確認周圍安全後再拍攝。" },
-      { type: "指定動作", instruction: "在私人空間跪坐並把雙手放在大腿上，低頭看向任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "背對鏡頭雙膝跪地，轉身展示手中的任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "雙手在背後交握，雙腳併攏站立，讓任務碼紙條與鎖具同框。" },
-      { type: "指定動作", instruction: "以四足姿勢面向側方，將任務碼紙條放在手掌前方完成拍攝。" },
-      { type: "指定動作", instruction: "坐在安全穩固的椅子上，雙手舉起任務碼紙條並保持鎖具可見。" },
-      { type: "指定動作", instruction: "在私人空間面向鏡子半蹲，讓鏡中的任務碼紙條與鎖具清楚可見。" },
-      { type: "指定動作", instruction: "單膝跪在軟墊上，另一腿向側邊伸直，手持任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "雙膝跪在軟墊上並向後坐，將任務碼紙條平放在腿上完成拍攝。" },
-      { type: "指定動作", instruction: "面向牆壁、雙手放在後腦，讓身旁的任務碼紙條清楚入鏡。" },
-      { type: "指定動作", instruction: "在私人空間採低姿態爬行姿勢，將任務碼紙條放在前方完成拍攝。" },
-      { type: "指定動作", instruction: "以端正跪姿手持寫有「接受今日任務」與驗證碼的紙條完成拍攝。" },
-      { type: "指定動作", instruction: "側坐在地面、雙腿彎向同一側，手持任務碼紙條與鎖具同框。" },
-      { type: "指定動作", instruction: "雙手扶著安全穩固的桌緣微微前傾，讓任務碼紙條清楚入鏡。" },
-      { type: "指定動作", instruction: "以蹲跪姿勢將任務碼紙條放在頭頂，維持平衡後完成拍攝。" },
-      { type: "指定動作", instruction: "躺在軟墊上側身蜷曲，手持任務碼紙條並保持鎖具可見。" },
-      { type: "指定動作", instruction: "站立並將雙手手腕交疊放在身前，手持任務碼紙條完成拍攝。" },
-      { type: "指定動作", instruction: "在私人空間用絲帶鬆鬆繫成項圈造型，手持任務碼紙條完成拍攝；不可影響呼吸。" },
-      { type: "指定動作", instruction: "跪在鏡子前低頭，讓任務碼紙條、鎖具與完整姿勢同時入鏡。" },
-      { type: "指定動作", instruction: "雙腿分開站穩，將任務碼紙條用雙手放在腰前完成拍攝。" },
-      { type: "指定動作", instruction: "採伏跪姿勢並把額頭靠近軟墊，將任務碼紙條放在手邊完成拍攝。" }
+      { type: "指定動作", instruction: "在私人空間做出小狗抬起一隻腳的姿勢完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪在軟墊上，雙手放在背後並低頭完成拍攝。" },
+      { type: "指定動作", instruction: "面向牆壁站立，雙手高舉過頭完成拍攝。" },
+      { type: "指定動作", instruction: "採四足跪姿，保持姿勢數秒後完成拍攝。" },
+      { type: "指定動作", instruction: "單膝跪地，另一腳向前並低頭完成拍攝。" },
+      { type: "指定動作", instruction: "採低蹲姿勢，雙手放在膝上完成拍攝。" },
+      { type: "指定動作", instruction: "背對鏡頭站立，再回頭看向鏡頭完成拍攝。" },
+      { type: "指定動作", instruction: "坐在地面抱膝並低頭完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪地，雙手掌心向上放在大腿上完成拍攝。" },
+      { type: "指定動作", instruction: "側身站立並抬起一條腿完成拍攝。" },
+      { type: "指定動作", instruction: "以伏地支撐姿勢停留數秒後完成拍攝。" },
+      { type: "指定動作", instruction: "坐在穩固椅子的邊緣，雙手放在大腿上完成拍攝。" },
+      { type: "指定動作", instruction: "雙手扶牆、身體微微前傾完成拍攝。" },
+      { type: "指定動作", instruction: "向鏡頭深深鞠躬完成拍攝。" },
+      { type: "指定動作", instruction: "盤腿坐下，雙手放在膝上並低頭完成拍攝。" },
+      { type: "指定動作", instruction: "單手遮住眼睛，另一手放在身側完成拍攝。" },
+      { type: "指定動作", instruction: "雙手交叉放在胸前，低頭站立完成拍攝。" },
+      { type: "指定動作", instruction: "側躺並屈膝，保持蜷曲姿勢完成拍攝。" },
+      { type: "指定動作", instruction: "平躺並將雙腿屈起，雙手放在身側完成拍攝。" },
+      { type: "指定動作", instruction: "跪在坐墊上向前伏低完成拍攝。" },
+      { type: "指定動作", instruction: "站在鏡子前，以端正站姿拍下完整姿勢。" },
+      { type: "指定動作", instruction: "用雙手在胸前比出愛心完成拍攝。" },
+      { type: "指定動作", instruction: "雙手背在身後，雙腳併攏站立完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪地並把雙手放在大腿上完成拍攝。" },
+      { type: "指定動作", instruction: "背靠牆壁半蹲，保持姿勢數秒完成拍攝。" },
+      { type: "指定動作", instruction: "單腳站立，雙手交握放在身前完成拍攝。" },
+      { type: "指定動作", instruction: "低頭站立，雙手自然垂下完成拍攝。" },
+      { type: "指定動作", instruction: "在安全空間戴上眼罩，雙手放在大腿上完成拍攝。" },
+      { type: "指定動作", instruction: "背對鏡頭雙膝跪地，再轉頭看向鏡頭完成拍攝。" },
+      { type: "指定動作", instruction: "四足跪姿面向側方完成拍攝。" },
+      { type: "指定動作", instruction: "坐在安全穩固的椅子上，雙手高舉完成拍攝。" },
+      { type: "指定動作", instruction: "面向鏡子半蹲，保持姿勢完成拍攝。" },
+      { type: "指定動作", instruction: "單膝跪在軟墊上，另一腿向側邊伸直完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪在軟墊上並向後坐完成拍攝。" },
+      { type: "指定動作", instruction: "面向牆壁站立，雙手放在後腦完成拍攝。" },
+      { type: "指定動作", instruction: "在私人空間採低姿態爬行姿勢完成拍攝。" },
+      { type: "指定動作", instruction: "以端正跪姿低頭，雙手放在大腿上完成拍攝。" },
+      { type: "指定動作", instruction: "側坐在地面，雙腿彎向同一側完成拍攝。" },
+      { type: "指定動作", instruction: "雙手扶著安全穩固的桌緣微微前傾完成拍攝。" },
+      { type: "指定動作", instruction: "以蹲跪姿勢保持平衡完成拍攝。" },
+      { type: "指定動作", instruction: "躺在軟墊上側身蜷曲完成拍攝。" },
+      { type: "指定動作", instruction: "站立並將雙手手腕交疊放在身前完成拍攝。" },
+      { type: "指定動作", instruction: "跪在鏡子前低頭，讓完整姿勢入鏡。" },
+      { type: "指定動作", instruction: "雙腿分開站穩，雙手放在腰前完成拍攝。" },
+      { type: "指定動作", instruction: "採伏跪姿勢並把額頭靠近軟墊完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪地後將雙手高舉過頭完成拍攝。" },
+      { type: "指定動作", instruction: "雙手扶牆，雙腳向後退一步並保持身體前傾完成拍攝。" },
+      { type: "指定動作", instruction: "坐在地面伸直雙腿，雙手放在腳踝旁完成拍攝。" },
+      { type: "指定動作", instruction: "雙手在背後交握，低頭走到房間角落完成拍攝。" },
+      { type: "指定動作", instruction: "面向房間角落站立，雙手貼在大腿兩側完成拍攝。" },
+      { type: "指定動作", instruction: "跪坐並將雙手整齊放在膝蓋上完成拍攝。" },
+      { type: "指定動作", instruction: "單膝跪地並將雙手放在後腦完成拍攝。" },
+      { type: "指定動作", instruction: "採四足姿勢後抬起一隻手完成拍攝。" },
+      { type: "指定動作", instruction: "趴在軟墊上，雙手放在頭部兩側完成拍攝。" },
+      { type: "指定動作", instruction: "側身半蹲，雙手交握放在胸前完成拍攝。" },
+      { type: "指定動作", instruction: "靠牆坐姿維持數秒後完成拍攝。" },
+      { type: "指定動作", instruction: "雙腳併攏站立，雙手背在身後並低頭完成拍攝。" },
+      { type: "指定動作", instruction: "坐在地面，雙膝彎曲並把雙手放在腳邊完成拍攝。" },
+      { type: "指定動作", instruction: "背對鏡頭蹲下，轉頭看向鏡頭完成拍攝。" },
+      { type: "指定動作", instruction: "跪在軟墊上，雙手向前伸直完成拍攝。" },
+      { type: "指定動作", instruction: "單手扶牆，另一手放在背後完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪地並將額頭靠近雙手完成拍攝。" },
+      { type: "指定動作", instruction: "趴臥並將雙手伸向前方完成拍攝。" },
+      { type: "指定動作", instruction: "坐在椅子上，雙腳併攏、雙手交握放在膝上完成拍攝。" },
+      { type: "指定動作", instruction: "面向鏡頭站立，雙手放在後腦、雙腳分開完成拍攝。" },
+      { type: "指定動作", instruction: "跪姿轉向側面，雙手放在背後完成拍攝。" },
+      { type: "指定動作", instruction: "靠牆站立，抬起一隻腳踩在牆面下方完成拍攝。" },
+      { type: "指定動作", instruction: "雙手抱住膝蓋蹲下，低頭完成拍攝。" },
+      { type: "指定動作", instruction: "平躺後把雙手交疊放在胸前完成拍攝。" },
+      { type: "指定動作", instruction: "側躺並用一隻手托住頭部完成拍攝。" },
+      { type: "指定動作", instruction: "俯身扶膝，低頭完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪地後挺直上身，雙手自然放在身側完成拍攝。" },
+      { type: "指定動作", instruction: "坐在地上背靠牆，雙手放在膝上完成拍攝。" },
+      { type: "指定動作", instruction: "面向鏡頭半蹲，雙手放在大腿外側完成拍攝。" },
+      { type: "指定動作", instruction: "站在鏡子旁，側身低頭完成拍攝。" },
+      { type: "指定動作", instruction: "跪姿雙手交握放在胸前完成拍攝。" },
+      { type: "指定動作", instruction: "雙腳一前一後站立，雙手背後完成拍攝。" },
+      { type: "指定動作", instruction: "採四足跪姿並低頭看向地面完成拍攝。" },
+      { type: "指定動作", instruction: "坐在地板上，雙腿彎曲向一側，雙手放在身後支撐完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪地、腳背貼地，低頭保持端正姿勢完成拍攝。" }
     ];
 
     const bootPage = document.getElementById("bootPage");
@@ -580,6 +616,7 @@
     document.getElementById("logoutButton").addEventListener("click", logout);
     document.getElementById("editProfileButton").addEventListener("click", editProfile);
     document.getElementById("openTaskButton").addEventListener("click", openTask);
+    document.getElementById("taskIdeaButton").addEventListener("click", () => { document.getElementById("taskIdeaMessage").textContent = ""; document.getElementById("taskIdeaDialog").showModal(); });
     document.getElementById("profileBackButton").addEventListener("click", renderDashboard);
     document.getElementById("taskBackButton").addEventListener("click", renderDashboard);
     document.getElementById("photoInput").addEventListener("change", event => choosePhoto(event.target.files[0]));
@@ -589,6 +626,7 @@
     document.getElementById("closeMemberProfile").addEventListener("click", () => document.getElementById("memberProfileDialog").close());
     document.getElementById("notificationsButton").addEventListener("click", openNotifications);
     document.getElementById("closeNotifications").addEventListener("click", () => document.getElementById("notificationsDialog").close());
+    document.getElementById("closeTaskIdea").addEventListener("click", () => document.getElementById("taskIdeaDialog").close());
 
     loginForm.addEventListener("submit", async event => {
       event.preventDefault();
@@ -735,7 +773,7 @@
         alert("無法載入今日任務，請稍後再試。");
       } finally {
         button.disabled = false;
-        button.textContent = "上傳驗證照片";
+        button.textContent = "上傳驗證任務";
       }
     }
 
@@ -775,9 +813,12 @@
 
     function renderDailyTask() {
       const task = state.dailyTask;
+      const codeElement = document.getElementById("taskCode");
+      const isCodeTask = task.type === "驗證任務碼";
       document.getElementById("taskType").textContent = task.type || "今日指定動作";
       document.getElementById("taskInstruction").textContent = task.instruction;
-      document.getElementById("taskCode").textContent = formatTaskCode(task.taskCode);
+      codeElement.textContent = isCodeTask ? formatTaskCode(task.taskCode) : "";
+      codeElement.classList.toggle("hidden", !isCodeTask);
     }
 
     async function submitTaskIdea(event) {
@@ -795,6 +836,7 @@
         await addDoc(collection(db, "taskIdeas"), { ownerId: state.member.uid, displayName: state.member.profile.displayName || state.member.account, content, status: "pending", createdAt: new Date().toISOString(), updatedAt: serverTimestamp() });
         form.reset();
         message.textContent = "想法已送出，管理員通過後會加入每日任務。";
+        setTimeout(() => document.getElementById("taskIdeaDialog").close(), 500);
       } catch {
         message.textContent = "送出失敗，請稍後再試。";
       } finally {
@@ -1075,7 +1117,7 @@
             <button class="publisher-button" type="button" data-member-profile="${escapeHtml(post.ownerId)}" aria-label="查看 ${escapeHtml(post.displayName || "會員")} 的資料"><span class="member-avatar">${escapeHtml(String(post.displayName || "會").trim().charAt(0) || "會")}</span><strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong></button>
             <span class="muted">${new Date(post.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}</span>
           </div>
-          <div class="public-details"><span>任務碼 ${escapeHtml(post.taskCode || "—")}</span><span>${escapeHtml(post.taskType || "驗證任務")}</span></div>
+          <div class="public-details">${post.taskType === "驗證任務碼" ? `<span>任務碼 ${escapeHtml(post.taskCode || "—")}</span>` : ""}<span>${escapeHtml(post.taskType || "驗證任務")}</span></div>
           ${post.taskInstruction ? `<p class="task-summary">${escapeHtml(post.taskInstruction)}</p>` : ""}
           <figure class="preview-frame"><img src="${post.imageDataUrl}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片"></figure>
           <div class="review-actions">${reviewControls}<button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button></div>
