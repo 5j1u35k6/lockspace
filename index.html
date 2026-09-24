@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.14.0">
+  <meta name="application-version" content="0.14.1">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -145,12 +145,12 @@
     .prop-option input { width: 17px; height: 17px; flex: none; margin: 0; accent-color: var(--lime); }
     @media (max-width: 640px) { .prop-picker { grid-template-columns: 1fr; } }
     .field-help { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 500; }
-    .custom-select { position: relative; margin-top: 6px; }
+    .custom-select { position: relative; display: block; width: 100%; min-width: 0; margin-top: 6px; }
     .select-trigger, .date-trigger { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 5px; background: #101017; color: var(--text); text-align: left; }
     .select-trigger::after { content: "▾"; color: var(--lime); }
     .select-trigger[aria-expanded="true"], .date-trigger[aria-expanded="true"] { border-color: var(--lime); box-shadow: 0 0 0 2px #b6ff701c; }
-    .option-menu { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px; border: 1px solid #b6ff7055; border-radius: 6px; background: var(--panel-2); box-shadow: 0 16px 36px #000b; }
-    .option-menu button { min-height: 40px; padding: 8px 10px; border: 1px solid transparent; border-radius: 4px; background: #ffffff08; color: var(--text); text-align: left; }
+    .option-menu { position: absolute; z-index: 100; top: calc(100% + 6px); right: 0; left: 0; display: grid; width: 100%; min-width: 0; max-height: min(320px, 55vh); overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px; border: 1px solid #b6ff7055; border-radius: 6px; background: var(--panel-2); box-shadow: 0 16px 36px #000b; }
+    .option-menu button { width: 100%; min-width: 0; min-height: 44px; padding: 8px 10px; border: 1px solid transparent; border-radius: 4px; background: #ffffff08; color: var(--text); text-align: left; white-space: normal; word-break: keep-all; writing-mode: horizontal-tb; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     .option-menu button:hover, .option-menu button[aria-selected="true"] { border-color: var(--lime); background: #b6ff7014; color: var(--lime); }
     .other-field { margin-top: 8px; }
     .age-display { color: var(--lime); }
@@ -252,6 +252,7 @@
     }
     @media (max-width: 520px) {
       .field-row.cols-4, .field-row.cols-3 { grid-template-columns: 1fr; }
+      .option-menu { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -298,7 +299,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.14.0</p>
+      <p class="version-stamp">Lockspace v0.14.1</p>
     </section>
   </main>
 
@@ -464,7 +465,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.14.0</p>
+      <p class="version-stamp">Lockspace v0.14.1</p>
     </form>
   </main>
 
@@ -496,7 +497,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.14.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.14.1</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -520,7 +521,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.14.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.14.1</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -566,8 +567,9 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.14.0";
+    const APP_VERSION = "0.14.1";
     const RELEASE_NOTES = [
+      { version: "0.14.1", date: "2026-09-25", changes: ["修正 iOS Safari 與 Edge 的自訂下拉選單寬度、文字排列及無法點選問題。"] },
       { version: "0.14.0", date: "2026-09-25", changes: ["恢復每個瀏覽器工作階段首次進站的限制級內容警語。", "擴充隱私權政策、平台使用須知、社群規範與分級懲處制度。"] },
       { version: "0.13.1", date: "2026-09-25", changes: ["驗證紀錄重新顯示任務類型、任務碼與任務說明，並相容缺少新版任務欄位的舊投稿。"] },
       { version: "0.13.0", date: "2026-09-24", changes: ["重新編排註冊與會員資料表單，相關欄位改為同列呈現。", "未配戴時身體尺寸移至貞操鎖資料下方，私人道具庫改為更緊湊的雙欄版面。"] },
@@ -1167,12 +1169,15 @@
         const menu = select.querySelector(".option-menu");
         const input = select.querySelector('input[type="hidden"]');
         trigger.addEventListener("click", event => {
+          event.preventDefault();
           event.stopPropagation();
           document.querySelectorAll(".option-menu").forEach(other => { if (other !== menu) other.classList.add("hidden"); });
           menu.classList.toggle("hidden");
           trigger.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
         });
-        menu.querySelectorAll("[data-value]").forEach(option => option.addEventListener("click", () => {
+        menu.querySelectorAll("[data-value]").forEach(option => option.addEventListener("click", event => {
+          event.preventDefault();
+          event.stopPropagation();
           input.value = option.dataset.value;
           trigger.querySelector("span").textContent = option.dataset.value;
           menu.querySelectorAll("[data-value]").forEach(item => item.setAttribute("aria-selected", String(item === option)));
