@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.0 - 2026-09-24
+
+### Added
+
+- Expanded the built-in action task pool to 180 clearly written tasks.
+- Added seven internal action categories: standing, kneeling, floor poses, mirror, props, embarrassment, and obedience.
+
+### Changed
+
+- Reworked action-task instructions around private-space chastity-lock verification with clearer body-position and photo requirements.
+- Excluded public exposure, dangerous restraint, breathing restriction, and other high-risk tasks.
+
 ## 0.9.1 - 2026-09-24
 
 ### Fixed

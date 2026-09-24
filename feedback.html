@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.9.1">
+  <meta name="application-version" content="0.10.0">
   <title>Lockspace 問題回饋</title>
   <style>
     :root{color-scheme:dark;--bg:#090a09;--panel:#121412;--line:#30352f;--text:#f5f4f7;--muted:#afacba;--lime:#b6ff70;--red:#ff91a6}
@@ -41,7 +41,7 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION="0.9.1";
+    const APP_VERSION="0.10.0";
     const config={apiKey:"AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",authDomain:"lockspace-19edc.firebaseapp.com",projectId:"lockspace-19edc",storageBucket:"lockspace-19edc.firebasestorage.app",messagingSenderId:"726438557640",appId:"1:726438557640:web:d0e51ec0280cd1066e32fd"};
     const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
     const form=document.getElementById("feedbackForm"),signedOut=document.getElementById("signedOut"),statusBox=document.getElementById("feedbackStatus");
