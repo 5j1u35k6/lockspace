@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.7.0">
+  <meta name="application-version" content="0.7.2">
   <title>Lockspace 問題回饋</title>
   <style>
     :root{color-scheme:dark;--bg:#090a09;--panel:#121412;--line:#30352f;--text:#f5f4f7;--muted:#afacba;--lime:#b6ff70;--red:#ff91a6}
     *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:var(--bg);color:var(--text);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-    button,input,textarea{font:inherit}.card{width:min(620px,100%);padding:24px;border:1px solid #ffffff17;border-radius:8px;background:var(--panel)}.brand{font-size:22px;font-weight:800}.brand b{color:var(--lime)}h1{margin:18px 0 8px}.muted{color:var(--muted);font-size:14px}.hidden{display:none!important}label{display:block;margin:15px 0;color:#d9d6e1;font-size:14px;font-weight:650}input,textarea{display:block;width:100%;margin-top:6px;padding:10px 11px;border:1px solid var(--line);border-radius:5px;background:#101017;color:var(--text)}input{min-height:44px}textarea{min-height:170px;resize:vertical}.actions{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 14px;border:1px solid var(--line);border-radius:6px;background:#ffffff08;color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}.button.primary{background:var(--lime);border-color:var(--lime);color:#151711}.status{margin:14px 0 0;padding:10px 12px;border:1px solid #ffffff18;border-radius:6px}.status.error{color:#ffb0bf;border-color:#ff617538;background:#ff617510}
+    button,input,textarea{font:inherit}.card{width:min(700px,100%);padding:24px;border:1px solid #ffffff17;border-radius:8px;background:var(--panel)}.brand{font-size:22px;font-weight:800}.brand b{color:var(--lime)}h1{margin:18px 0 8px}h2{margin:28px 0 10px;font-size:18px}.muted{color:var(--muted);font-size:14px}.hidden{display:none!important}label{display:block;margin:15px 0;color:#d9d6e1;font-size:14px;font-weight:650}input,textarea{display:block;width:100%;margin-top:6px;padding:10px 11px;border:1px solid var(--line);border-radius:5px;background:#101017;color:var(--text)}input{min-height:44px}textarea{min-height:170px;resize:vertical}.actions{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 14px;border:1px solid var(--line);border-radius:6px;background:#ffffff08;color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}.button.primary{background:var(--lime);border-color:var(--lime);color:#151711}.status{margin:14px 0 0;padding:10px 12px;border:1px solid #ffffff18;border-radius:6px}.status.error{color:#ffb0bf;border-color:#ff617538;background:#ff617510}.feedback-list{display:grid;gap:10px}.feedback-item{padding:13px;border:1px solid #ffffff16;border-radius:6px;background:#ffffff07}.feedback-item p{margin:6px 0;white-space:pre-wrap}.reply{padding:10px;border-left:3px solid var(--lime);background:#b6ff700b}
   </style>
 </head>
 <body>
@@ -33,14 +33,15 @@
       <p id="feedbackStatus" class="status hidden" role="status"></p>
       <div class="actions"><a class="button" href="index.html">返回首頁</a><button class="button primary" type="submit">送出回饋</button></div>
     </form>
+    <section id="myFeedbackSection" class="hidden"><h2>我的回饋</h2><div id="myFeedbackList" class="feedback-list"></div></section>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-    import { getFirestore, collection, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION="0.7.0";
+    const APP_VERSION="0.7.2";
     const config={apiKey:"AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",authDomain:"lockspace-19edc.firebaseapp.com",projectId:"lockspace-19edc",storageBucket:"lockspace-19edc.firebasestorage.app",messagingSenderId:"726438557640",appId:"1:726438557640:web:d0e51ec0280cd1066e32fd"};
     const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
     const form=document.getElementById("feedbackForm"),signedOut=document.getElementById("signedOut"),statusBox=document.getElementById("feedbackStatus");
@@ -53,6 +54,7 @@
       member={uid:user.uid,...snapshot.data()};
       document.getElementById("memberLabel").textContent=`${member.profile?.displayName||member.username||"會員"} · 已登入`;
       signedOut.classList.add("hidden");form.classList.remove("hidden");
+      await loadMyFeedback();
     });
 
     form.addEventListener("submit",async event=>{
@@ -66,11 +68,21 @@
       try{
         const ref=doc(collection(db,"feedback"));
         await setDoc(ref,{userId:member.uid,username:member.username||"",displayName:member.profile?.displayName||member.username||"會員",opinion,content,status:"open",appVersion:APP_VERSION,createdAt:serverTimestamp(),createdAtIso:new Date().toISOString()});
-        form.reset();statusBox.textContent="已收到你的回饋，管理員可在後台查看。";statusBox.classList.remove("hidden");
+        form.reset();statusBox.textContent="已收到你的回饋，管理員回覆後會顯示在首頁通知。";statusBox.classList.remove("hidden");await loadMyFeedback();
       }catch{
         statusBox.textContent="回饋送出失敗，請稍後再試。";statusBox.classList.add("error");statusBox.classList.remove("hidden");
       }finally{button.disabled=false}
     });
+
+    async function loadMyFeedback(){
+      const snapshot=await getDocs(query(collection(db,"feedback"),where("userId","==",member.uid)));
+      const items=snapshot.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>String(b.createdAtIso||"").localeCompare(String(a.createdAtIso||"")));
+      const section=document.getElementById("myFeedbackSection"),list=document.getElementById("myFeedbackList");
+      section.classList.toggle("hidden",items.length===0);
+      list.innerHTML=items.map(item=>`<article class="feedback-item"><strong>${esc(item.opinion||"問題回饋")}</strong><p>${esc(item.content||"")}</p><span class="muted">${item.adminReply?"管理員已回覆":"等待回覆"}</span>${item.adminReply?`<div class="reply"><strong>管理員回覆</strong><p>${esc(item.adminReply)}</p></div>`:""}</article>`).join("");
+    }
+
+    function esc(value){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[char])}
   </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.7.1">
+  <meta name="application-version" content="0.7.2">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -33,12 +33,14 @@
     button, a, input, textarea, select { outline-offset: 3px; }
     button { color: inherit; cursor: pointer; }
     .hidden { display: none !important; }
-    .auth-page, .registration-page {
+    .boot-page, .auth-page, .registration-page {
       min-height: 100vh;
       display: grid;
       place-items: center;
       padding: 22px;
     }
+    .boot-page { color: var(--muted); }
+    .boot-page .brand { margin-bottom: 12px; }
     .auth-card, .registration-card, .panel, .task-panel, .upload-panel, .submission-card {
       background: var(--panel);
       border: 1px solid #ffffff17;
@@ -200,8 +202,23 @@
     .feed-heading { padding-top: 24px; border-top: 1px solid #ffffff16; }
     .submission-card { margin-top: 14px; }
     .submission-meta { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+    .publisher-button { display: inline-flex; align-items: center; gap: 9px; padding: 0; border: 0; background: transparent; text-align: left; }
+    .publisher-button:hover strong { color: var(--lime); }
+    .member-avatar { display: grid; place-items: center; width: 38px; height: 38px; flex: none; border: 1px solid #b6ff7055; border-radius: 50%; background: #b6ff7014; color: var(--lime); font-weight: 800; }
     .review-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
     .review-result { color: var(--muted); font-size: 13px; }
+    .notification-list { display: grid; gap: 9px; }
+    .notification-item { padding: 12px 14px; border-left: 3px solid var(--lime); background: #ffffff08; }
+    .notification-item p { margin: 4px 0 0; white-space: pre-wrap; }
+    .site-footer { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 18px; margin-top: 42px; padding-top: 20px; border-top: 1px solid #ffffff16; color: var(--muted); font-size: 12px; }
+    .site-footer a { color: #d8d5e0; }
+    .modal-dialog { width: min(620px, calc(100% - 28px)); padding: 0; border: 1px solid #b6ff704d; border-radius: 8px; background: var(--panel); color: var(--text); }
+    .modal-dialog::backdrop { background: #000d; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid #ffffff16; }
+    .modal-body { padding: 18px; }
+    .modal-body h2 { color: var(--red); font-size: 24px; }
+    .modal-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; padding: 0 18px 18px; }
+    .profile-list { margin: 0; }
     .version-stamp { margin: 18px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
     @media (max-width: 780px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -209,13 +226,16 @@
       .topbar, .page-title, .section-heading, .submission-meta { align-items: flex-start; flex-direction: column; }
       .header-actions { width: 100%; flex-wrap: wrap; }
       .member-chip { display: none; }
-      .auth-page, .registration-page { padding: 14px; }
+      .boot-page, .auth-page, .registration-page { padding: 14px; }
       .auth-card, .registration-card { padding: 19px 16px; }
     }
   </style>
 </head>
 <body>
-  <main id="authPage" class="auth-page">
+  <main id="bootPage" class="boot-page">
+    <div><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div><p>正在確認登入狀態…</p></div>
+  </main>
+  <main id="authPage" class="auth-page hidden">
     <section class="auth-card">
       <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
       <p class="eyebrow">MEMBER ACCESS</p>
@@ -253,7 +273,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.7.1</p>
+      <p class="version-stamp">Lockspace v0.7.2</p>
     </section>
   </main>
 
@@ -349,7 +369,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.7.1</p>
+      <p class="version-stamp">Lockspace v0.7.2</p>
     </form>
   </main>
 
@@ -365,6 +385,10 @@
       </div>
     </header>
     <div class="dashboard-main">
+      <section id="notificationsSection" class="panel hidden">
+        <div class="section-heading"><h2>通知</h2></div>
+        <div id="notificationsList" class="notification-list"></div>
+      </section>
       <section class="upload-entry">
         <button id="openTaskButton" class="button primary" type="button">上傳驗證照片</button>
       </section>
@@ -379,7 +403,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.7.0</p>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.7.2</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -401,8 +425,18 @@
         </form>
       </section>
     </div>
-    <p class="version-stamp">Lockspace v0.7.0</p>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.7.2</span></footer>
   </main>
+
+  <dialog id="ageGateDialog" class="modal-dialog">
+    <div class="modal-body"><h2>警告</h2><p>本平台內容可能有害兒童或少年身心發展。</p><p>列為限制級內容，未滿 18 歲不得瀏覽。</p></div>
+    <div class="modal-actions"><a class="button" href="https://www.google.com/">離開</a><button id="confirmAdultButton" class="button primary" type="button">我已年滿 18 歲</button></div>
+  </dialog>
+
+  <dialog id="memberProfileDialog" class="modal-dialog">
+    <div class="modal-head"><strong id="memberProfileTitle">會員資料</strong><button id="closeMemberProfile" class="button quiet" type="button">關閉</button></div>
+    <div id="memberProfileContent" class="modal-body"></div>
+  </dialog>
 
   <dialog id="birthDateDialog" class="calendar-dialog">
     <div class="calendar-head"><button id="calendarPrev" class="button" type="button" aria-label="上個月">‹</button><input id="calendarMonth" aria-label="年份與月份"><button id="calendarNext" class="button" type="button" aria-label="下個月">›</button></div>
@@ -414,9 +448,9 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.7.0";
+    const APP_VERSION = "0.7.2";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
@@ -435,9 +469,12 @@
       authNotice: "",
       previewUrl: "",
       posts: [],
-      reviews: []
+      reviews: [],
+      members: new Map(),
+      feedback: []
     };
 
+    const bootPage = document.getElementById("bootPage");
     const authPage = document.getElementById("authPage");
     const registrationPage = document.getElementById("registrationPage");
     const dashboardPage = document.getElementById("dashboardPage");
@@ -464,15 +501,23 @@
     document.getElementById("taskBackButton").addEventListener("click", renderDashboard);
     document.getElementById("photoInput").addEventListener("change", event => choosePhoto(event.target.files[0]));
     document.getElementById("upload").addEventListener("submit", submitPreview);
+    document.getElementById("confirmAdultButton").addEventListener("click", () => document.getElementById("ageGateDialog").close());
+    document.getElementById("closeMemberProfile").addEventListener("click", () => document.getElementById("memberProfileDialog").close());
 
     loginForm.addEventListener("submit", async event => {
       event.preventDefault();
       const data = Object.fromEntries(new FormData(loginForm).entries());
+      const button = loginForm.querySelector('button[type="submit"]');
       hideError("loginError");
+      button.disabled = true;
+      button.textContent = "登入中…";
       try {
         await signInWithEmailAndPassword(auth, accountEmail(data.account), data.password);
       } catch {
         showError("loginError", "帳號或密碼不正確。");
+      } finally {
+        button.disabled = false;
+        button.textContent = "登入並繼續";
       }
     });
 
@@ -560,11 +605,19 @@
     }
 
     function showOnly(page) {
+      bootPage.classList.add("hidden");
       authPage.classList.add("hidden");
       registrationPage.classList.add("hidden");
       dashboardPage.classList.add("hidden");
       taskPage.classList.add("hidden");
       page.classList.remove("hidden");
+    }
+
+    function showLoginPage() {
+      showOnly(authPage);
+      setAuthMode("login");
+      const dialog = document.getElementById("ageGateDialog");
+      if (!dialog.open) dialog.showModal();
     }
 
     function showError(id, message) {
@@ -581,9 +634,8 @@
       const profile = state.member.profile;
       document.getElementById("memberChip").textContent = `${profile.displayName || state.member.account} · 已註冊`;
       document.getElementById("taskCode").textContent = dailyCode();
-      checkAdmin();
+      await Promise.all([checkAdmin(), loadSubmissions(), loadFeedbackNotifications()]);
       showOnly(dashboardPage);
-      await loadSubmissions();
     }
 
     function openTask() {
@@ -807,10 +859,23 @@
     }
 
     async function loadSubmissions() {
-      const [snapshot, reviewSnapshot] = await Promise.all([getDocs(collection(db, "submissions")), getDocs(collection(db, "reviews"))]);
+      const [snapshot, reviewSnapshot, memberSnapshot] = await Promise.all([
+        getDocs(collection(db, "submissions")),
+        getDocs(collection(db, "reviews")),
+        getDocs(collection(db, "members"))
+      ]);
       state.posts = snapshot.docs.map(item => ({ id: item.id, ...item.data() })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
       state.reviews = reviewSnapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      state.members = new Map(memberSnapshot.docs.filter(item => item.data().deleted !== true).map(item => [item.id, { id: item.id, ...item.data() }]));
       renderFeed();
+    }
+
+    async function loadFeedbackNotifications() {
+      const snapshot = await getDocs(query(collection(db, "feedback"), where("userId", "==", state.member.uid)));
+      state.feedback = snapshot.docs.map(item => ({ id: item.id, ...item.data() })).filter(item => item.adminReply).sort((a, b) => String(b.repliedAtIso || "").localeCompare(String(a.repliedAtIso || "")));
+      const section = document.getElementById("notificationsSection");
+      section.classList.toggle("hidden", state.feedback.length === 0);
+      document.getElementById("notificationsList").innerHTML = state.feedback.map(item => `<article class="notification-item"><strong>管理員回覆：${escapeHtml(item.opinion || "問題回饋")}</strong><p>${escapeHtml(item.adminReply)}</p><span class="muted">${escapeHtml(formatDate(item.repliedAtIso))}</span></article>`).join("");
     }
 
     function renderFeed() {
@@ -833,7 +898,7 @@
             : `<button class="button primary" type="button" data-review="approved" data-submission="${escapeHtml(post.id)}">符合條件</button><button class="button danger" type="button" data-review="rejected" data-submission="${escapeHtml(post.id)}">不符合條件</button>`;
         return `<article class="submission-card">
           <div class="submission-meta">
-            <strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong>
+            <button class="publisher-button" type="button" data-member-profile="${escapeHtml(post.ownerId)}" aria-label="查看 ${escapeHtml(post.displayName || "會員")} 的資料"><span class="member-avatar">${escapeHtml(String(post.displayName || "會").trim().charAt(0) || "會")}</span><strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong></button>
             <span class="muted">${new Date(post.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}</span>
           </div>
           <div class="public-details"><span>任務碼 ${escapeHtml(post.taskCode || "—")}</span></div>
@@ -843,6 +908,29 @@
       }).join("");
       feed.querySelectorAll("[data-review]").forEach(button => button.addEventListener("click", () => reviewSubmission(button)));
       feed.querySelectorAll("[data-report]").forEach(button => button.addEventListener("click", () => reportSubmission(button)));
+      feed.querySelectorAll("[data-member-profile]").forEach(button => button.addEventListener("click", () => openMemberProfile(button.dataset.memberProfile)));
+    }
+
+    function openMemberProfile(memberId) {
+      const member = state.members.get(memberId);
+      if (!member) return alert("這位會員的資料目前無法查看。");
+      const profile = member.profile || {};
+      const displayName = profile.displayName || member.username || "會員";
+      const fields = [
+        ["身高", format(profile.heightCm, "cm")], ["體重", format(profile.weightKg, "kg")],
+        ["膚色", selectedLabel(profile, "skinTone", "skinToneOther")], ["身材", selectedLabel(profile, "bodyType", "bodyTypeOther")],
+        ["鎖具品牌", selectedLabel(profile, "lockBrand", "lockBrandOther")], ["顏色", profile.lockColor],
+        ["籠體尺寸", pair(profile.cageLengthCm, profile.cageWidthCm, "cm")], ["環內徑", format(profile.ringDiameterMm, "mm")],
+        ["材質", selectedLabel(profile, "lockMaterial", "lockMaterialOther")], ["鎖定方式", selectedLabel(profile, "lockingMethod", "lockingMethodOther")],
+        ["未配戴長度", format(profile.bodyLengthCm, "cm")], ["未配戴周長", format(profile.bodyGirthCm, "cm")]
+      ].filter(([, value]) => value);
+      document.getElementById("memberProfileTitle").textContent = displayName;
+      document.getElementById("memberProfileContent").innerHTML = fields.length ? `<dl class="profile-list">${fields.map(([label, value]) => `<div class="profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>` : '<p class="muted">這位會員尚未填寫公開資料。</p>';
+      document.getElementById("memberProfileDialog").showModal();
+    }
+
+    function selectedLabel(profile, key, otherKey) {
+      return profile[key] === "其他" ? profile[otherKey] || "其他" : profile[key] || "";
     }
 
     async function reviewSubmission(button) {
@@ -924,6 +1012,12 @@
       return a || b ? `${a || "—"} × ${b || "—"} ${unit}` : "";
     }
 
+    function formatDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString("zh-TW", { timeZone: "Asia/Taipei" });
+    }
+
     function escapeHtml(value) {
       return String(value).replace(/[&<>"']/g, char => ({
         "&": "&amp;",
@@ -934,18 +1028,29 @@
       })[char]);
     }
 
+    let authRevision = 0;
     onAuthStateChanged(auth, async user => {
+      const revision = ++authRevision;
+      showOnly(bootPage);
       if (!user) {
         state.member = null;
-        showOnly(authPage);
-        setAuthMode("login");
+        showLoginPage();
         if (state.authNotice) {
           showError("loginError", state.authNotice);
           state.authNotice = "";
         }
         return;
       }
-      const snapshot = await getDoc(doc(db, "members", user.uid));
+      let snapshot;
+      try {
+        snapshot = await getDoc(doc(db, "members", user.uid));
+      } catch {
+        if (revision !== authRevision) return;
+        state.authNotice = "無法讀取會員資料，請檢查網路後再試。";
+        await signOut(auth);
+        return;
+      }
+      if (revision !== authRevision) return;
       if (snapshot.exists() && snapshot.data().deleted === true) {
         state.authNotice = "此會員帳號已停用。";
         await signOut(auth);
