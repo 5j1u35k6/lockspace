@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.0 - 2026-09-24
+
+- Added per-member daily task selection across verification codes, built-in actions, and approved member ideas.
+- Added alphanumeric six-character codes that remain fixed for each member for the day.
+- Added member task-idea submission and administrator approval, rejection, and deletion controls.
+- Renamed the profile label from penile circumference to penile thickness.
+
 Lockspace uses semantic versioning: `major.minor.patch`.
 
 - Major: incompatible API or data-contract changes.

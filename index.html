@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.8.0">
+  <meta name="application-version" content="0.9.0">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -281,7 +281,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.8.0</p>
+      <p class="version-stamp">Lockspace v0.9.0</p>
     </section>
   </main>
 
@@ -367,7 +367,7 @@
           <label>陰莖長度
             <span class="input-with-unit"><input name="bodyLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
           </label>
-          <label>陰莖周長
+          <label>陰莖粗度
             <span class="input-with-unit"><input name="bodyGirthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
           </label>
         </div>
@@ -377,7 +377,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.8.0</p>
+      <p class="version-stamp">Lockspace v0.9.0</p>
     </form>
   </main>
 
@@ -408,7 +408,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.8.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.9.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -417,8 +417,10 @@
       <section id="taskFlow" class="task-flow">
         <section class="task-panel">
           <div class="task-label">ONE TASK TODAY</div>
-          <h2>將今日隨機數字寫在紙條上，與鎖具外觀同框拍照。</h2>
+          <p id="taskType" class="task-label">驗證任務碼</p>
+          <h2 id="taskInstruction">載入今日任務中…</h2>
           <div id="taskCode" class="task-code">000 000</div>
+          <p class="muted">任務碼與指定動作會依會員每日固定；隔日重新抽選。</p>
         </section>
         <form id="upload" class="upload-panel">
           <div class="section-heading"><h2>提交照片</h2><span class="private-tag">登入會員可見</span></div>
@@ -428,9 +430,15 @@
           <p id="uploadError" class="error hidden" role="alert"></p>
           <button class="button primary full" type="submit">送出驗證紀錄</button>
         </form>
+        <form id="taskIdeaForm" class="panel task-idea-panel">
+          <div class="section-heading"><div><h2>提供任務想法</h2><p class="muted">通過管理員審核後，會加入之後的每日任務。</p></div></div>
+          <label class="field-label">指定動作<textarea name="content" maxlength="180" rows="3" placeholder="簡短描述動作與拍攝方式" required></textarea></label>
+          <p id="taskIdeaMessage" class="muted"></p>
+          <button class="button secondary" type="submit">送出想法</button>
+        </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.8.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.9.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -462,10 +470,11 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.8.0";
+    const APP_VERSION = "0.9.0";
     const RELEASE_NOTES = [
+      { version: "0.9.0", date: "2026-09-24", changes: ["每日任務改為每位會員獨立抽選驗證任務碼、指定動作或用戶提供任務。", "新增大量指定動作素材，以及會員任務提案與後台審核。", "個人資料欄位「陰莖周長」更名為「陰莖粗度」。"] },
       { version: "0.8.0", date: "2026-09-24", changes: ["新增登入後功能列通知中心與未讀提示。", "新增版本更新紀錄及版本編號規則說明。", "問題回饋頁的返回首頁移至左上角。"] },
       { version: "0.7.2", date: "2026-09-24", changes: ["任務發布者頭像可開啟公開會員資料。", "改善登入狀態判定，避免登入頁與首頁反覆跳轉。", "新增管理員回覆、會員通知、隱私權政策及使用條款。"] }
     ];
@@ -489,8 +498,64 @@
       posts: [],
       reviews: [],
       members: new Map(),
-      feedback: []
+      feedback: [],
+      dailyTask: null
     };
+
+    const CODE_TASK = { type: "驗證任務碼", instruction: "將今日隨機驗證碼寫在紙條上，與鎖具外觀同框拍照。" };
+    const ACTION_TASKS = [
+      { type: "指定動作", instruction: "在私人空間做出小狗抬起一隻腳的姿勢，讓寫有任務碼的紙條清楚入鏡。" },
+      { type: "指定動作", instruction: "在私人空間跪坐，雙手放在背後，讓任務碼紙條與鎖具同框。" },
+      { type: "指定動作", instruction: "面向牆壁站立，雙手高舉，讓任務碼紙條清楚入鏡。" },
+      { type: "指定動作", instruction: "採四足跪姿，將任務碼紙條放在身旁並與鎖具同框。" },
+      { type: "指定動作", instruction: "單膝跪地，另一腳向前，手持任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "採蹲姿並低頭，將任務碼紙條放在胸前完成拍攝。" },
+      { type: "指定動作", instruction: "背對鏡頭站立並回頭看向任務碼紙條，與鎖具同框。" },
+      { type: "指定動作", instruction: "坐在地面抱膝，將任務碼紙條放在膝前完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪地、手掌向上，手持任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "側身站立並抬起一條腿，讓任務碼紙條清楚入鏡。" },
+      { type: "指定動作", instruction: "以伏地姿勢支撐身體，將任務碼紙條放在前方完成拍攝。" },
+      { type: "指定動作", instruction: "坐在椅子邊緣、雙腿分開，手持任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "雙手扶牆、身體前傾，將任務碼紙條放在身側完成拍攝。" },
+      { type: "指定動作", instruction: "以鞠躬姿勢面向鏡頭，手持任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "盤腿坐下並將雙手放在膝上，讓任務碼紙條與鎖具同框。" },
+      { type: "指定動作", instruction: "單手遮住眼睛、另一手拿任務碼紙條，與鎖具同框。" },
+      { type: "指定動作", instruction: "雙手交叉放在胸前、低頭站立，讓任務碼紙條清楚入鏡。" },
+      { type: "指定動作", instruction: "以側躺姿勢屈膝，將任務碼紙條放在腰側完成拍攝。" },
+      { type: "指定動作", instruction: "平躺並將雙腿屈起，手持任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "跪在坐墊上並向前伏低，讓任務碼紙條與鎖具同框。" },
+      { type: "指定動作", instruction: "站在鏡子前，讓鏡中鎖具與手持的任務碼紙條同時清楚可見。" },
+      { type: "指定動作", instruction: "用雙手比出愛心並框住任務碼紙條，與鎖具同框。" },
+      { type: "指定動作", instruction: "手持寫有「今日已完成」及任務碼的紙條，與鎖具同框。" },
+      { type: "指定動作", instruction: "將任務碼寫在兩張紙上，分別拿在左右手並與鎖具同框。" },
+      { type: "指定動作", instruction: "將任務碼紙條放在鎖具正下方，採端正站姿完成拍攝。" },
+      { type: "指定動作", instruction: "以跪姿將任務碼紙條舉過頭頂，與鎖具同框。" },
+      { type: "指定動作", instruction: "坐在地上伸直雙腿，將任務碼紙條放在腳邊完成拍攝。" },
+      { type: "指定動作", instruction: "背靠牆壁半蹲，手持任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "單腳站立，雙手捧住任務碼紙條，與鎖具同框。" },
+      { type: "指定動作", instruction: "以低頭認錯的站姿手持任務碼紙條，與鎖具同框。" },
+      { type: "指定動作", instruction: "在私人空間戴上眼罩，手持任務碼紙條並與鎖具同框；確認周圍安全後再拍攝。" },
+      { type: "指定動作", instruction: "在私人空間跪坐並把雙手放在大腿上，低頭看向任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "背對鏡頭雙膝跪地，轉身展示手中的任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "雙手在背後交握，雙腳併攏站立，讓任務碼紙條與鎖具同框。" },
+      { type: "指定動作", instruction: "以四足姿勢面向側方，將任務碼紙條放在手掌前方完成拍攝。" },
+      { type: "指定動作", instruction: "坐在安全穩固的椅子上，雙手舉起任務碼紙條並保持鎖具可見。" },
+      { type: "指定動作", instruction: "在私人空間面向鏡子半蹲，讓鏡中的任務碼紙條與鎖具清楚可見。" },
+      { type: "指定動作", instruction: "單膝跪在軟墊上，另一腿向側邊伸直，手持任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "雙膝跪在軟墊上並向後坐，將任務碼紙條平放在腿上完成拍攝。" },
+      { type: "指定動作", instruction: "面向牆壁、雙手放在後腦，讓身旁的任務碼紙條清楚入鏡。" },
+      { type: "指定動作", instruction: "在私人空間採低姿態爬行姿勢，將任務碼紙條放在前方完成拍攝。" },
+      { type: "指定動作", instruction: "以端正跪姿手持寫有「接受今日任務」與驗證碼的紙條完成拍攝。" },
+      { type: "指定動作", instruction: "側坐在地面、雙腿彎向同一側，手持任務碼紙條與鎖具同框。" },
+      { type: "指定動作", instruction: "雙手扶著安全穩固的桌緣微微前傾，讓任務碼紙條清楚入鏡。" },
+      { type: "指定動作", instruction: "以蹲跪姿勢將任務碼紙條放在頭頂，維持平衡後完成拍攝。" },
+      { type: "指定動作", instruction: "躺在軟墊上側身蜷曲，手持任務碼紙條並保持鎖具可見。" },
+      { type: "指定動作", instruction: "站立並將雙手手腕交疊放在身前，手持任務碼紙條完成拍攝。" },
+      { type: "指定動作", instruction: "在私人空間用絲帶鬆鬆繫成項圈造型，手持任務碼紙條完成拍攝；不可影響呼吸。" },
+      { type: "指定動作", instruction: "跪在鏡子前低頭，讓任務碼紙條、鎖具與完整姿勢同時入鏡。" },
+      { type: "指定動作", instruction: "雙腿分開站穩，將任務碼紙條用雙手放在腰前完成拍攝。" },
+      { type: "指定動作", instruction: "採伏跪姿勢並把額頭靠近軟墊，將任務碼紙條放在手邊完成拍攝。" }
+    ];
 
     const bootPage = document.getElementById("bootPage");
     const authPage = document.getElementById("authPage");
@@ -519,6 +584,7 @@
     document.getElementById("taskBackButton").addEventListener("click", renderDashboard);
     document.getElementById("photoInput").addEventListener("change", event => choosePhoto(event.target.files[0]));
     document.getElementById("upload").addEventListener("submit", submitPreview);
+    document.getElementById("taskIdeaForm").addEventListener("submit", submitTaskIdea);
     document.getElementById("confirmAdultButton").addEventListener("click", () => document.getElementById("ageGateDialog").close());
     document.getElementById("closeMemberProfile").addEventListener("click", () => document.getElementById("memberProfileDialog").close());
     document.getElementById("notificationsButton").addEventListener("click", openNotifications);
@@ -653,22 +719,87 @@
     async function renderDashboard() {
       const profile = state.member.profile;
       document.getElementById("memberChip").textContent = `${profile.displayName || state.member.account} · 已註冊`;
-      document.getElementById("taskCode").textContent = dailyCode();
       await Promise.all([checkAdmin(), loadSubmissions(), loadFeedbackNotifications()]);
       showOnly(dashboardPage);
     }
 
-    function openTask() {
-      document.getElementById("taskCode").textContent = dailyCode();
-      showOnly(taskPage);
+    async function openTask() {
+      const button = document.getElementById("openTaskButton");
+      button.disabled = true;
+      button.textContent = "載入今日任務…";
+      try {
+        state.dailyTask = await loadOrCreateDailyTask();
+        renderDailyTask();
+        showOnly(taskPage);
+      } catch {
+        alert("無法載入今日任務，請稍後再試。");
+      } finally {
+        button.disabled = false;
+        button.textContent = "上傳驗證照片";
+      }
     }
 
-    function dailyCode() {
-      const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Taipei" });
-      let hash = 0;
-      for (const char of today) hash = ((hash << 5) - hash + char.charCodeAt(0)) | 0;
-      const code = String(Math.abs(hash) % 1000000).padStart(6, "0");
-      return `${code.slice(0, 3)} ${code.slice(3)}`;
+    function taipeiDate() {
+      return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Taipei" });
+    }
+
+    function randomTaskCode() {
+      const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      const values = new Uint32Array(6);
+      crypto.getRandomValues(values);
+      return Array.from(values, value => alphabet[value % alphabet.length]).join("");
+    }
+
+    function formatTaskCode(code) {
+      const value = String(code || "").replace(/\s/g, "").toUpperCase();
+      return `${value.slice(0, 3)} ${value.slice(3, 6)}`.trim();
+    }
+
+    async function loadOrCreateDailyTask() {
+      const date = taipeiDate();
+      const reference = doc(db, "dailyMemberTasks", `${state.member.uid}_${date}`);
+      const existing = await getDoc(reference);
+      if (existing.exists()) return existing.data();
+      const approvedSnapshot = await getDocs(query(collection(db, "taskIdeas"), where("status", "==", "approved")));
+      const approved = approvedSnapshot.docs.map(item => ({ type: "用戶提供", instruction: item.data().content, sourceIdeaId: item.id }));
+      const randomValue = new Uint32Array(1);
+      crypto.getRandomValues(randomValue);
+      const categories = approved.length ? ["code", "action", "idea"] : ["code", "action"];
+      const category = categories[randomValue[0] % categories.length];
+      crypto.getRandomValues(randomValue);
+      const selected = category === "code" ? CODE_TASK : category === "idea" ? approved[randomValue[0] % approved.length] : ACTION_TASKS[randomValue[0] % ACTION_TASKS.length];
+      const task = { ownerId: state.member.uid, taskDate: date, taskCode: randomTaskCode(), type: selected.type, instruction: selected.instruction, sourceIdeaId: selected.sourceIdeaId || "", createdAt: new Date().toISOString() };
+      await setDoc(reference, task);
+      return task;
+    }
+
+    function renderDailyTask() {
+      const task = state.dailyTask;
+      document.getElementById("taskType").textContent = task.type || "今日指定動作";
+      document.getElementById("taskInstruction").textContent = task.instruction;
+      document.getElementById("taskCode").textContent = formatTaskCode(task.taskCode);
+    }
+
+    async function submitTaskIdea(event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const button = event.submitter;
+      const content = String(new FormData(form).get("content") || "").trim();
+      const message = document.getElementById("taskIdeaMessage");
+      if (content.length < 6) {
+        message.textContent = "請至少輸入 6 個字。";
+        return;
+      }
+      button.disabled = true;
+      try {
+        await addDoc(collection(db, "taskIdeas"), { ownerId: state.member.uid, displayName: state.member.profile.displayName || state.member.account, content, status: "pending", createdAt: new Date().toISOString(), updatedAt: serverTimestamp() });
+        form.reset();
+        message.textContent = "想法已送出，管理員通過後會加入每日任務。";
+      } catch {
+        message.textContent = "送出失敗，請稍後再試。";
+      } finally {
+        button.disabled = false;
+      }
     }
 
     function editProfile() {
@@ -857,12 +988,15 @@
       const button = event.submitter;
       button.disabled = true;
       try {
-        const date = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Taipei" });
+        const date = taipeiDate();
+        const task = state.dailyTask || await loadOrCreateDailyTask();
         await setDoc(doc(db, "submissions", `${state.member.uid}_${date}`), {
           ownerId: state.member.uid,
           displayName: state.member.profile.displayName || state.member.account,
           imageDataUrl: state.previewUrl,
-          taskCode: dailyCode(),
+          taskCode: formatTaskCode(task.taskCode),
+          taskType: task.type,
+          taskInstruction: task.instruction,
           submittedDate: date,
           createdAt: new Date().toISOString(),
           updatedAt: serverTimestamp()
@@ -941,7 +1075,8 @@
             <button class="publisher-button" type="button" data-member-profile="${escapeHtml(post.ownerId)}" aria-label="查看 ${escapeHtml(post.displayName || "會員")} 的資料"><span class="member-avatar">${escapeHtml(String(post.displayName || "會").trim().charAt(0) || "會")}</span><strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong></button>
             <span class="muted">${new Date(post.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}</span>
           </div>
-          <div class="public-details"><span>任務碼 ${escapeHtml(post.taskCode || "—")}</span></div>
+          <div class="public-details"><span>任務碼 ${escapeHtml(post.taskCode || "—")}</span><span>${escapeHtml(post.taskType || "驗證任務")}</span></div>
+          ${post.taskInstruction ? `<p class="task-summary">${escapeHtml(post.taskInstruction)}</p>` : ""}
           <figure class="preview-frame"><img src="${post.imageDataUrl}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片"></figure>
           <div class="review-actions">${reviewControls}<button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button></div>
         </article>`;
@@ -962,7 +1097,7 @@
         ["鎖具品牌", selectedLabel(profile, "lockBrand", "lockBrandOther")], ["顏色", profile.lockColor],
         ["籠體尺寸", pair(profile.cageLengthCm, profile.cageWidthCm, "cm")], ["環內徑", format(profile.ringDiameterMm, "mm")],
         ["材質", selectedLabel(profile, "lockMaterial", "lockMaterialOther")], ["鎖定方式", selectedLabel(profile, "lockingMethod", "lockingMethodOther")],
-        ["未配戴長度", format(profile.bodyLengthCm, "cm")], ["未配戴周長", format(profile.bodyGirthCm, "cm")]
+        ["未配戴長度", format(profile.bodyLengthCm, "cm")], ["陰莖粗度", format(profile.bodyGirthCm, "cm")]
       ].filter(([, value]) => value);
       document.getElementById("memberProfileTitle").textContent = displayName;
       document.getElementById("memberProfileContent").innerHTML = fields.length ? `<dl class="profile-list">${fields.map(([label, value]) => `<div class="profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>` : '<p class="muted">這位會員尚未填寫公開資料。</p>';

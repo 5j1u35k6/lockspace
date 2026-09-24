@@ -82,6 +82,33 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    match /dailyMemberTasks/{taskId} {
+      allow read: if isAdmin()
+        || (isRegistered() && resource.data.ownerId == request.auth.uid);
+      allow create: if isRegistered()
+        && request.resource.data.ownerId == request.auth.uid
+        && taskId == request.auth.uid + "_" + request.resource.data.taskDate
+        && request.resource.data.taskCode is string
+        && request.resource.data.taskCode.size() == 6
+        && request.resource.data.type in ["驗證任務碼", "指定動作", "用戶提供"]
+        && request.resource.data.instruction is string;
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    match /taskIdeas/{ideaId} {
+      allow read: if isAdmin()
+        || (isRegistered() && resource.data.status == "approved")
+        || (isRegistered() && resource.data.ownerId == request.auth.uid);
+      allow create: if isRegistered()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.content is string
+        && request.resource.data.content.size() >= 6
+        && request.resource.data.content.size() <= 180
+        && request.resource.data.status == "pending";
+      allow update, delete: if isAdmin();
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
