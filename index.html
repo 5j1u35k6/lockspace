@@ -369,8 +369,8 @@
       </div>
 
       <div class="form-section">
-        <h2>我的道具庫 <span class="private-tag">不公開</span></h2>
-        <p class="muted">只用來篩選「指定動作」任務；系統只會從你勾選的道具中隨機抽取 0～1 個。請只勾選你實際擁有、能安全自行穿戴與解除的道具。</p>
+        <h2>我的道具庫 <span class="private-tag">私人</span></h2>
+        <p class="muted">此清單只供你本人與管理員存取，用來篩選「指定動作」任務；系統只會從你勾選的道具中隨機抽取 0～1 個。請只勾選你實際擁有、能安全自行穿戴與解除的道具。</p>
         <div class="prop-picker">
           <section class="prop-group"><h3>頸部／身份</h3><div class="prop-options">
             <label class="prop-option"><input type="checkbox" name="taskProps" value="collar"><span>項圈</span></label>
@@ -436,7 +436,7 @@
 
       <div class="callout warning">標示公開的資料會顯示給已登入會員。</div>
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
-      <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
+      <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意標示為「公開」的已填資料顯示給平台會員；私人道具庫不包含在公開範圍內。我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
       <p class="version-stamp">Lockspace v0.11.0</p>
     </form>
@@ -735,7 +735,7 @@
 
     function generateActionTask() {
       for (let attempt = 0; attempt < 60; attempt += 1) {
-        const ownedPropIds = Array.isArray(state.member?.profile?.taskProps) ? state.member.profile.taskProps : [];
+        const ownedPropIds = Array.isArray(state.member?.taskProps) ? state.member.taskProps : [];
         const ownedProps = ACTION_PROPS.filter(prop => ownedPropIds.includes(prop.id));
         const useProp = ownedProps.length > 0 && securePick([true, true, true, false, false]);
         const prop = useProp ? securePick(ownedProps) : null;
@@ -858,7 +858,7 @@
       event.preventDefault();
       const profileFormData = new FormData(profileForm);
       const profile = Object.fromEntries(profileFormData.entries());
-      profile.taskProps = profileFormData.getAll("taskProps").map(value => String(value));
+      const taskProps = profileFormData.getAll("taskProps").map(value => String(value));
       if (!profile.birthDate || new Date(`${profile.birthDate}T00:00:00`) > adultCutoff) {
         alert("註冊者必須年滿 18 歲。");
         return;
@@ -896,7 +896,11 @@
           verification: proofFile ? { status: "pending", proofReady, submittedAt: new Date().toISOString() } : state.member?.verification,
           updatedAt: serverTimestamp()
         }, { merge: true });
-        state.member = { uid: user.uid, account, profile, verification: proofFile ? { status: "pending", proofReady } : state.member?.verification };
+        await setDoc(doc(db, "memberPreferences", user.uid), {
+          taskProps,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        state.member = { uid: user.uid, account, profile, taskProps, verification: proofFile ? { status: "pending", proofReady } : state.member?.verification };
         state.pendingCredentials = null;
         renderDashboard();
       } catch (error) {
@@ -1065,7 +1069,7 @@
       for (const [key, value] of Object.entries(profile)) {
         if (profileForm.elements[key] && typeof value === "string") profileForm.elements[key].value = value;
       }
-      const ownedTaskProps = Array.isArray(profile.taskProps) ? profile.taskProps : [];
+      const ownedTaskProps = Array.isArray(state.member.taskProps) ? state.member.taskProps : [];
       profileForm.querySelectorAll('input[name="taskProps"]').forEach(input => {
         input.checked = ownedTaskProps.includes(input.value);
       });
@@ -1217,6 +1221,7 @@
       const user = auth.currentUser;
       if (!user) return;
       try {
+        await deleteDoc(doc(db, "memberPreferences", user.uid));
         await deleteDoc(doc(db, "members", user.uid));
         await deleteUser(user);
       } catch {
@@ -1478,8 +1483,12 @@
         return;
       }
       let snapshot;
+      let preferencesSnapshot;
       try {
-        snapshot = await getDoc(doc(db, "members", user.uid));
+        [snapshot, preferencesSnapshot] = await Promise.all([
+          getDoc(doc(db, "members", user.uid)),
+          getDoc(doc(db, "memberPreferences", user.uid))
+        ]);
       } catch {
         if (revision !== authRevision) return;
         state.authNotice = "無法讀取會員資料，請檢查網路後再試。";
@@ -1500,7 +1509,14 @@
         showOnly(registrationPage);
         return;
       }
-      state.member = { uid: user.uid, account: snapshot.data().username || user.email.split("@")[0], ...snapshot.data() };
+      state.member = {
+        uid: user.uid,
+        account: snapshot.data().username || user.email.split("@")[0],
+        ...snapshot.data(),
+        taskProps: preferencesSnapshot?.exists() && Array.isArray(preferencesSnapshot.data().taskProps)
+          ? preferencesSnapshot.data().taskProps
+          : []
+      };
       await renderDashboard();
     });
 
