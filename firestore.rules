@@ -11,11 +11,23 @@ service cloud.firestore {
         && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
+    function memberIsActive(memberId) {
+      return exists(/databases/$(database)/documents/members/$(memberId))
+        && (!("deleted" in get(/databases/$(database)/documents/members/$(memberId)).data)
+          || get(/databases/$(database)/documents/members/$(memberId)).data.deleted != true);
+    }
+
     function isRegistered() {
+      return signedIn() && memberIsActive(request.auth.uid);
+    }
+
+    function canWriteOwnProof(memberId) {
       return signedIn()
-        && exists(/databases/$(database)/documents/members/$(request.auth.uid))
-        && (!("deleted" in get(/databases/$(database)/documents/members/$(request.auth.uid)).data)
-          || get(/databases/$(database)/documents/members/$(request.auth.uid)).data.deleted != true);
+        && request.auth.uid == memberId
+        && (
+          !exists(/databases/$(database)/documents/members/$(memberId))
+          || memberIsActive(memberId)
+        );
     }
 
     match /admins/{adminId} {
@@ -26,72 +38,232 @@ service cloud.firestore {
     match /members/{memberId} {
       allow read: if signedIn()
         && (request.auth.uid == memberId || isRegistered() || isAdmin());
+
       allow create: if signedIn()
         && request.auth.uid == memberId
-        && (!("deleted" in request.resource.data) || request.resource.data.deleted != true);
+        && request.resource.data.keys().hasAll([
+          "username", "profile", "verification", "updatedAt"
+        ])
+        && request.resource.data.keys().hasOnly([
+          "username", "profile", "verification", "updatedAt"
+        ])
+        && request.resource.data.username is string
+        && request.resource.data.profile is map
+        && request.resource.data.verification is map
+        && request.resource.data.verification.keys().hasAll([
+          "status", "proofReady"
+        ])
+        && request.resource.data.verification.keys().hasOnly([
+          "status", "proofReady", "submittedAt"
+        ])
+        && request.resource.data.verification.status == "pending"
+        && request.resource.data.verification.proofReady == true;
+
       allow update: if isAdmin()
-        || (signedIn()
+        || (
+          signedIn()
+          && request.auth.uid == memberId
+          && memberIsActive(memberId)
+          && request.resource.data.username == resource.data.username
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            "profile", "verification", "updatedAt"
+          ])
+          && (
+            !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+              "verification"
+            ])
+            || (
+              request.resource.data.verification is map
+              && request.resource.data.verification.keys().hasAll([
+                "status", "proofReady"
+              ])
+              && request.resource.data.verification.keys().hasOnly([
+                "status", "proofReady", "submittedAt"
+              ])
+              && request.resource.data.verification.status == "pending"
+              && request.resource.data.verification.proofReady == true
+            )
+          )
+        );
+
+      allow delete: if isAdmin()
+        || (
+          signedIn()
           && request.auth.uid == memberId
           && (!("deleted" in resource.data) || resource.data.deleted != true)
-          && (!("deleted" in request.resource.data) || request.resource.data.deleted != true));
-      allow delete: if (signedIn() && request.auth.uid == memberId) || isAdmin();
+        );
     }
 
     match /birthProofs/{memberId} {
       allow read: if (signedIn() && request.auth.uid == memberId) || isAdmin();
-      allow create, update: if signedIn() && request.auth.uid == memberId;
-      allow delete: if (signedIn() && request.auth.uid == memberId) || isAdmin();
+
+      allow create, update: if canWriteOwnProof(memberId)
+        && request.resource.data.keys().hasOnly(["dataUrl", "updatedAt"])
+        && request.resource.data.dataUrl is string;
+
+      allow delete: if isAdmin()
+        || (
+          signedIn()
+          && request.auth.uid == memberId
+          && memberIsActive(memberId)
+        );
     }
 
     match /submissions/{submissionId} {
       allow read: if isRegistered() || isAdmin();
+
       allow create: if isRegistered()
-        && request.resource.data.ownerId == request.auth.uid;
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.submittedDate is string
+        && submissionId == request.auth.uid + "_" + request.resource.data.submittedDate
+        && request.resource.data.keys().hasAll([
+          "ownerId",
+          "displayName",
+          "imageDataUrl",
+          "taskCode",
+          "taskType",
+          "taskInstruction",
+          "submittedDate",
+          "createdAt",
+          "updatedAt"
+        ])
+        && request.resource.data.ownerId is string
+        && request.resource.data.displayName is string
+        && request.resource.data.imageDataUrl is string
+        && request.resource.data.taskCode is string
+        && request.resource.data.taskType is string
+        && request.resource.data.taskInstruction is string
+        && request.resource.data.createdAt is string;
+
       allow update: if false;
+
       allow delete: if isAdmin()
         || (isRegistered() && resource.data.ownerId == request.auth.uid);
     }
 
     match /reviews/{reviewId} {
       allow read: if isRegistered() || isAdmin();
+
       allow create: if isRegistered()
+        && request.resource.data.keys().hasOnly([
+          "submissionId", "reviewerId", "decision", "createdAt"
+        ])
+        && request.resource.data.submissionId is string
         && request.resource.data.reviewerId == request.auth.uid
+        && request.resource.data.createdAt is string
         && reviewId == request.resource.data.submissionId + "_" + request.auth.uid
         && request.resource.data.decision in ["approved", "rejected"]
         && exists(/databases/$(database)/documents/submissions/$(request.resource.data.submissionId))
         && get(/databases/$(database)/documents/submissions/$(request.resource.data.submissionId)).data.ownerId != request.auth.uid;
+
       allow update: if false;
       allow delete: if isAdmin();
     }
 
     match /reports/{reportId} {
       allow read: if isAdmin();
+
       allow create: if isRegistered()
+        && request.resource.data.keys().hasOnly([
+          "submissionId", "reporterId", "createdAt", "status"
+        ])
+        && request.resource.data.submissionId is string
         && request.resource.data.reporterId == request.auth.uid
-        && reportId == request.resource.data.submissionId + "_" + request.auth.uid;
+        && request.resource.data.status == "open"
+        && reportId == request.resource.data.submissionId + "_" + request.auth.uid
+        && exists(/databases/$(database)/documents/submissions/$(request.resource.data.submissionId));
+
       allow update, delete: if isAdmin();
     }
 
     match /feedback/{feedbackId} {
       allow create: if isRegistered()
+        && request.resource.data.keys().hasAll([
+          "userId",
+          "username",
+          "displayName",
+          "opinion",
+          "content",
+          "status",
+          "appVersion",
+          "createdAt",
+          "createdAtIso"
+        ])
+        && request.resource.data.keys().hasOnly([
+          "userId",
+          "username",
+          "displayName",
+          "opinion",
+          "content",
+          "status",
+          "appVersion",
+          "createdAt",
+          "createdAtIso"
+        ])
         && request.resource.data.userId == request.auth.uid
+        && request.resource.data.username is string
+        && request.resource.data.displayName is string
         && request.resource.data.opinion is string
-        && request.resource.data.content is string;
+        && request.resource.data.content is string
+        && request.resource.data.appVersion is string
+        && request.resource.data.opinion.size() > 0
+        && request.resource.data.opinion.size() <= 80
+        && request.resource.data.content.size() > 0
+        && request.resource.data.content.size() <= 1200
+        && request.resource.data.status == "open";
+
       allow read: if isAdmin()
         || (signedIn() && resource.data.userId == request.auth.uid);
+
       allow update, delete: if isAdmin();
     }
 
     match /dailyMemberTasks/{taskId} {
-      allow read: if isAdmin()
-        || (isRegistered() && resource.data.ownerId == request.auth.uid);
+      // First-time task loading intentionally reads a document that does not
+      // exist yet. Permit that missing-document get, but protect existing
+      // daily tasks so only their owner (or an admin) can read them.
+      allow get: if isAdmin()
+        || (
+          isRegistered()
+          && (
+            !exists(/databases/$(database)/documents/dailyMemberTasks/$(taskId))
+            || resource.data.ownerId == request.auth.uid
+          )
+        );
+
+      allow list: if isAdmin();
+
       allow create: if isRegistered()
+        && request.resource.data.keys().hasAll([
+          "ownerId",
+          "taskDate",
+          "taskCode",
+          "type",
+          "instruction",
+          "sourceIdeaId",
+          "createdAt"
+        ])
+        && request.resource.data.keys().hasOnly([
+          "ownerId",
+          "taskDate",
+          "taskCode",
+          "type",
+          "instruction",
+          "sourceIdeaId",
+          "createdAt"
+        ])
         && request.resource.data.ownerId == request.auth.uid
-        && taskId == request.auth.uid + "_" + request.resource.data.taskDate
+        && request.resource.data.taskDate is string
         && request.resource.data.taskCode is string
         && request.resource.data.taskCode.size() == 6
-        && request.resource.data.type in ["驗證任務碼", "指定動作", "用戶提供"]
-        && request.resource.data.instruction is string;
+        && taskId == request.auth.uid + "_" + request.resource.data.taskDate
+        && request.resource.data.type in [
+          "驗證任務碼", "指定動作", "用戶提供"
+        ]
+        && request.resource.data.instruction is string
+        && request.resource.data.sourceIdeaId is string
+        && request.resource.data.createdAt is string;
+
       allow update: if false;
       allow delete: if isAdmin();
     }
@@ -100,12 +272,32 @@ service cloud.firestore {
       allow read: if isAdmin()
         || (isRegistered() && resource.data.status == "approved")
         || (isRegistered() && resource.data.ownerId == request.auth.uid);
+
       allow create: if isRegistered()
+        && request.resource.data.keys().hasAll([
+          "ownerId",
+          "displayName",
+          "content",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ])
+        && request.resource.data.keys().hasOnly([
+          "ownerId",
+          "displayName",
+          "content",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ])
         && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.displayName is string
         && request.resource.data.content is string
         && request.resource.data.content.size() >= 6
         && request.resource.data.content.size() <= 180
-        && request.resource.data.status == "pending";
+        && request.resource.data.status == "pending"
+        && request.resource.data.createdAt is string;
+
       allow update, delete: if isAdmin();
     }
 
