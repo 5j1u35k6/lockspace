@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.11.0 - 2026-09-24
+
+### Changed
+
+- Applied 93 manual review comments to the built-in action-task system, replacing 91 tasks that were repetitive, low-challenge, impractical, or poorly matched to their category while keeping the pool at 180 tasks.
+- Added an explicit clothing requirement to every built-in action task.
+- Reworked obedience tasks around timed sequences, posture transitions, and exact protocols.
+
+### Safety
+
+- Added an 18+ / voluntary participation / private-space warning to the verification task page.
+- Reminds members to stop immediately if they experience pain, dizziness, loss of balance, or other discomfort.
+
 ## 0.10.1 - 2026-09-24
 
 ### Changed
