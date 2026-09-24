@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.9.0">
+  <meta name="application-version" content="0.9.1">
   <title>Lockspace 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -281,7 +281,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.9.0</p>
+      <p class="version-stamp">Lockspace v0.9.1</p>
     </section>
   </main>
 
@@ -377,7 +377,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意以上已填資料公開給平台會員；我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.9.0</p>
+      <p class="version-stamp">Lockspace v0.9.1</p>
     </form>
   </main>
 
@@ -409,7 +409,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.9.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.9.1</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -432,7 +432,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.9.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.9.1</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -478,8 +478,9 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.9.0";
+    const APP_VERSION = "0.9.1";
     const RELEASE_NOTES = [
+      { version: "0.9.1", date: "2026-09-24", changes: ["修正每日任務首次載入權限，避免新的一天無法建立任務。", "每日任務明確改為「驗證任務碼、指定動作、用戶提供」三種類型擇一；指定動作不再混入任務碼紙條要求。", "將「提供任務想法」移到登入後首頁，並擴充指定動作素材。", "修正已建立的舊指定動作仍顯示任務碼紙條文字。"] },
       { version: "0.9.0", date: "2026-09-24", changes: ["每日任務改為每位會員獨立抽選驗證任務碼、指定動作或用戶提供任務。", "新增大量指定動作素材，以及會員任務提案與後台審核。", "個人資料欄位「陰莖周長」更名為「陰莖粗度」。"] },
       { version: "0.8.0", date: "2026-09-24", changes: ["新增登入後功能列通知中心與未讀提示。", "新增版本更新紀錄及版本編號規則說明。", "問題回饋頁的返回首頁移至左上角。"] },
       { version: "0.7.2", date: "2026-09-24", changes: ["任務發布者頭像可開啟公開會員資料。", "改善登入狀態判定，避免登入頁與首頁反覆跳轉。", "新增管理員回覆、會員通知、隱私權政策及使用條款。"] }

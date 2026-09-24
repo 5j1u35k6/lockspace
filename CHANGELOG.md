@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.9.1 - 2026-09-24
+
+### Fixed
+
+- Fixed first-time daily-task loading when the member's daily task document does not yet exist.
+- Removed legacy verification-code-paper instructions from action-only tasks, including already-created daily tasks.
+
+### Changed
+
+- Clarified the daily task model as exactly one of three categories: verification code, built-in action, or approved member idea.
+- Moved member task-idea submission to the signed-in home page.
+- Expanded the built-in action task pool.
+
 ## 0.9.0 - 2026-09-24
 
 - Added per-member daily task selection across verification codes, built-in actions, and approved member ideas.
