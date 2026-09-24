@@ -870,6 +870,7 @@
       const profileFormData = new FormData(profileForm);
       const profile = Object.fromEntries(profileFormData.entries());
       const taskProps = profileFormData.getAll("taskProps").map(value => String(value));
+      delete profile.taskProps;
       if (!profile.birthDate || new Date(`${profile.birthDate}T00:00:00`) > adultCutoff) {
         alert("註冊者必須年滿 18 歲。");
         return;
