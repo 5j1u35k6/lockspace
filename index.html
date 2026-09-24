@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.13.0">
+  <meta name="application-version" content="0.13.1">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -295,7 +295,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.13.0</p>
+      <p class="version-stamp">Lockspace v0.13.1</p>
     </section>
   </main>
 
@@ -461,7 +461,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意標示為「公開」的已填資料顯示給平台會員；私人道具庫不包含在公開範圍內。我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.13.0</p>
+      <p class="version-stamp">Lockspace v0.13.1</p>
     </form>
   </main>
 
@@ -493,7 +493,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.13.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.13.1</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -517,7 +517,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.13.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.13.1</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -563,8 +563,9 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.13.0";
+    const APP_VERSION = "0.13.1";
     const RELEASE_NOTES = [
+      { version: "0.13.1", date: "2026-09-25", changes: ["驗證紀錄重新顯示任務類型、任務碼與任務說明，並相容缺少新版任務欄位的舊投稿。"] },
       { version: "0.13.0", date: "2026-09-24", changes: ["重新編排註冊與會員資料表單，相關欄位改為同列呈現。", "未配戴時身體尺寸移至貞操鎖資料下方，私人道具庫改為更緊湊的雙欄版面。"] },
       { version: "0.12.2", date: "2026-09-24", changes: ["修正日期選擇器初始化順序造成整個登入程式停止執行的問題。"] },
       { version: "0.12.1", date: "2026-09-24", changes: ["修正登入後可能持續停在「正在確認登入狀態」的問題。", "私人道具偏好與首頁附屬資料讀取失敗或逾時時，仍可正常進入會員首頁。"] },
@@ -1435,6 +1436,9 @@
         return;
       }
       feed.innerHTML = state.posts.map(post => {
+        const isLegacyCodeTask = !post.taskType && Boolean(post.taskCode);
+        const taskType = post.taskType || (isLegacyCodeTask ? "驗證任務碼" : "驗證任務");
+        const taskInstruction = post.taskInstruction || (isLegacyCodeTask ? CODE_TASK.instruction : "");
         const reviews = state.reviews.filter(review => review.submissionId === post.id);
         const approved = reviews.filter(review => review.decision === "approved").length;
         const rejected = reviews.filter(review => review.decision === "rejected").length;
@@ -1451,8 +1455,8 @@
             <button class="publisher-button" type="button" data-member-profile="${escapeHtml(post.ownerId)}" aria-label="查看 ${escapeHtml(post.displayName || "會員")} 的資料"><span class="member-avatar">${escapeHtml(String(post.displayName || "會").trim().charAt(0) || "會")}</span><strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong></button>
             <span class="muted">${new Date(post.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}</span>
           </div>
-          <div class="public-details">${post.taskType === "驗證任務碼" ? `<span>任務碼 ${escapeHtml(post.taskCode || "—")}</span>` : ""}<span>${escapeHtml(post.taskType || "驗證任務")}</span></div>
-          ${post.taskInstruction ? `<p class="task-summary">${escapeHtml(post.taskInstruction)}</p>` : ""}
+          <div class="public-details">${taskType === "驗證任務碼" ? `<span>任務碼 ${escapeHtml(post.taskCode || "—")}</span>` : ""}<span>${escapeHtml(taskType)}</span></div>
+          ${taskInstruction ? `<p class="task-summary">${escapeHtml(taskInstruction)}</p>` : ""}
           <figure class="preview-frame"><img src="${post.imageDataUrl}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片"></figure>
           <div class="review-actions">${reviewControls}<button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button></div>
         </article>`;
