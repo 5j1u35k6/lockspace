@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.12.2">
+  <meta name="application-version" content="0.13.0">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -75,6 +75,9 @@
     }
     .tab.active { background: var(--lime); color: #151711; border-color: var(--lime); }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 16px; }
+    .field-row { display: grid; gap: 13px 12px; }
+    .field-row.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .field-row.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .form-section { margin-top: 22px; padding-top: 16px; border-top: 1px solid #ffffff16; }
     label { display: block; margin: 10px 0; color: #d9d6e1; font-size: 14px; font-weight: 650; }
     input, textarea, select {
@@ -134,13 +137,13 @@
     .warning { background: #f4be630d; border: 1px solid #f4be6331; color: #ead7ae; }
     .check-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: #d6d3dd; font-size: 14px; }
     .check-row input { width: 18px; height: 18px; flex: none; margin: 0; accent-color: var(--lime); }
-    .prop-picker { display: grid; gap: 14px; margin-top: 14px; }
-    .prop-group { padding: 13px; border: 1px solid #ffffff16; border-radius: 8px; background: #ffffff05; }
-    .prop-group h3 { margin: 0 0 9px; font-size: 13px; color: var(--lime); }
-    .prop-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; }
-    .prop-option { display: flex; align-items: center; gap: 8px; min-height: 34px; color: #d6d3dd; font-size: 13px; font-weight: 550; }
+    .prop-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .prop-group { padding: 10px 11px; border: 1px solid #ffffff16; border-radius: 8px; background: #ffffff05; }
+    .prop-group h3 { margin: 0 0 5px; font-size: 13px; color: var(--lime); }
+    .prop-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; row-gap: 1px; }
+    .prop-option { display: flex; align-items: center; gap: 6px; min-height: 27px; margin: 0; color: #d6d3dd; font-size: 13px; font-weight: 550; }
     .prop-option input { width: 17px; height: 17px; flex: none; margin: 0; accent-color: var(--lime); }
-    @media (max-width: 640px) { .prop-options { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .prop-picker { grid-template-columns: 1fr; } }
     .field-help { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 500; }
     .custom-select { position: relative; margin-top: 6px; }
     .select-trigger, .date-trigger { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 5px; background: #101017; color: var(--text); text-align: left; }
@@ -237,12 +240,16 @@
     .version-stamp { margin: 18px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
     @media (max-width: 780px) {
       .form-grid { grid-template-columns: 1fr; }
+      .field-row.cols-4, .field-row.cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .site-shell { padding: 15px 15px 45px; }
       .topbar, .page-title, .section-heading, .submission-meta { align-items: flex-start; flex-direction: column; }
       .header-actions { width: 100%; flex-wrap: wrap; }
       .member-chip { display: none; }
       .boot-page, .auth-page, .registration-page { padding: 14px; }
       .auth-card, .registration-card { padding: 19px 16px; }
+    }
+    @media (max-width: 520px) {
+      .field-row.cols-4, .field-row.cols-3 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -288,7 +295,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.12.0</p>
+      <p class="version-stamp">Lockspace v0.13.0</p>
     </section>
   </main>
 
@@ -312,6 +319,8 @@
             <span class="field-help">僅開放年滿 18 歲的出生日期。</span>
             <span id="ageDisplay" class="field-help age-display hidden" aria-live="polite"></span>
           </label>
+        </div>
+        <div class="field-row cols-4">
           <label>身高 <span class="public-tag">公開</span>
             <span class="input-with-unit"><input name="heightCm" type="number" min="0" max="260" step="1"><span>cm</span></span>
           </label>
@@ -340,7 +349,7 @@
 
       <div class="form-section">
         <h2>貞操鎖資料 <span class="public-tag">公開</span></h2>
-        <div class="form-grid">
+        <div class="field-row cols-3">
           <label>品牌
             <span class="custom-select" data-custom-select="lockBrand" data-other-target="lockBrandOther"><input name="lockBrand" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="CB-X">CB-X</button><button type="button" data-value="Holy Trainer">Holy Trainer</button><button type="button" data-value="KINK3D">KINK3D</button><button type="button" data-value="其他">其他</button></span></span>
             <input class="other-field hidden" name="lockBrandOther" maxlength="64" placeholder="簡要填寫品牌">
@@ -348,6 +357,12 @@
           <label>顏色
             <input name="lockColor" maxlength="32">
           </label>
+          <label>材質
+            <span class="custom-select" data-custom-select="lockMaterial" data-other-target="lockMaterialOther"><input name="lockMaterial" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="樹脂">樹脂</button><button type="button" data-value="不鏽鋼">不鏽鋼</button><button type="button" data-value="鈦">鈦</button><button type="button" data-value="矽膠">矽膠</button><button type="button" data-value="其他">其他</button></span></span>
+            <input class="other-field hidden" name="lockMaterialOther" maxlength="32" placeholder="簡要填寫材質">
+          </label>
+        </div>
+        <div class="field-row cols-3">
           <label>籠長
             <span class="input-with-unit"><input name="cageLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
           </label>
@@ -357,10 +372,8 @@
           <label>環內徑
             <span class="input-with-unit"><input name="ringDiameterMm" type="number" min="0" max="200" step="0.1"><span>mm</span></span>
           </label>
-          <label>材質
-            <span class="custom-select" data-custom-select="lockMaterial" data-other-target="lockMaterialOther"><input name="lockMaterial" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="樹脂">樹脂</button><button type="button" data-value="不鏽鋼">不鏽鋼</button><button type="button" data-value="鈦">鈦</button><button type="button" data-value="矽膠">矽膠</button><button type="button" data-value="其他">其他</button></span></span>
-            <input class="other-field hidden" name="lockMaterialOther" maxlength="32" placeholder="簡要填寫材質">
-          </label>
+        </div>
+        <div class="field-row cols-3">
           <label>鎖定方式
             <span class="custom-select" data-custom-select="lockingMethod" data-other-target="lockingMethodOther"><input name="lockingMethod" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="掛鎖">掛鎖</button><button type="button" data-value="內嵌鎖">內嵌鎖</button><button type="button" data-value="一次性編號鎖">一次性編號鎖</button><button type="button" data-value="其他">其他</button></span></span>
             <input class="other-field hidden" name="lockingMethodOther" maxlength="32" placeholder="簡要填寫鎖定方式">
@@ -374,6 +387,18 @@
             <button id="expectedUnlockDateButton" class="date-trigger" type="button" aria-expanded="false"><span>選擇預計開鎖日期</span><b>日曆</b></button>
             <button id="unlockIndefiniteButton" class="button secondary" type="button" style="margin-top:8px">無期限</button>
             <span class="field-help">可選擇日期，或設為「無期限」。</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>未配戴時身體尺寸 <span class="public-tag">公開</span></h2>
+        <div class="form-grid">
+          <label>陰莖長度
+            <span class="input-with-unit"><input name="bodyLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+          </label>
+          <label>陰莖粗度
+            <span class="input-with-unit"><input name="bodyGirthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
           </label>
         </div>
       </div>
@@ -432,23 +457,11 @@
         </div>
       </div>
 
-      <div class="form-section">
-        <h2>未配戴時身體尺寸 <span class="public-tag">公開</span></h2>
-        <div class="form-grid">
-          <label>陰莖長度
-            <span class="input-with-unit"><input name="bodyLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
-          </label>
-          <label>陰莖粗度
-            <span class="input-with-unit"><input name="bodyGirthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
-          </label>
-        </div>
-      </div>
-
       <div class="callout warning">標示公開的資料會顯示給已登入會員。</div>
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意標示為「公開」的已填資料顯示給平台會員；私人道具庫不包含在公開範圍內。我可以之後刪除或修改。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.12.0</p>
+      <p class="version-stamp">Lockspace v0.13.0</p>
     </form>
   </main>
 
@@ -480,7 +493,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.12.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.13.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -504,7 +517,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.12.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.13.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -550,8 +563,9 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.12.2";
+    const APP_VERSION = "0.13.0";
     const RELEASE_NOTES = [
+      { version: "0.13.0", date: "2026-09-24", changes: ["重新編排註冊與會員資料表單，相關欄位改為同列呈現。", "未配戴時身體尺寸移至貞操鎖資料下方，私人道具庫改為更緊湊的雙欄版面。"] },
       { version: "0.12.2", date: "2026-09-24", changes: ["修正日期選擇器初始化順序造成整個登入程式停止執行的問題。"] },
       { version: "0.12.1", date: "2026-09-24", changes: ["修正登入後可能持續停在「正在確認登入狀態」的問題。", "私人道具偏好與首頁附屬資料讀取失敗或逾時時，仍可正常進入會員首頁。"] },
       { version: "0.12.0", date: "2026-09-24", changes: ["指定動作改為程序式組合生成，只產生可由單張照片確認的姿勢、穿著與可選道具條件。", "會員資料新增私人「我的道具庫」，指定動作只會從本人勾選的道具中抽取。", "貞操鎖資料新增上鎖日期與預計開鎖日期；預計開鎖日期可設為無期限。"] },
