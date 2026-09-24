@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.12.1">
+  <meta name="application-version" content="0.12.2">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -550,8 +550,9 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.12.1";
+    const APP_VERSION = "0.12.2";
     const RELEASE_NOTES = [
+      { version: "0.12.2", date: "2026-09-24", changes: ["修正日期選擇器初始化順序造成整個登入程式停止執行的問題。"] },
       { version: "0.12.1", date: "2026-09-24", changes: ["修正登入後可能持續停在「正在確認登入狀態」的問題。", "私人道具偏好與首頁附屬資料讀取失敗或逾時時，仍可正常進入會員首頁。"] },
       { version: "0.12.0", date: "2026-09-24", changes: ["指定動作改為程序式組合生成，只產生可由單張照片確認的姿勢、穿著與可選道具條件。", "會員資料新增私人「我的道具庫」，指定動作只會從本人勾選的道具中抽取。", "貞操鎖資料新增上鎖日期與預計開鎖日期；預計開鎖日期可設為無期限。"] },
       { version: "0.11.0", date: "2026-09-24", changes: ["依 93 則人工審核註解重整指定動作：替換 91 條無挑戰、重複、難以達成或分類不吻合的任務，並保留 180 條總數。", "所有指定動作現在都明確標示服裝要求：下半身裸露、上半身裸露（下身仍需讓鎖具可見）或全裸。", "驗證任務頁新增 18+、自願參與、私密安全空間與可隨時停止的警語。", "服從感任務改以計時、順序、姿勢轉換與明確流程增加差異與挑戰。"] },
@@ -808,6 +809,11 @@
     adultCutoff.setFullYear(adultCutoff.getFullYear() - 18);
     let calendarYear = adultCutoff.getFullYear();
     let calendarMonth = adultCutoff.getMonth();
+    const PROFILE_DATE_FIELDS = {
+      birthDate: { buttonId: "birthDateButton", placeholder: "選擇出生日期" },
+      lockDate: { buttonId: "lockDateButton", placeholder: "選擇上鎖日期" },
+      expectedUnlockDate: { buttonId: "expectedUnlockDateButton", placeholder: "選擇預計開鎖日期" }
+    };
 
     setupCustomSelects();
     setupProfileDatePickers();
@@ -1189,12 +1195,6 @@
     }
 
     let activeCalendarField = "birthDate";
-
-    const PROFILE_DATE_FIELDS = {
-      birthDate: { buttonId: "birthDateButton", placeholder: "選擇出生日期" },
-      lockDate: { buttonId: "lockDateButton", placeholder: "選擇上鎖日期" },
-      expectedUnlockDate: { buttonId: "expectedUnlockDateButton", placeholder: "選擇預計開鎖日期" }
-    };
 
     function parseProfileDate(value) {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) return null;
