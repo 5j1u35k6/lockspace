@@ -134,6 +134,13 @@
     .warning { background: #f4be630d; border: 1px solid #f4be6331; color: #ead7ae; }
     .check-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; color: #d6d3dd; font-size: 14px; }
     .check-row input { width: 18px; height: 18px; flex: none; margin: 0; accent-color: var(--lime); }
+    .prop-picker { display: grid; gap: 14px; margin-top: 14px; }
+    .prop-group { padding: 13px; border: 1px solid #ffffff16; border-radius: 8px; background: #ffffff05; }
+    .prop-group h3 { margin: 0 0 9px; font-size: 13px; color: var(--lime); }
+    .prop-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; }
+    .prop-option { display: flex; align-items: center; gap: 8px; min-height: 34px; color: #d6d3dd; font-size: 13px; font-weight: 550; }
+    .prop-option input { width: 17px; height: 17px; flex: none; margin: 0; accent-color: var(--lime); }
+    @media (max-width: 640px) { .prop-options { grid-template-columns: 1fr; } }
     .field-help { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 500; }
     .custom-select { position: relative; margin-top: 6px; }
     .select-trigger, .date-trigger { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 5px; background: #101017; color: var(--text); text-align: left; }
@@ -358,6 +365,60 @@
             <span class="custom-select" data-custom-select="lockingMethod" data-other-target="lockingMethodOther"><input name="lockingMethod" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="掛鎖">掛鎖</button><button type="button" data-value="內嵌鎖">內嵌鎖</button><button type="button" data-value="一次性編號鎖">一次性編號鎖</button><button type="button" data-value="其他">其他</button></span></span>
             <input class="other-field hidden" name="lockingMethodOther" maxlength="32" placeholder="簡要填寫鎖定方式">
           </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>我的道具庫 <span class="private-tag">不公開</span></h2>
+        <p class="muted">只用來篩選「指定動作」任務；系統只會從你勾選的道具中隨機抽取 0～1 個。請只勾選你實際擁有、能安全自行穿戴與解除的道具。</p>
+        <div class="prop-picker">
+          <section class="prop-group"><h3>頸部／身份</h3><div class="prop-options">
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="collar"><span>項圈</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="leather-collar"><span>皮革項圈</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="metal-collar"><span>金屬項圈</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="dog-tag"><span>犬牌</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="collar-dog-tag"><span>項圈＋犬牌</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="collar-leash"><span>項圈＋牽繩</span></label>
+          </div></section>
+          <section class="prop-group"><h3>手部／束縛</h3><div class="prop-options">
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="handcuffs"><span>手銬</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="leather-cuffs"><span>皮革手銬</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="soft-restraints"><span>軟式束縛帶</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="ankle-cuffs"><span>腳銬</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="wrist-cuffs"><span>手腕束帶</span></label>
+          </div></section>
+          <section class="prop-group"><h3>胸部</h3><div class="prop-options">
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="nipple-clamps"><span>乳夾</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="chain-nipple-clamps"><span>鏈式乳夾</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="adjustable-nipple-clamps"><span>可調式乳夾</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="decorative-nipple-clips"><span>乳環／裝飾夾</span></label>
+          </div></section>
+          <section class="prop-group"><h3>插入式道具</h3><div class="prop-options">
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="small-plug"><span>小型肛塞</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="plug"><span>一般肛塞</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="tail-plug"><span>尾巴肛塞</span></label>
+          </div></section>
+          <section class="prop-group"><h3>感官</h3><div class="prop-options">
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="blindfold"><span>眼罩</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="earmuffs"><span>耳罩</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="mouth-accessory"><span>嘴部配件／口枷</span></label>
+          </div></section>
+          <section class="prop-group"><h3>BDSM 展示</h3><div class="prop-options">
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="paddle"><span>拍板</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="whip"><span>鞭子</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="cane"><span>藤條</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="crop"><span>教鞭</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="slapper"><span>拍打器</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="feather"><span>羽毛棒</span></label>
+          </div></section>
+          <section class="prop-group"><h3>角色</h3><div class="prop-options">
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="pup-hood"><span>Pup hood</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="pup-mask"><span>Pup mask</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="dog-ears"><span>犬耳</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="dog-tail"><span>外掛式犬尾</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="harness"><span>Harness</span></label>
+            <label class="prop-option"><input type="checkbox" name="taskProps" value="leather-harness"><span>Leather harness</span></label>
+          </div></section>
         </div>
       </div>
 
@@ -795,7 +856,9 @@
 
     profileForm.addEventListener("submit", async event => {
       event.preventDefault();
-      const profile = Object.fromEntries(new FormData(profileForm).entries());
+      const profileFormData = new FormData(profileForm);
+      const profile = Object.fromEntries(profileFormData.entries());
+      profile.taskProps = profileFormData.getAll("taskProps").map(value => String(value));
       if (!profile.birthDate || new Date(`${profile.birthDate}T00:00:00`) > adultCutoff) {
         alert("註冊者必須年滿 18 歲。");
         return;
@@ -1002,6 +1065,10 @@
       for (const [key, value] of Object.entries(profile)) {
         if (profileForm.elements[key] && typeof value === "string") profileForm.elements[key].value = value;
       }
+      const ownedTaskProps = Array.isArray(profile.taskProps) ? profile.taskProps : [];
+      profileForm.querySelectorAll('input[name="taskProps"]').forEach(input => {
+        input.checked = ownedTaskProps.includes(input.value);
+      });
       profileForm.elements.adultConfirmed.checked = true;
       profileForm.elements.publicDataConsent.checked = true;
       profileForm.elements.proofRedacted.checked = true;
