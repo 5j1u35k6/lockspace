@@ -792,11 +792,24 @@
       return `${value.slice(0, 3)} ${value.slice(3, 6)}`.trim();
     }
 
+    function normalizeTask(task) {
+      if (!task || task.type !== "指定動作") return task;
+      let instruction = String(task.instruction || "").trim();
+
+      // Clean legacy v0.9.0 action text that still mixed in code-paper instructions.
+      instruction = instruction
+        .replace(/[，,；;]\s*[^。！？!?]*(?:任務碼|驗證碼)[^。！？!?]*[。！？!?]?$/u, "")
+        .replace(/\s*[^。！？!?]*(?:任務碼紙條|驗證碼紙條)[^。！？!?]*[。！？!?]?$/u, "")
+        .trim();
+
+      return { ...task, instruction };
+    }
+
     async function loadOrCreateDailyTask() {
       const date = taipeiDate();
       const reference = doc(db, "dailyMemberTasks", `${state.member.uid}_${date}`);
       const existing = await getDoc(reference);
-      if (existing.exists()) return existing.data();
+      if (existing.exists()) return normalizeTask(existing.data());
       const approvedSnapshot = await getDocs(query(collection(db, "taskIdeas"), where("status", "==", "approved")));
       const approved = approvedSnapshot.docs.map(item => ({ type: "用戶提供", instruction: item.data().content, sourceIdeaId: item.id }));
       const randomValue = new Uint32Array(1);
@@ -807,11 +820,12 @@
       const selected = category === "code" ? CODE_TASK : category === "idea" ? approved[randomValue[0] % approved.length] : ACTION_TASKS[randomValue[0] % ACTION_TASKS.length];
       const task = { ownerId: state.member.uid, taskDate: date, taskCode: randomTaskCode(), type: selected.type, instruction: selected.instruction, sourceIdeaId: selected.sourceIdeaId || "", createdAt: new Date().toISOString() };
       await setDoc(reference, task);
-      return task;
+      return normalizeTask(task);
     }
 
     function renderDailyTask() {
-      const task = state.dailyTask;
+      const task = normalizeTask(state.dailyTask);
+      state.dailyTask = task;
       const codeElement = document.getElementById("taskCode");
       const isCodeTask = task.type === "驗證任務碼";
       document.getElementById("taskType").textContent = task.type || "今日指定動作";
@@ -1030,7 +1044,7 @@
       button.disabled = true;
       try {
         const date = taipeiDate();
-        const task = state.dailyTask || await loadOrCreateDailyTask();
+        const task = normalizeTask(state.dailyTask || await loadOrCreateDailyTask());
         await setDoc(doc(db, "submissions", `${state.member.uid}_${date}`), {
           ownerId: state.member.uid,
           displayName: state.member.profile.displayName || state.member.account,
