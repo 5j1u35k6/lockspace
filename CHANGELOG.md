@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.1 - 2026-09-24
+
+### Changed
+
+- Browser tab titles now follow the current Lockspace page, including member home, verification task, feedback, admin, privacy, and terms pages.
+- Synchronized visible page-version metadata across the static pages.
+
 ## 0.10.0 - 2026-09-24
 
 ### Added
