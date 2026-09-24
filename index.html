@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.13.1">
+  <meta name="application-version" content="0.14.0">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -167,6 +167,8 @@
     .calendar-actions { display: flex; justify-content: flex-end; padding: 0 14px 14px; }
     .error { color: #ffb0bf; background: #ff617510; border: 1px solid #ff617538; padding: 11px 13px; border-radius: 11px; font-size: 14px; }
     .fineprint { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
+    .policy-links { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; font-size: 13px; }
+    .policy-links a { color: var(--cyan); }
     .site-shell { max-width: 1280px; margin: auto; padding: 22px 30px 60px; }
     .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 19px; border-bottom: 1px solid #ffffff18; }
     .header-actions { display: flex; align-items: center; gap: 9px; }
@@ -264,6 +266,7 @@
       <h1>登入 Lockspace</h1>
       <p class="muted">私人任務與會員驗證空間。</p>
       <div class="callout warning"><strong>僅限年滿 18 歲使用</strong></div>
+      <div class="policy-links"><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知、條款與懲處規範</a></div>
 
       <div class="tabs" role="tablist" aria-label="會員入口">
         <button class="tab active" id="loginTab" type="button">帳號登入</button>
@@ -295,7 +298,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.13.1</p>
+      <p class="version-stamp">Lockspace v0.14.0</p>
     </section>
   </main>
 
@@ -459,9 +462,9 @@
 
       <div class="callout warning">標示公開的資料會顯示給已登入會員。</div>
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
-      <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我同意標示為「公開」的已填資料顯示給平台會員；私人道具庫不包含在公開範圍內。我可以之後刪除或修改。</span></label>
+      <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.13.1</p>
+      <p class="version-stamp">Lockspace v0.14.0</p>
     </form>
   </main>
 
@@ -493,7 +496,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.13.1</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.14.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -517,12 +520,12 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">使用條款與社群規範</a><span>Lockspace v0.13.1</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.14.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
-    <div class="modal-body"><h2>警告</h2><p>本平台內容可能有害兒童或少年身心發展。</p><p>列為限制級內容，未滿 18 歲不得瀏覽。</p></div>
-    <div class="modal-actions"><a class="button" href="https://www.google.com/">離開</a><button id="confirmAdultButton" class="button primary" type="button">我已年滿 18 歲</button></div>
+    <div class="modal-body"><h2>限制級內容警告</h2><p><strong>本平台僅限年滿 18 歲者使用。</strong>內容可能包含成人性主題、裸露、私密影像及 BDSM／貞操鎖相關資訊，不適合兒童或少年瀏覽。</p><p>使用者必須自願參與、尊重同意與隱私，且不得上傳未成年人、未經同意影像或可識別他人的個人資料。違規內容可能被移除，帳號可能受到限制、暫停或永久停權。</p><div class="policy-links"><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知、條款與懲處規範</a></div><p class="fineprint">選擇繼續即表示你確認已年滿 18 歲，並同意遵守上述政策與規範。</p></div>
+    <div class="modal-actions"><a class="button" href="https://www.google.com/">離開</a><button id="confirmAdultButton" class="button primary" type="button">我已年滿 18 歲並同意</button></div>
   </dialog>
 
   <dialog id="memberProfileDialog" class="modal-dialog">
@@ -563,8 +566,9 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.13.1";
+    const APP_VERSION = "0.14.0";
     const RELEASE_NOTES = [
+      { version: "0.14.0", date: "2026-09-25", changes: ["恢復每個瀏覽器工作階段首次進站的限制級內容警語。", "擴充隱私權政策、平台使用須知、社群規範與分級懲處制度。"] },
       { version: "0.13.1", date: "2026-09-25", changes: ["驗證紀錄重新顯示任務類型、任務碼與任務說明，並相容缺少新版任務欄位的舊投稿。"] },
       { version: "0.13.0", date: "2026-09-24", changes: ["重新編排註冊與會員資料表單，相關欄位改為同列呈現。", "未配戴時身體尺寸移至貞操鎖資料下方，私人道具庫改為更緊湊的雙欄版面。"] },
       { version: "0.12.2", date: "2026-09-24", changes: ["修正日期選擇器初始化順序造成整個登入程式停止執行的問題。"] },
@@ -820,6 +824,7 @@
     const profileForm = document.getElementById("profileForm");
     const loginTab = document.getElementById("loginTab");
     const signupTab = document.getElementById("signupTab");
+    const AGE_GATE_SESSION_KEY = "lockspace-adult-confirmed-v1";
     const adultCutoff = new Date();
     adultCutoff.setFullYear(adultCutoff.getFullYear() - 18);
     let calendarYear = adultCutoff.getFullYear();
@@ -844,11 +849,13 @@
     document.getElementById("photoInput").addEventListener("change", event => choosePhoto(event.target.files[0]));
     document.getElementById("upload").addEventListener("submit", submitPreview);
     document.getElementById("taskIdeaForm").addEventListener("submit", submitTaskIdea);
-    document.getElementById("confirmAdultButton").addEventListener("click", () => document.getElementById("ageGateDialog").close());
+    document.getElementById("confirmAdultButton").addEventListener("click", confirmAgeGate);
+    document.getElementById("ageGateDialog").addEventListener("cancel", event => event.preventDefault());
     document.getElementById("closeMemberProfile").addEventListener("click", () => document.getElementById("memberProfileDialog").close());
     document.getElementById("notificationsButton").addEventListener("click", openNotifications);
     document.getElementById("closeNotifications").addEventListener("click", () => document.getElementById("notificationsDialog").close());
     document.getElementById("closeTaskIdea").addEventListener("click", () => document.getElementById("taskIdeaDialog").close());
+    showAgeGateIfNeeded();
 
     loginForm.addEventListener("submit", async event => {
       event.preventDefault();
@@ -992,8 +999,23 @@
     function showLoginPage() {
       showOnly(authPage);
       setAuthMode("login");
+      showAgeGateIfNeeded();
+    }
+
+    function showAgeGateIfNeeded() {
       const dialog = document.getElementById("ageGateDialog");
-      if (!dialog.open) dialog.showModal();
+      let confirmed = false;
+      try {
+        confirmed = sessionStorage.getItem(AGE_GATE_SESSION_KEY) === "true";
+      } catch {}
+      if (!confirmed && !dialog.open) dialog.showModal();
+    }
+
+    function confirmAgeGate() {
+      try {
+        sessionStorage.setItem(AGE_GATE_SESSION_KEY, "true");
+      } catch {}
+      document.getElementById("ageGateDialog").close();
     }
 
     function showError(id, message) {
