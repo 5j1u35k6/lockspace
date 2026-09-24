@@ -917,10 +917,14 @@
           verification: proofFile ? { status: "pending", proofReady, submittedAt: new Date().toISOString() } : state.member?.verification,
           updatedAt: serverTimestamp()
         }, { merge: true });
-        await setDoc(doc(db, "memberPreferences", user.uid), {
-          taskProps,
-          updatedAt: serverTimestamp()
-        }, { merge: true });
+        try {
+          await setDoc(doc(db, "memberPreferences", user.uid), {
+            taskProps,
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+        } catch (error) {
+          console.warn("Member preferences could not be saved.", error);
+        }
         state.member = { uid: user.uid, account, profile, taskProps, verification: proofFile ? { status: "pending", proofReady } : state.member?.verification };
         state.pendingCredentials = null;
         renderDashboard();
@@ -1558,6 +1562,17 @@
       })[char]);
     }
 
+    async function loadMemberTaskProps(uid) {
+      try {
+        const preferencesSnapshot = await getDoc(doc(db, "memberPreferences", uid));
+        const taskProps = preferencesSnapshot.exists() ? preferencesSnapshot.data().taskProps : [];
+        return Array.isArray(taskProps) ? taskProps : [];
+      } catch (error) {
+        console.warn("Member preferences could not be loaded.", error);
+        return [];
+      }
+    }
+
     let authRevision = 0;
     onAuthStateChanged(auth, async user => {
       const revision = ++authRevision;
@@ -1572,12 +1587,8 @@
         return;
       }
       let snapshot;
-      let preferencesSnapshot;
       try {
-        [snapshot, preferencesSnapshot] = await Promise.all([
-          getDoc(doc(db, "members", user.uid)),
-          getDoc(doc(db, "memberPreferences", user.uid))
-        ]);
+        snapshot = await getDoc(doc(db, "members", user.uid));
       } catch {
         if (revision !== authRevision) return;
         state.authNotice = "無法讀取會員資料，請檢查網路後再試。";
@@ -1598,13 +1609,13 @@
         showOnly(registrationPage);
         return;
       }
+      const taskProps = await loadMemberTaskProps(user.uid);
+      if (revision !== authRevision) return;
       state.member = {
         uid: user.uid,
         account: snapshot.data().username || user.email.split("@")[0],
         ...snapshot.data(),
-        taskProps: preferencesSnapshot?.exists() && Array.isArray(preferencesSnapshot.data().taskProps)
-          ? preferencesSnapshot.data().taskProps
-          : []
+        taskProps
       };
       await renderDashboard();
     });
