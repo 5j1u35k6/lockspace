@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.14.2 - 2026-09-25
+
+- Prevent feedback and admin pages from appearing stuck when Firestore reads fail.
+- Remove member preferences, daily tasks, and task ideas during administrator account cleanup.
+- Reauthenticate before self-service account deletion and remove the member's private proof, posts, interactions, feedback, daily tasks, and task ideas.
+- Restore task type and instruction details in the administrator task table.
+- Align version labels across the public, policy, feedback, and admin pages.
+- Restrict private task-prop values and cap encoded image sizes in Firestore rules.
+- Restore a clean lint run for the Sites application.
+
 ## 0.11.0 - 2026-09-24
 
 ### Changed
