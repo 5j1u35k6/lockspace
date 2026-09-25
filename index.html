@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.15.2">
+  <meta name="application-version" content="0.16.0">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -320,7 +320,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.15.2</p>
+      <p class="version-stamp">Lockspace v0.16.0</p>
     </section>
   </main>
 
@@ -511,7 +511,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.15.2</p>
+      <p class="version-stamp">Lockspace v0.16.0</p>
     </form>
   </main>
 
@@ -543,7 +543,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.15.2</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.16.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -567,7 +567,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.15.2</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.16.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -608,6 +608,7 @@
     <div class="calendar-actions"><button id="calendarClose" class="button" type="button">取消</button></div>
   </dialog>
 
+  <script src="i18n-content.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
@@ -680,6 +681,9 @@
     };
     Object.assign(COMPLETE_EN, TASK_EN);
     Object.assign(TRANSLATIONS.en, COMPLETE_EN);
+    Object.entries(window.LOCKSPACE_TASK_TRANSLATIONS || {}).forEach(([language, values]) => {
+      if (language !== "en" && TRANSLATIONS[language]) Object.assign(TRANSLATIONS[language], values);
+    });
     const LOCALIZED_CORE = {
       "zh-Hans":{"私人任務與會員驗證空間。":"私人任务与会员验证空间。","帳號":"账号","密碼":"密码","確認密碼":"确认密码","登入並繼續":"登录并继续","下一步：填寫個人資料":"下一步：填写个人资料","完成會員註冊資料":"完成会员注册资料","建立你的會員檔案。":"建立你的会员档案。","公開顯示名稱":"公开显示名称","生日":"生日","生日查驗":"生日查验","證件生日照片":"证件生日照片","上傳驗證任務":"上传验证任务","提供任務想法":"提供任务想法","大家的驗證紀錄":"大家的验证记录","會員資料":"会员资料","版本更新":"版本更新","儲存會員資料":"保存会员资料","提交照片":"提交照片","送出驗證紀錄":"提交验证记录","我的道具庫":"我的道具库","尺寸與合身":"尺寸与合身","配戴狀態":"佩戴状态","通知與版本更新":"通知与版本更新"},
       ja:{"私人任務與會員驗證空間。":"非公開タスクと会員認証のスペース。","帳號":"ユーザー名","密碼":"パスワード","確認密碼":"パスワード確認","登入並繼續":"ログインして続行","下一步：填寫個人資料":"次へ：プロフィール入力","完成會員註冊資料":"会員プロフィールを完成","建立你的會員檔案。":"会員プロフィールを作成します。","公開顯示名稱":"公開表示名","生日":"生年月日","生日查驗":"年齢確認","證件生日照片":"生年月日の証明","上傳驗證任務":"認証タスクをアップロード","提供任務想法":"タスクを提案","大家的驗證紀錄":"みんなの認証記録","會員資料":"会員プロフィール","版本更新":"更新履歴","儲存會員資料":"プロフィールを保存","提交照片":"写真を送信","送出驗證紀錄":"認証記録を送信","我的道具庫":"所有アイテム","通知與版本更新":"通知と更新","上鎖日期":"施錠日","預計開鎖日期":"解除予定日","提交照片":"写真を提出"},
@@ -764,8 +768,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.15.2";
+    const APP_VERSION = "0.16.0";
     const RELEASE_NOTES = [
+      { version: "0.16.0", date: "2026-09-25", changes: ["補齊程序生成任務在九種介面語言中的完整內容翻譯，不再以英文替代韓文、泰文、越南文、印尼文或世界語。", "隱私權政策與平台使用條款加入全文語言切換，並與主站共用語言偏好。", "政策翻譯以靜態檔案隨網站發布，切換語言時不會把會員瀏覽內容送往外部翻譯服務。"] },
       { version: "0.15.2", date: "2026-09-25", changes: ["補齊九種語言的主要前端操作、會員、任務與警語用詞。", "動態組合文字改用句中片段翻譯，程序生成任務不再殘留中文。", "瀏覽器分頁標題會依目前畫面與所選語言更新。"] },
       { version: "0.15.1", date: "2026-09-25", changes: ["補齊登入、註冊、會員首頁、任務、通知、驗證紀錄、彈窗、日期與錯誤訊息的前端翻譯。", "非中文介面未提供個別譯文時改用完整英文翻譯，不再殘留難以理解的中文。", "語言切換同步套用提示文字、無障礙標籤與動態產生內容。"] },
       { version: "0.15.0", date: "2026-09-25", changes: ["重新整理會員資料與公開檔案，依個人概況、鎖具與配戴、尺寸與合身分組。", "新增鎖具類型、型號、環型、固定方式、環籠間距、合身狀態、配戴頻率、經驗與持鑰狀態。", "擴充可核對官方來源的貞操鎖品牌，並加入繁中、簡中、英文、日文、韓文、泰文、越南文、印尼文與世界語介面。"] },
