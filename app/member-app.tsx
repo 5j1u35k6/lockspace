@@ -162,7 +162,10 @@ export function MemberDashboard({ profile: initialProfile }: { profile: ProfileD
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(timeoutId);
+  }, [load]);
 
   async function choosePhoto(file?: File) {
     if (!file) return;

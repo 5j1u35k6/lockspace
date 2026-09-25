@@ -12,7 +12,7 @@ function stripJpegMetadata(bytes: Uint8Array) {
   let sawImageData = false;
   while (offset + 1 < bytes.length) {
     if (bytes[offset] !== 0xff) return null;
-    let markerStart = offset;
+    const markerStart = offset;
     while (bytes[offset] === 0xff) offset++;
     if (offset >= bytes.length) return null;
     const marker = bytes[offset++];
