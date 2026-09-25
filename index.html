@@ -712,10 +712,13 @@
         if (!source || language === "zh-Hant") return source;
         const key = source.trim();
         if (dictionary[key]) return source.replace(key, dictionary[key]);
-        return Object.keys(dictionary)
+        const translated = Object.keys(dictionary)
           .filter(part => part.length > 1 && source.includes(part))
           .sort((a, b) => b.length - a.length)
           .reduce((value, part) => value.split(part).join(dictionary[part]), source);
+        return ["zh-Hant", "zh-Hans", "ja"].includes(language)
+          ? translated
+          : translated.replaceAll("，", ", ").replaceAll("。", ".").replaceAll("：", ": ");
       };
       document.documentElement.lang = language;
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
