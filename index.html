@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.15.0">
+  <meta name="application-version" content="0.15.1">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -320,7 +320,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.15.0</p>
+      <p class="version-stamp">Lockspace v0.15.1</p>
     </section>
   </main>
 
@@ -511,7 +511,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.15.0</p>
+      <p class="version-stamp">Lockspace v0.15.1</p>
     </form>
   </main>
 
@@ -543,7 +543,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.15.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.15.1</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -567,7 +567,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.15.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.15.1</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -624,13 +624,72 @@
       id: {"語言":"Bahasa","登入 Lockspace":"Masuk ke Lockspace","僅限年滿 18 歲使用":"Khusus usia 18+","基本資料":"Profil dasar","貞操鎖資料":"Perangkat chastity","鎖具識別":"Perangkat","尺寸與合身":"Ukuran dan kecocokan","配戴狀態":"Status pemakaian","品牌":"Merek","型號":"Model","材質":"Bahan","請選擇":"Pilih","公開":"Publik","私人":"Privat"},
       eo: {"語言":"Lingvo","正在確認登入狀態…":"Kontrolante ensaluton…","登入 Lockspace":"Ensaluti en Lockspace","僅限年滿 18 歲使用":"Nur por plenkreskuloj 18+","帳號登入":"Ensaluti","註冊會員":"Registriĝi","基本資料":"Bazaj informoj","貞操鎖資料":"Ĉasteca aparato","鎖具識別":"Aparato","尺寸與合身":"Grandeco kaj konveno","配戴狀態":"Portostato","品牌":"Marko","型號":"Modelo","顏色":"Koloro","材質":"Materialo","鎖具類型":"Aparattipo","籠體形式":"Kaĝa formo","環型":"Ringa formo","固定方式":"Fiksado","籠長":"Kaĝa longo","籠寬":"Kaĝa larĝo","環內徑":"Interna ringa diametro","環籠間距":"Ringa interspaco","合身狀態":"Konveno","未配戴長度":"Longo sen aparato","未配戴周長":"Cirkonferenco sen aparato","鎖定方式":"Ŝlosa metodo","配戴頻率":"Portofteco","經驗程度":"Sperto","持鑰狀態":"Ŝlosiltenado","上鎖日期":"Ŝlosdato","預計開鎖日期":"Planita malŝlosdato","請選擇":"Elektu","公開":"Publika","私人":"Privata","個人概況":"Superrigardo","鎖具與配戴":"Aparato kaj portado"}
     };
+    const COMPLETE_EN = {
+      "繁體中文":"Traditional Chinese","简体中文":"Simplified Chinese","日本語":"Japanese",
+      "私人任務與會員驗證空間。":"Private tasks and member verification.","隱私權政策":"Privacy Policy","平台使用須知、條款與懲處規範":"Platform Rules, Terms and Penalties",
+      "至少 8 個字元，須包含 1 個英文大寫字母與 1 個特殊符號。":"At least 8 characters, including one uppercase letter and one special character.",
+      "確認密碼":"Confirm password","下一步：填寫個人資料":"Next: complete profile","← 返回":"← Back","完成會員註冊資料":"Complete member registration",
+      "建立你的會員檔案。":"Create your member profile.","公開顯示名稱":"Public display name","生日":"Date of birth","選擇出生日期":"Select date of birth",
+      "日曆":"Calendar","僅開放年滿 18 歲的出生日期。":"Only dates of birth for adults aged 18 or older are accepted.","身高":"Height","體重":"Weight",
+      "膚色":"Skin tone","白皙":"Fair","偏白":"Light","自然":"Medium","小麥":"Tan","棕色":"Brown","深色":"Dark","其他":"Other",
+      "身材":"Body type","纖細":"Slim","精實":"Athletic","標準":"Average","壯碩":"Muscular","微肉":"Stocky","豐滿":"Full",
+      "生日查驗":"Age verification","上傳只露出生日的證件照片。請遮住姓名、證號、地址、照片與其他資料。":"Upload an ID image showing only your date of birth. Cover your name, ID number, address, portrait and all other details.",
+      "證件生日照片":"Date-of-birth proof","我已遮住生日以外的所有個人資料。":"I have covered all personal information except my date of birth.",
+      "以實際配戴與合身資訊為主；不確定的欄位可以留白。公開資料不包含持鑰者姓名或聯絡方式。":"Enter practical wear and fit details. Leave uncertain fields blank. Public data never includes a keyholder's name or contact details.",
+      "球環式":"Ball-trap","全腰帶式":"Full belt","穿刺固定式":"Piercing-secured","客製式":"Custom","無品牌／通用款":"Unbranded / generic","客製製作":"Custom-made",
+      "樹脂／尼龍":"Resin / nylon","不鏽鋼":"Stainless steel","鈦":"Titanium","矽膠":"Silicone","封閉式":"Closed","開放式":"Open",
+      "極短／平面式":"Ultra-short / flat","解剖曲線式":"Anatomical curve","圓環":"Round ring","人體工學環":"Ergonomic ring","雙環":"Double ring","鉸鏈環":"Hinged ring","客製":"Custom",
+      "球環固定":"Ball-trap","腰帶固定":"Belt-secured","穿刺固定":"Piercing-secured","合身":"Good fit","偏緊":"Tight","偏鬆":"Loose","尚在調整":"Still adjusting",
+      "不公開":"Not public","已割包皮":"Circumcised","未割包皮":"Uncircumcised","掛鎖":"Padlock","內嵌鎖":"Integrated lock","一次性編號鎖":"Numbered security seal",
+      "偶爾配戴":"Occasional","白天配戴":"Daytime","夜間配戴":"Nighttime","長時間配戴":"Extended wear","初次嘗試":"First time","入門":"Beginner","有經驗":"Experienced","長期配戴":"Long-term wearer",
+      "自主管理":"Self-managed","有固定持鑰者":"Regular keyholder","遠端持鑰":"Remote keyholder","共同管理":"Shared management","選擇上鎖日期":"Select lock date",
+      "選擇預計開鎖日期":"Select expected unlock date","無期限":"Indefinite","我的道具庫":"My equipment","私人":"Private",
+      "此清單只供你本人與管理員存取，用來篩選「指定動作」任務；系統只會從你勾選的道具中隨機抽取 0～1 個。請只勾選你實際擁有、能安全自行穿戴與解除的道具。":"Only you and administrators can access this list. It filters assigned-action tasks and may add at most one selected item. Select only equipment you own and can safely put on and remove.",
+      "頸部／身份":"Neck / identity","項圈":"Collar","皮革項圈":"Leather collar","金屬項圈":"Metal collar","犬牌":"Dog tag","項圈＋犬牌":"Collar + dog tag","項圈＋牽繩":"Collar + leash",
+      "手部／束縛":"Hands / restraints","手銬":"Handcuffs","皮革手銬":"Leather cuffs","軟式束縛帶":"Soft restraints","腳銬":"Ankle cuffs","手腕束帶":"Wrist cuffs",
+      "胸部":"Chest","乳夾":"Nipple clamps","鏈式乳夾":"Chain nipple clamps","可調式乳夾":"Adjustable nipple clamps","乳環／裝飾夾":"Decorative nipple clips",
+      "插入式道具":"Insertable equipment","小型肛塞":"Small plug","一般肛塞":"Standard plug","尾巴肛塞":"Tail plug","感官":"Sensory","眼罩":"Blindfold","耳罩":"Earmuffs","嘴部配件／口枷":"Mouth accessory / gag",
+      "BDSM 展示":"BDSM display","拍板":"Clapperboard","鞭子":"Whip","藤條":"Cane","教鞭":"Pointer","拍打器":"Paddle","羽毛棒":"Feather wand","角色":"Roleplay","犬耳":"Dog ears","外掛式犬尾":"Wearable dog tail",
+      "標示公開的資料會顯示給已登入會員。":"Fields marked public are visible to signed-in members.","我已年滿 18 歲，並確認會員帳戶由我本人使用。":"I am at least 18 and confirm this account is for my own use.",
+      "我已閱讀並同意":"I have read and agree to","及":"and","；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。":"; I agree that completed fields marked Public may be shown to members. My private equipment list is excluded.",
+      "完成註冊並進入任務":"Complete registration","已登入":"Signed in","後台管理":"Admin","通知":"Notifications","問題回饋":"Feedback","編輯公開檔案":"Edit public profile","登出":"Sign out",
+      "上傳驗證任務":"Upload verification task","提供任務想法":"Suggest a task","大家的驗證紀錄":"Community verification records","包含你的提交，最新紀錄優先。":"Includes your submissions, newest first.",
+      "僅限年滿 18 歲":"Adults 18+ only","平台使用須知與懲處規範":"Platform rules and penalties","驗證任務碼":"Verification code task","載入今日任務中…":"Loading today's task…",
+      "🔞 僅限年滿 18 歲且自願參與":"🔞 Adults 18+ and voluntary participation only","請只在私密、安全、無第三者可見的空間執行。任務可能包含裸露要求；若出現疼痛、暈眩、失去平衡或任何不適，請立即停止並放棄本次任務。":"Perform tasks only in a private, safe space unseen by others. Tasks may involve nudity. Stop immediately if you feel pain, dizziness, loss of balance or any discomfort.",
+      "提交照片":"Submit photo","登入會員可見":"Visible to signed-in members","選擇圖片（JPEG、PNG、WebP，12 MB 以內）":"Choose an image (JPEG, PNG or WebP, up to 12 MB)",
+      "LOCKSPACE · 任務驗證浮水印已嵌入":"LOCKSPACE · Verification watermark embedded","我已年滿 18 歲，是照片中的本人或取得所有入鏡成年人的明確同意，並同意將照片提供給已註冊會員驗證。":"I am at least 18, am the person shown or have explicit consent from every adult shown, and agree to share the image with registered members for verification.",
+      "送出驗證紀錄":"Submit verification","限制級內容警告":"Adult content warning","本平台僅限年滿 18 歲者使用。":"This platform is for adults aged 18 or older only.",
+      "內容可能包含成人性主題、裸露、私密影像及 BDSM／貞操鎖相關資訊，不適合兒童或少年瀏覽。":"Content may include adult themes, nudity, intimate images, BDSM and chastity-device information. It is not suitable for minors.",
+      "使用者必須自願參與、尊重同意與隱私，且不得上傳未成年人、未經同意影像或可識別他人的個人資料。違規內容可能被移除，帳號可能受到限制、暫停或永久停權。":"Participation must be voluntary and respect consent and privacy. Never upload minors, non-consensual images or identifying personal data. Violations may lead to removal, restriction, suspension or a permanent ban.",
+      "選擇繼續即表示你確認已年滿 18 歲，並同意遵守上述政策與規範。":"By continuing, you confirm that you are at least 18 and agree to follow these policies and rules.","離開":"Leave","我已年滿 18 歲並同意":"I am 18+ and agree",
+      "會員資料":"Member profile","關閉":"Close","通知與版本更新":"Notifications and updates","版本更新":"Release notes","版本編號規則":"Version numbering","主版本號":"Major","次版本號":"Minor","修訂號":"Patch",
+      "：不相容的 API 或資料契約修改。":": incompatible API or data-contract changes.","：向下相容的新功能。":": backward-compatible features.","：向下相容的問題修正。":": backward-compatible fixes.",
+      "通過管理員審核後，會加入之後的「用戶提供」每日任務池。":"After administrator approval, this may enter the user-submitted daily-task pool.","任務內容":"Task details","送出想法":"Submit idea",
+      "日":"Sun","一":"Mon","二":"Tue","三":"Wed","四":"Thu","五":"Fri","六":"Sat","取消":"Cancel","這位會員的資料目前無法查看。":"This member's profile is unavailable.","會員":"Member",
+      "鎖具品牌":"Device brand","籠體尺寸":"Cage dimensions","包皮狀態":"Circumcision status","公開備註":"Public note","這位會員尚未填寫公開資料。":"This member has not added public profile details.",
+      "無法讀取會員資料，請檢查網路後再試。":"Unable to load member data. Check your connection and try again.","此會員帳號已停用。":"This member account has been disabled.",
+      "註冊者必須年滿 18 歲。":"You must be at least 18 to register.","請選擇膚色與身材。":"Select a skin tone and body type.","預計開鎖日期不能早於上鎖日期。":"The expected unlock date cannot be earlier than the lock date.",
+      "無法送出審核，請稍後再試。":"Unable to submit the review. Try again later.","已送出檢舉":"Report submitted","檢舉失敗，請重試":"Report failed. Try again.","檢舉此任務":"Report this task"
+    };
+    Object.assign(TRANSLATIONS.en, COMPLETE_EN);
+    const EXTRA_LOCALIZED = {
+      "zh-Hans":{"限制級內容警告":"成人内容警告","隱私權政策":"隐私权政策","平台使用須知、條款與懲處規範":"平台使用须知、条款与处罚规范","後台管理":"后台管理","通知":"通知","問題回饋":"问题反馈","登出":"退出登录","關閉":"关闭","取消":"取消"},
+      ja:{"限制級內容警告":"成人向けコンテンツの警告","隱私權政策":"プライバシーポリシー","平台使用須知、條款與懲處規範":"利用規約・コミュニティルール・処分","後台管理":"管理","通知":"通知","問題回饋":"フィードバック","登出":"ログアウト","關閉":"閉じる","取消":"キャンセル"},
+      ko:{"限制級內容警告":"성인 콘텐츠 경고","隱私權政策":"개인정보 처리방침","平台使用須知、條款與懲處規範":"이용약관, 커뮤니티 규칙 및 제재","後台管理":"관리","通知":"알림","問題回饋":"피드백","登出":"로그아웃","關閉":"닫기","取消":"취소"},
+      th:{"限制級內容警告":"คำเตือนเนื้อหาสำหรับผู้ใหญ่","隱私權政策":"นโยบายความเป็นส่วนตัว","平台使用須知、條款與懲處規範":"ข้อกำหนด กฎชุมชน และบทลงโทษ","後台管理":"ผู้ดูแลระบบ","通知":"การแจ้งเตือน","問題回饋":"ข้อเสนอแนะ","登出":"ออกจากระบบ","關閉":"ปิด","取消":"ยกเลิก"},
+      vi:{"限制級內容警告":"Cảnh báo nội dung người lớn","隱私權政策":"Chính sách quyền riêng tư","平台使用須知、條款與懲處規範":"Điều khoản, quy tắc cộng đồng và hình phạt","後台管理":"Quản trị","通知":"Thông báo","問題回饋":"Phản hồi","登出":"Đăng xuất","關閉":"Đóng","取消":"Hủy"},
+      id:{"限制級內容警告":"Peringatan konten dewasa","隱私權政策":"Kebijakan Privasi","平台使用須知、條款與懲處規範":"Ketentuan, aturan komunitas, dan sanksi","後台管理":"Admin","通知":"Notifikasi","問題回饋":"Masukan","登出":"Keluar","關閉":"Tutup","取消":"Batal"},
+      eo:{"限制級內容警告":"Averto pri plenkreska enhavo","隱私權政策":"Privateca Politiko","平台使用須知、條款與懲處規範":"Kondiĉoj, komunumaj reguloj kaj punoj","後台管理":"Administrado","通知":"Sciigoj","問題回饋":"Reago","登出":"Elsaluti","關閉":"Fermi","取消":"Nuligi"}
+    };
+    Object.entries(EXTRA_LOCALIZED).forEach(([language, values]) => Object.assign(TRANSLATIONS[language], values));
+    const originalAttributes = new WeakMap();
     const originalText = new WeakMap();
     let translatingPage = false;
     function translatePage() {
       if (translatingPage) return;
       translatingPage = true;
       const language = document.getElementById("languageSelect")?.value || "zh-Hant";
-      const dictionary = TRANSLATIONS[language] || {};
+      const dictionary = language === "zh-Hant" ? {} : { ...TRANSLATIONS.en, ...(TRANSLATIONS[language] || {}) };
       document.documentElement.lang = language;
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       let node;
@@ -640,6 +699,16 @@
         const key = source.trim();
         node.nodeValue = key && dictionary[key] ? source.replace(key, dictionary[key]) : source;
       }
+      document.querySelectorAll("[placeholder], [title], [aria-label]").forEach(element => {
+        if (!originalAttributes.has(element)) {
+          originalAttributes.set(element, Object.fromEntries(["placeholder", "title", "aria-label"].map(name => [name, element.getAttribute(name)])));
+        }
+        const originals = originalAttributes.get(element);
+        Object.entries(originals).forEach(([name, source]) => {
+          if (source) element.setAttribute(name, dictionary[source] || source);
+        });
+      });
+      document.title = language === "zh-Hant" ? "lockspace. 會員登入" : "lockspace. Member access";
       translatingPage = false;
     }
     function setupLanguage() {
@@ -655,8 +724,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.15.0";
+    const APP_VERSION = "0.15.1";
     const RELEASE_NOTES = [
+      { version: "0.15.1", date: "2026-09-25", changes: ["補齊登入、註冊、會員首頁、任務、通知、驗證紀錄、彈窗、日期與錯誤訊息的前端翻譯。", "非中文介面未提供個別譯文時改用完整英文翻譯，不再殘留難以理解的中文。", "語言切換同步套用提示文字、無障礙標籤與動態產生內容。"] },
       { version: "0.15.0", date: "2026-09-25", changes: ["重新整理會員資料與公開檔案，依個人概況、鎖具與配戴、尺寸與合身分組。", "新增鎖具類型、型號、環型、固定方式、環籠間距、合身狀態、配戴頻率、經驗與持鑰狀態。", "擴充可核對官方來源的貞操鎖品牌，並加入繁中、簡中、英文、日文、韓文、泰文、越南文、印尼文與世界語介面。"] },
       { version: "0.14.2", date: "2026-09-25", changes: ["修正管理與回饋頁的載入失敗狀態，避免畫面無回應。", "補齊管理員刪除會員時的私人偏好、每日任務與任務提案清理。", "同步各頁版本資訊並加強 Firestore 寫入資料限制。"] },
       { version: "0.14.1", date: "2026-09-25", changes: ["修正 iOS Safari 與 Edge 的自訂下拉選單寬度、文字排列及無法點選問題。"] },
