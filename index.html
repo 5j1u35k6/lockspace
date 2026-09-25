@@ -1363,7 +1363,7 @@
       if (!password) return;
       try {
         await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, password));
-        const ownedQueries = await Promise.all([
+        const ownedQueries = await Promise.allSettled([
           getDocs(query(collection(db, "submissions"), where("ownerId", "==", user.uid))),
           getDocs(query(collection(db, "reviews"), where("reviewerId", "==", user.uid))),
           getDocs(query(collection(db, "reports"), where("reporterId", "==", user.uid))),
@@ -1371,7 +1371,10 @@
           getDocs(query(collection(db, "dailyMemberTasks"), where("ownerId", "==", user.uid))),
           getDocs(query(collection(db, "taskIdeas"), where("ownerId", "==", user.uid)))
         ]);
-        await Promise.all(ownedQueries.flatMap(snapshot => snapshot.docs.map(item => deleteDoc(item.ref))));
+        const ownedDocuments = ownedQueries
+          .filter(result => result.status === "fulfilled")
+          .flatMap(result => result.value.docs);
+        await Promise.allSettled(ownedDocuments.map(item => deleteDoc(item.ref)));
         await deleteDoc(doc(db, "birthProofs", user.uid));
         await deleteDoc(doc(db, "memberPreferences", user.uid));
         await deleteDoc(doc(db, "members", user.uid));
