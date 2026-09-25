@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.14.2">
+  <meta name="application-version" content="0.15.0">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -208,6 +208,18 @@
     .preview-frame img { display: block; width: auto; height: auto; max-width: 100%; max-height: 70vh; object-fit: contain; margin: auto; }
     .public-details { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; padding: 10px 0; border-block: 1px solid #ffffff10; }
     .public-details span { font-size: 12px; color: #cfccd7; background: #ffffff08; padding: 5px 8px; border-radius: 8px; }
+    .language-control {
+      position: fixed; top: 12px; right: 12px; z-index: 80; display: flex; align-items: center; gap: 8px;
+      margin: 0; padding: 6px 8px 6px 10px; border: 1px solid var(--line); border-radius: 6px;
+      background: #121412f2; box-shadow: 0 8px 24px #0008; color: var(--muted); font-size: 12px;
+    }
+    .language-control select { width: auto; min-height: 34px; margin: 0; padding: 5px 30px 5px 8px; background-position: calc(100% - 15px) 14px, calc(100% - 10px) 14px; }
+    .section-intro { max-width: 72ch; margin: 4px 0 14px; color: var(--muted); font-size: 13px; }
+    .subsection-title { margin: 19px 0 5px; color: var(--cyan); font-size: 13px; letter-spacing: 0; text-transform: uppercase; }
+    .profile-groups { display: grid; gap: 18px; }
+    .profile-group { padding-top: 3px; }
+    .profile-group + .profile-group { border-top: 1px solid #ffffff16; padding-top: 16px; }
+    .profile-group h3 { margin: 0 0 7px; color: var(--lime); font-size: 14px; }
     .profile-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid #ffffff0e; font-size: 13px; }
     .profile-row dt { color: var(--muted); }
     .profile-row dd { margin: 0; text-align: right; font-weight: 700; }
@@ -247,7 +259,9 @@
       .topbar, .page-title, .section-heading, .submission-meta { align-items: flex-start; flex-direction: column; }
       .header-actions { width: 100%; flex-wrap: wrap; }
       .member-chip { display: none; }
-      .boot-page, .auth-page, .registration-page { padding: 14px; }
+      .boot-page, .auth-page, .registration-page { padding: 58px 14px 14px; }
+      .language-control { left: 12px; right: 12px; justify-content: space-between; }
+      .language-control select { flex: 1; max-width: 210px; }
       .auth-card, .registration-card { padding: 19px 16px; }
     }
     @media (max-width: 520px) {
@@ -257,6 +271,13 @@
   </style>
 </head>
 <body>
+  <label class="language-control" for="languageSelect"><span>語言</span>
+    <select id="languageSelect" aria-label="介面語言">
+      <option value="zh-Hant">繁體中文</option><option value="zh-Hans">简体中文</option><option value="en">English</option>
+      <option value="ja">日本語</option><option value="ko">한국어</option><option value="th">ไทย</option>
+      <option value="vi">Tiếng Việt</option><option value="id">Bahasa Indonesia</option><option value="eo">Esperanto</option>
+    </select>
+  </label>
   <main id="bootPage" class="boot-page">
     <div><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div><p>正在確認登入狀態…</p></div>
   </main>
@@ -299,7 +320,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.14.2</p>
+      <p class="version-stamp">Lockspace v0.15.0</p>
     </section>
   </main>
 
@@ -353,56 +374,81 @@
 
       <div class="form-section">
         <h2>貞操鎖資料 <span class="public-tag">公開</span></h2>
-        <div class="field-row cols-3">
+        <p class="section-intro">以實際配戴與合身資訊為主；不確定的欄位可以留白。公開資料不包含持鑰者姓名或聯絡方式。</p>
+        <h3 class="subsection-title">鎖具識別</h3>
+        <div class="field-row cols-4">
+          <label>鎖具類型
+            <select name="deviceType"><option value="">請選擇</option><option>球環式</option><option>全腰帶式</option><option>穿刺固定式</option><option>客製式</option><option>其他</option></select>
+          </label>
           <label>品牌
-            <span class="custom-select" data-custom-select="lockBrand" data-other-target="lockBrandOther"><input name="lockBrand" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="CB-X">CB-X</button><button type="button" data-value="Holy Trainer">Holy Trainer</button><button type="button" data-value="KINK3D">KINK3D</button><button type="button" data-value="其他">其他</button></span></span>
+            <span class="custom-select" data-custom-select="lockBrand" data-other-target="lockBrandOther"><input name="lockBrand" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="CB-X">CB-X</button><button type="button" data-value="Holy Trainer">Holy Trainer</button><button type="button" data-value="KINK3D">KINK3D</button><button type="button" data-value="Mature Metal">Mature Metal</button><button type="button" data-value="Steelworxx">Steelworxx</button><button type="button" data-value="Behind Barz">Behind Barz</button><button type="button" data-value="Lockd">Lockd / Chastity Cages Co</button><button type="button" data-value="無品牌／通用款">無品牌／通用款</button><button type="button" data-value="客製製作">客製製作</button><button type="button" data-value="其他">其他</button></span></span>
             <input class="other-field hidden" name="lockBrandOther" maxlength="64" placeholder="簡要填寫品牌">
+          </label>
+          <label>型號
+            <input name="lockModel" maxlength="64" placeholder="例如：Cobra N">
           </label>
           <label>顏色
             <input name="lockColor" maxlength="32">
           </label>
+        </div>
+        <div class="field-row cols-4">
           <label>材質
-            <span class="custom-select" data-custom-select="lockMaterial" data-other-target="lockMaterialOther"><input name="lockMaterial" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="樹脂">樹脂</button><button type="button" data-value="不鏽鋼">不鏽鋼</button><button type="button" data-value="鈦">鈦</button><button type="button" data-value="矽膠">矽膠</button><button type="button" data-value="其他">其他</button></span></span>
+            <span class="custom-select" data-custom-select="lockMaterial" data-other-target="lockMaterialOther"><input name="lockMaterial" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="樹脂">樹脂／尼龍</button><button type="button" data-value="不鏽鋼">不鏽鋼</button><button type="button" data-value="鈦">鈦</button><button type="button" data-value="矽膠">矽膠</button><button type="button" data-value="其他">其他</button></span></span>
             <input class="other-field hidden" name="lockMaterialOther" maxlength="32" placeholder="簡要填寫材質">
           </label>
-        </div>
-        <div class="field-row cols-3">
-          <label>籠長
-            <span class="input-with-unit"><input name="cageLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+          <label>籠體形式
+            <select name="cageStyle"><option value="">請選擇</option><option>封閉式</option><option>開放式</option><option>極短／平面式</option><option>解剖曲線式</option><option>全腰帶式</option><option>其他</option></select>
           </label>
-          <label>籠寬
-            <span class="input-with-unit"><input name="cageWidthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+          <label>環型
+            <select name="ringShape"><option value="">請選擇</option><option>圓環</option><option>人體工學環</option><option>雙環</option><option>鉸鏈環</option><option>客製</option></select>
           </label>
-          <label>環內徑
-            <span class="input-with-unit"><input name="ringDiameterMm" type="number" min="0" max="200" step="0.1"><span>mm</span></span>
+          <label>固定方式
+            <select name="fixationMethod"><option value="">請選擇</option><option>球環固定</option><option>腰帶固定</option><option>穿刺固定</option><option>其他</option></select>
           </label>
         </div>
-        <div class="field-row cols-3">
+        <h3 class="subsection-title">尺寸與合身</h3>
+        <div class="field-row cols-4">
+          <label>籠長 <span class="input-with-unit"><input name="cageLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span></label>
+          <label>籠寬 <span class="input-with-unit"><input name="cageWidthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span></label>
+          <label>環內徑 <span class="input-with-unit"><input name="ringDiameterMm" type="number" min="0" max="200" step="0.1"><span>mm</span></span></label>
+          <label>環籠間距 <span class="input-with-unit"><input name="cageGapMm" type="number" min="0" max="100" step="0.1"><span>mm</span></span></label>
+        </div>
+        <div class="field-row cols-4">
+          <label>合身狀態
+            <select name="fitStatus"><option value="">請選擇</option><option>合身</option><option>偏緊</option><option>偏鬆</option><option>尚在調整</option></select>
+          </label>
+          <label>包皮狀態（選填）
+            <select name="foreskinStatus"><option value="">不公開</option><option>已割包皮</option><option>未割包皮</option></select>
+          </label>
+          <label>未配戴長度 <span class="input-with-unit"><input name="bodyLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span></label>
+          <label>未配戴周長 <span class="input-with-unit"><input name="bodyGirthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span></label>
+        </div>
+        <h3 class="subsection-title">配戴狀態</h3>
+        <div class="field-row cols-4">
           <label>鎖定方式
             <span class="custom-select" data-custom-select="lockingMethod" data-other-target="lockingMethodOther"><input name="lockingMethod" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="掛鎖">掛鎖</button><button type="button" data-value="內嵌鎖">內嵌鎖</button><button type="button" data-value="一次性編號鎖">一次性編號鎖</button><button type="button" data-value="其他">其他</button></span></span>
             <input class="other-field hidden" name="lockingMethodOther" maxlength="32" placeholder="簡要填寫鎖定方式">
           </label>
-          <label>上鎖日期
-            <input name="lockDate" type="hidden">
-            <button id="lockDateButton" class="date-trigger" type="button" aria-expanded="false"><span>選擇上鎖日期</span><b>日曆</b></button>
+          <label>配戴頻率
+            <select name="wearSchedule"><option value="">請選擇</option><option>偶爾配戴</option><option>白天配戴</option><option>夜間配戴</option><option>長時間配戴</option><option>24/7</option></select>
           </label>
-          <label>預計開鎖日期
-            <input name="expectedUnlockDate" type="hidden">
-            <button id="expectedUnlockDateButton" class="date-trigger" type="button" aria-expanded="false"><span>選擇預計開鎖日期</span><b>日曆</b></button>
-            <button id="unlockIndefiniteButton" class="button secondary" type="button" style="margin-top:8px">無期限</button>
-            <span class="field-help">可選擇日期，或設為「無期限」。</span>
+          <label>經驗程度
+            <select name="experienceLevel"><option value="">請選擇</option><option>初次嘗試</option><option>入門</option><option>有經驗</option><option>長期配戴</option></select>
+          </label>
+          <label>持鑰狀態
+            <select name="keyholderStatus"><option value="">請選擇</option><option>自主管理</option><option>有固定持鑰者</option><option>遠端持鑰</option><option>共同管理</option></select>
           </label>
         </div>
-      </div>
-
-      <div class="form-section">
-        <h2>未配戴時身體尺寸 <span class="public-tag">公開</span></h2>
-        <div class="form-grid">
-          <label>陰莖長度
-            <span class="input-with-unit"><input name="bodyLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+        <div class="field-row cols-3">
+          <label>上鎖日期
+            <input name="lockDate" type="hidden"><button id="lockDateButton" class="date-trigger" type="button" aria-expanded="false"><span>選擇上鎖日期</span><b>日曆</b></button>
           </label>
-          <label>陰莖粗度
-            <span class="input-with-unit"><input name="bodyGirthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span>
+          <label>預計開鎖日期
+            <input name="expectedUnlockDate" type="hidden"><button id="expectedUnlockDateButton" class="date-trigger" type="button" aria-expanded="false"><span>選擇預計開鎖日期</span><b>日曆</b></button>
+            <button id="unlockIndefiniteButton" class="button secondary" type="button" style="margin-top:8px">無期限</button>
+          </label>
+          <label>公開備註（選填）
+            <textarea name="lockProfileNote" rows="3" maxlength="240" placeholder="例如：正在調整環徑，歡迎交流同型號配戴經驗。"></textarea>
           </label>
         </div>
       </div>
@@ -465,7 +511,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.14.2</p>
+      <p class="version-stamp">Lockspace v0.15.0</p>
     </form>
   </main>
 
@@ -497,7 +543,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.14.2</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.15.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -521,7 +567,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.14.2</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.15.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -567,8 +613,51 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION = "0.14.2";
+    const LANGUAGE_KEY = "lockspace-language-v1";
+    const TRANSLATIONS = {
+      en: {"語言":"Language","正在確認登入狀態…":"Checking sign-in status…","登入 Lockspace":"Sign in to Lockspace","私人任務與會員驗證空間。":"Private tasks and member verification.","僅限年滿 18 歲使用":"Adults 18+ only","帳號登入":"Sign in","註冊會員":"Register","帳號":"Username","密碼":"Password","登入並繼續":"Sign in and continue","基本資料":"Basic profile","貞操鎖資料":"Chastity device","鎖具識別":"Device","尺寸與合身":"Sizing and fit","配戴狀態":"Wear status","品牌":"Brand","型號":"Model","顏色":"Color","材質":"Material","鎖具類型":"Device type","籠體形式":"Cage style","環型":"Ring shape","固定方式":"Fixation","籠長":"Cage length","籠寬":"Cage width","環內徑":"Inner ring diameter","環籠間距":"Ring-to-cage gap","合身狀態":"Fit","包皮狀態（選填）":"Circumcision status (optional)","未配戴長度":"Uncaged length","未配戴周長":"Uncaged circumference","鎖定方式":"Lock type","配戴頻率":"Wear schedule","經驗程度":"Experience","持鑰狀態":"Keyholding","上鎖日期":"Lock date","預計開鎖日期":"Expected unlock date","公開備註（選填）":"Public note (optional)","請選擇":"Select","公開":"Public","私人":"Private","我的道具庫":"My equipment","儲存會員資料":"Save profile","個人概況":"Overview","鎖具與配戴":"Device and wear","這位會員尚未填寫公開資料。":"This member has not added public profile details."},
+      "zh-Hans": {"語言":"语言","正在確認登入狀態…":"正在确认登录状态…","登入 Lockspace":"登录 Lockspace","僅限年滿 18 歲使用":"仅限年满 18 岁使用","帳號登入":"账号登录","註冊會員":"注册会员","基本資料":"基本资料","貞操鎖資料":"贞操锁资料","鎖具識別":"锁具识别","尺寸與合身":"尺寸与合身","配戴狀態":"佩戴状态","品牌":"品牌","型號":"型号","顏色":"颜色","材質":"材质","鎖具類型":"锁具类型","籠體形式":"笼体形式","環型":"环型","固定方式":"固定方式","籠長":"笼长","籠寬":"笼宽","環內徑":"环内径","環籠間距":"环笼间距","合身狀態":"合身状态","包皮狀態（選填）":"包皮状态（选填）","未配戴長度":"未佩戴长度","未配戴周長":"未佩戴周长","鎖定方式":"锁定方式","配戴頻率":"佩戴频率","經驗程度":"经验程度","持鑰狀態":"持钥状态","上鎖日期":"上锁日期","預計開鎖日期":"预计开锁日期","公開備註（選填）":"公开备注（选填）","請選擇":"请选择","公開":"公开","私人":"私人","個人概況":"个人概况","鎖具與配戴":"锁具与佩戴"},
+      ja: {"語言":"言語","正在確認登入狀態…":"ログイン状態を確認中…","登入 Lockspace":"Lockspace にログイン","僅限年滿 18 歲使用":"18歳以上限定","帳號登入":"ログイン","註冊會員":"新規登録","基本資料":"基本情報","貞操鎖資料":"貞操デバイス","鎖具識別":"デバイス情報","尺寸與合身":"サイズとフィット","配戴狀態":"装着状況","品牌":"ブランド","型號":"モデル","顏色":"色","材質":"素材","鎖具類型":"タイプ","籠體形式":"ケージ形状","環型":"リング形状","固定方式":"固定方法","籠長":"ケージ長","籠寬":"ケージ幅","環內徑":"リング内径","環籠間距":"リング間隔","合身狀態":"フィット","未配戴長度":"未装着時の長さ","未配戴周長":"未装着時の周囲","鎖定方式":"ロック方式","配戴頻率":"装着頻度","經驗程度":"経験","持鑰狀態":"鍵の管理","上鎖日期":"施錠日","預計開鎖日期":"解除予定日","請選擇":"選択","公開":"公開","私人":"非公開","個人概況":"概要","鎖具與配戴":"デバイスと装着"},
+      ko: {"語言":"언어","正在確認登入狀態…":"로그인 상태 확인 중…","登入 Lockspace":"Lockspace 로그인","僅限年滿 18 歲使用":"만 18세 이상만 이용 가능","帳號登入":"로그인","註冊會員":"회원가입","基本資料":"기본 정보","貞操鎖資料":"정조 장치","鎖具識別":"장치 정보","尺寸與合身":"치수 및 착용감","配戴狀態":"착용 상태","品牌":"브랜드","型號":"모델","顏色":"색상","材質":"소재","鎖具類型":"장치 유형","籠體形式":"케이지 형태","環型":"링 형태","固定方式":"고정 방식","籠長":"케이지 길이","籠寬":"케이지 너비","環內徑":"링 내경","環籠間距":"링 간격","合身狀態":"착용감","未配戴長度":"미착용 길이","未配戴周長":"미착용 둘레","鎖定方式":"잠금 방식","配戴頻率":"착용 빈도","經驗程度":"경험","持鑰狀態":"키 관리","上鎖日期":"잠금 날짜","預計開鎖日期":"예상 해제일","請選擇":"선택","公開":"공개","私人":"비공개","個人概況":"개요","鎖具與配戴":"장치 및 착용"},
+      th: {"語言":"ภาษา","登入 Lockspace":"เข้าสู่ระบบ Lockspace","僅限年滿 18 歲使用":"สำหรับผู้มีอายุ 18 ปีขึ้นไป","基本資料":"ข้อมูลพื้นฐาน","貞操鎖資料":"อุปกรณ์พรหมจรรย์","鎖具識別":"ข้อมูลอุปกรณ์","尺寸與合身":"ขนาดและความพอดี","配戴狀態":"สถานะการสวมใส่","品牌":"แบรนด์","型號":"รุ่น","材質":"วัสดุ","請選擇":"เลือก","公開":"สาธารณะ","私人":"ส่วนตัว"},
+      vi: {"語言":"Ngôn ngữ","登入 Lockspace":"Đăng nhập Lockspace","僅限年滿 18 歲使用":"Chỉ dành cho người từ 18 tuổi","基本資料":"Thông tin cơ bản","貞操鎖資料":"Thiết bị khóa trinh tiết","鎖具識別":"Thiết bị","尺寸與合身":"Kích thước và độ vừa","配戴狀態":"Tình trạng đeo","品牌":"Thương hiệu","型號":"Mẫu","材質":"Chất liệu","請選擇":"Chọn","公開":"Công khai","私人":"Riêng tư"},
+      id: {"語言":"Bahasa","登入 Lockspace":"Masuk ke Lockspace","僅限年滿 18 歲使用":"Khusus usia 18+","基本資料":"Profil dasar","貞操鎖資料":"Perangkat chastity","鎖具識別":"Perangkat","尺寸與合身":"Ukuran dan kecocokan","配戴狀態":"Status pemakaian","品牌":"Merek","型號":"Model","材質":"Bahan","請選擇":"Pilih","公開":"Publik","私人":"Privat"},
+      eo: {"語言":"Lingvo","正在確認登入狀態…":"Kontrolante ensaluton…","登入 Lockspace":"Ensaluti en Lockspace","僅限年滿 18 歲使用":"Nur por plenkreskuloj 18+","帳號登入":"Ensaluti","註冊會員":"Registriĝi","基本資料":"Bazaj informoj","貞操鎖資料":"Ĉasteca aparato","鎖具識別":"Aparato","尺寸與合身":"Grandeco kaj konveno","配戴狀態":"Portostato","品牌":"Marko","型號":"Modelo","顏色":"Koloro","材質":"Materialo","鎖具類型":"Aparattipo","籠體形式":"Kaĝa formo","環型":"Ringa formo","固定方式":"Fiksado","籠長":"Kaĝa longo","籠寬":"Kaĝa larĝo","環內徑":"Interna ringa diametro","環籠間距":"Ringa interspaco","合身狀態":"Konveno","未配戴長度":"Longo sen aparato","未配戴周長":"Cirkonferenco sen aparato","鎖定方式":"Ŝlosa metodo","配戴頻率":"Portofteco","經驗程度":"Sperto","持鑰狀態":"Ŝlosiltenado","上鎖日期":"Ŝlosdato","預計開鎖日期":"Planita malŝlosdato","請選擇":"Elektu","公開":"Publika","私人":"Privata","個人概況":"Superrigardo","鎖具與配戴":"Aparato kaj portado"}
+    };
+    const originalText = new WeakMap();
+    let translatingPage = false;
+    function translatePage() {
+      if (translatingPage) return;
+      translatingPage = true;
+      const language = document.getElementById("languageSelect")?.value || "zh-Hant";
+      const dictionary = TRANSLATIONS[language] || {};
+      document.documentElement.lang = language;
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      let node;
+      while ((node = walker.nextNode())) {
+        if (!originalText.has(node)) originalText.set(node, node.nodeValue);
+        const source = originalText.get(node);
+        const key = source.trim();
+        node.nodeValue = key && dictionary[key] ? source.replace(key, dictionary[key]) : source;
+      }
+      translatingPage = false;
+    }
+    function setupLanguage() {
+      const selector = document.getElementById("languageSelect");
+      const saved = localStorage.getItem(LANGUAGE_KEY);
+      const supported = [...selector.options].map(option => option.value);
+      const browserLanguage = navigator.language === "zh-TW" || navigator.language === "zh-HK" ? "zh-Hant" : navigator.language.split("-")[0];
+      selector.value = supported.includes(saved) ? saved : supported.includes(browserLanguage) ? browserLanguage : "zh-Hant";
+      selector.addEventListener("change", () => { localStorage.setItem(LANGUAGE_KEY, selector.value); translatePage(); });
+      translatePage();
+      new MutationObserver(records => {
+        if (!translatingPage && records.some(record => record.addedNodes.length)) requestAnimationFrame(translatePage);
+      }).observe(document.body, { childList: true, subtree: true });
+    }
+
+    const APP_VERSION = "0.15.0";
     const RELEASE_NOTES = [
+      { version: "0.15.0", date: "2026-09-25", changes: ["重新整理會員資料與公開檔案，依個人概況、鎖具與配戴、尺寸與合身分組。", "新增鎖具類型、型號、環型、固定方式、環籠間距、合身狀態、配戴頻率、經驗與持鑰狀態。", "擴充可核對官方來源的貞操鎖品牌，並加入繁中、簡中、英文、日文、韓文、泰文、越南文、印尼文與世界語介面。"] },
       { version: "0.14.2", date: "2026-09-25", changes: ["修正管理與回饋頁的載入失敗狀態，避免畫面無回應。", "補齊管理員刪除會員時的私人偏好、每日任務與任務提案清理。", "同步各頁版本資訊並加強 Firestore 寫入資料限制。"] },
       { version: "0.14.1", date: "2026-09-25", changes: ["修正 iOS Safari 與 Edge 的自訂下拉選單寬度、文字排列及無法點選問題。"] },
       { version: "0.14.0", date: "2026-09-25", changes: ["恢復每個瀏覽器工作階段首次進站的限制級內容警語。", "擴充隱私權政策、平台使用須知、社群規範與分級懲處制度。"] },
@@ -838,6 +927,7 @@
       expectedUnlockDate: { buttonId: "expectedUnlockDateButton", placeholder: "選擇預計開鎖日期" }
     };
 
+    setupLanguage();
     setupCustomSelects();
     setupProfileDatePickers();
 
@@ -1516,17 +1606,32 @@
       if (!member) return alert("這位會員的資料目前無法查看。");
       const profile = member.profile || {};
       const displayName = profile.displayName || member.username || "會員";
-      const fields = [
-        ["身高", format(profile.heightCm, "cm")], ["體重", format(profile.weightKg, "kg")],
-        ["膚色", selectedLabel(profile, "skinTone", "skinToneOther")], ["身材", selectedLabel(profile, "bodyType", "bodyTypeOther")],
-        ["鎖具品牌", selectedLabel(profile, "lockBrand", "lockBrandOther")], ["顏色", profile.lockColor],
-        ["籠體尺寸", pair(profile.cageLengthCm, profile.cageWidthCm, "cm")], ["環內徑", format(profile.ringDiameterMm, "mm")],
-        ["材質", selectedLabel(profile, "lockMaterial", "lockMaterialOther")], ["鎖定方式", selectedLabel(profile, "lockingMethod", "lockingMethodOther")],
-        ["上鎖日期", profile.lockDate], ["預計開鎖日期", profile.expectedUnlockDate === "indefinite" ? "無期限" : profile.expectedUnlockDate],
-        ["未配戴長度", format(profile.bodyLengthCm, "cm")], ["陰莖粗度", format(profile.bodyGirthCm, "cm")]
-      ].filter(([, value]) => value);
+      const groups = [
+        ["個人概況", [
+          ["身高", format(profile.heightCm, "cm")], ["體重", format(profile.weightKg, "kg")],
+          ["膚色", selectedLabel(profile, "skinTone", "skinToneOther")], ["身材", selectedLabel(profile, "bodyType", "bodyTypeOther")],
+          ["經驗程度", profile.experienceLevel]
+        ]],
+        ["鎖具與配戴", [
+          ["鎖具類型", profile.deviceType], ["鎖具品牌", selectedLabel(profile, "lockBrand", "lockBrandOther")],
+          ["型號", profile.lockModel], ["顏色", profile.lockColor], ["材質", selectedLabel(profile, "lockMaterial", "lockMaterialOther")],
+          ["籠體形式", profile.cageStyle], ["環型", profile.ringShape], ["固定方式", profile.fixationMethod],
+          ["鎖定方式", selectedLabel(profile, "lockingMethod", "lockingMethodOther")], ["配戴頻率", profile.wearSchedule],
+          ["持鑰狀態", profile.keyholderStatus], ["上鎖日期", profile.lockDate],
+          ["預計開鎖日期", profile.expectedUnlockDate === "indefinite" ? "無期限" : profile.expectedUnlockDate]
+        ]],
+        ["尺寸與合身", [
+          ["籠體尺寸", pair(profile.cageLengthCm, profile.cageWidthCm, "cm")], ["環內徑", format(profile.ringDiameterMm, "mm")],
+          ["環籠間距", format(profile.cageGapMm, "mm")], ["合身狀態", profile.fitStatus],
+          ["包皮狀態", profile.foreskinStatus], ["未配戴長度", format(profile.bodyLengthCm, "cm")],
+          ["未配戴周長", format(profile.bodyGirthCm, "cm")], ["公開備註", profile.lockProfileNote]
+        ]]
+      ].map(([title, fields]) => [title, fields.filter(([, value]) => value)]).filter(([, fields]) => fields.length);
       document.getElementById("memberProfileTitle").textContent = displayName;
-      document.getElementById("memberProfileContent").innerHTML = fields.length ? `<dl class="profile-list">${fields.map(([label, value]) => `<div class="profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>` : '<p class="muted">這位會員尚未填寫公開資料。</p>';
+      document.getElementById("memberProfileContent").innerHTML = groups.length
+        ? `<div class="profile-groups">${groups.map(([title, fields]) => `<section class="profile-group"><h3>${escapeHtml(title)}</h3><dl class="profile-list">${fields.map(([label, value]) => `<div class="profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl></section>`).join("")}</div>`
+        : '<p class="muted">這位會員尚未填寫公開資料。</p>';
+      translatePage();
       document.getElementById("memberProfileDialog").showModal();
     }
 
