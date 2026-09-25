@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.17.1">
+  <meta name="application-version" content="0.17.2">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員驗證平台登入與註冊入口。">
   <style>
@@ -328,7 +328,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.17.1</p>
+      <p class="version-stamp">Lockspace v0.17.2</p>
     </section>
   </main>
 
@@ -519,7 +519,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.17.1</p>
+      <p class="version-stamp">Lockspace v0.17.2</p>
     </form>
   </main>
 
@@ -551,7 +551,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.17.1</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.17.2</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -575,7 +575,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.17.1</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.17.2</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -795,8 +795,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.17.1";
+    const APP_VERSION = "0.17.2";
     const RELEASE_NOTES = [
+      { version: "0.17.2", date: "2026-09-25", changes: ["補齊通知介面中 v0.17.0 之後的版本更新翻譯。", "版本紀錄改為依目前語言明確選取譯文，不再依賴畫面文字替換。", "未來若新版說明缺少譯文，非中文介面會顯示翻譯準備提示，不會直接混入繁體中文。"] },
       { version: "0.17.1", date: "2026-09-25", changes: ["修正手機版語言選擇列遮住會員首頁品牌與操作按鈕。", "窄螢幕下語言列改為正常頁面流，桌面版仍維持右上角固定顯示。", "同步調整登入與註冊畫面的可視高度，避免語言列造成多餘空白。"] },
       { version: "0.17.0", date: "2026-09-25", changes: ["建立全站共用語言核心，首頁、問題回饋、通知、政策與管理頁共用相同語言偏好。", "補齊問題回饋、通知、管理狀態與版本紀錄等動態介面的九種語言翻譯。", "語言選擇跨頁保存，並採用國際網站常見的固定全站語言入口。"] },
       { version: "0.16.1", date: "2026-09-25", changes: ["移除非英文介面的英文回退機制，避免日文、韓文等頁面混入英文。", "補齊各語言缺少的靜態介面、選項、日期與短字串翻譯。", "新增逐語言 DOM 掃描驗證，非漢字語言不再殘留中文。"] },
@@ -1691,11 +1692,19 @@
     }
 
     function openNotifications() {
-      document.getElementById("releaseNotesList").innerHTML = RELEASE_NOTES.map(release => `<article class="release-item"><div class="release-head"><strong>v${escapeHtml(release.version)}</strong><span class="muted">${escapeHtml(release.date)}</span></div><ul>${release.changes.map(change => `<li>${escapeHtml(change)}</li>`).join("")}</ul></article>`).join("");
+      document.getElementById("releaseNotesList").innerHTML = RELEASE_NOTES.map(release => `<article class="release-item"><div class="release-head"><strong>v${escapeHtml(release.version)}</strong><span class="muted">${escapeHtml(release.date)}</span></div><ul>${release.changes.map(change => `<li>${escapeHtml(localizedReleaseChange(change))}</li>`).join("")}</ul></article>`).join("");
       localStorage.setItem(`lockspace-seen-version-${state.member.uid}`, APP_VERSION);
       localStorage.setItem(`lockspace-seen-reply-${state.member.uid}`, state.feedback[0]?.repliedAtIso || "");
       updateNotificationBadge();
       document.getElementById("notificationsDialog").showModal();
+    }
+
+    function localizedReleaseChange(change) {
+      const language = document.getElementById("languageSelect").value;
+      if (language === "zh-Hant") return change;
+      return TRANSLATIONS[language]?.[change]
+        || TRANSLATIONS[language]?.["版本內容翻譯準備中。"]
+        || "Translation in progress.";
     }
 
     function updateNotificationBadge() {
