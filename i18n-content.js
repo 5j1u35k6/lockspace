@@ -4,7 +4,7 @@
   window.LOCKSPACE_UI_TRANSLATIONS = Object.assign({}, window.LOCKSPACE_UI_TRANSLATIONS || {});
   window.initPolicyI18n = page => {
     const key = "lockspace-language-v1";
-    const options = [["zh-Hant","繁體中文"],["zh-Hans","简体中文"],["en","English"],["ja","日本語"],["ko","한국어"],["th","ไทย"],["vi","Tiếng Việt"],["ms","Bahasa Malaysia"],["id","Bahasa Indonesia"],["de","Deutsch"],["nl","Nederlands"],["it","Italiano"],["fr","Français"],["eo","Esperanto"]];
+    const options = [["zh-Hant","繁體中文"],["zh-Hans","简体中文"],["en","English"],["ja","日本語"],["ko","한국어"],["th","ไทย"],["vi","Tiếng Việt"],["ms","Bahasa Malaysia"],["id","Bahasa Indonesia"],["de","Deutsch"],["nl","Nederlands"],["it","Italiano"],["fr","Français"],["eo","Esperanto"],["hi","हिन्दी"],["bn","বাংলা"],["ur","اردو"],["ar","العربية"],["pa","ਪੰਜਾਬੀ"],["fil","Filipino"],["sw","Kiswahili"],["ha","Hausa"],["pt","Português"],["yo","Yorùbá"],["ig","Igbo"],["ln","Lingála"],["am","አማርኛ"],["ru","Русский"],["es","Español"],["pl","Polski"],["uk","Українська"],["ro","Română"],["ht","Kreyòl ayisyen"],["jam","Patois"],["qu","Runa Simi"],["gn","Avañe'ẽ"],["ay","Aymar aru"],["tpi","Tok Pisin"],["sm","Gagana Samoa"],["fj","Vakaviti"],["hif","Fiji Hindi"],["mi","Te Reo Māori"]];
     const control = document.createElement("label");
     control.className = "language-control";
     control.innerHTML = '<span>語言</span><select aria-label="介面語言">' + options.map(([value,label]) => '<option value="' + value + '">' + label + '</option>').join("") + '</select>';
@@ -17,7 +17,7 @@
     document.querySelectorAll(".top .button, .policy h1, .policy h2, .policy h3, .policy p, .policy li").forEach(node => originals.set(node, node.textContent.trim()));
     const render = () => {
       const language = select.value;
-      const dictionary = DATA.policies[page]?.[language] || {};
+      const dictionary = DATA.policies[page]?.[language] || DATA.policies[page]?.en || {};
       document.documentElement.lang = language;
       originals.forEach((source, node) => { node.textContent = dictionary[source] || source; });
       control.querySelector("span").textContent = APP_LANGUAGE_NAMES[language] || "Language";
@@ -27,7 +27,7 @@
     render();
   };
 
-  const APP_OPTIONS = [["zh-Hant","繁體中文"],["zh-Hans","简体中文"],["en","English"],["ja","日本語"],["ko","한국어"],["th","ไทย"],["vi","Tiếng Việt"],["ms","Bahasa Malaysia"],["id","Bahasa Indonesia"],["de","Deutsch"],["nl","Nederlands"],["it","Italiano"],["fr","Français"],["eo","Esperanto"]];
+  const APP_OPTIONS = [["zh-Hant","繁體中文"],["zh-Hans","简体中文"],["en","English"],["ja","日本語"],["ko","한국어"],["th","ไทย"],["vi","Tiếng Việt"],["ms","Bahasa Malaysia"],["id","Bahasa Indonesia"],["de","Deutsch"],["nl","Nederlands"],["it","Italiano"],["fr","Français"],["eo","Esperanto"],["hi","हिन्दी"],["bn","বাংলা"],["ur","اردو"],["ar","العربية"],["pa","ਪੰਜਾਬੀ"],["fil","Filipino"],["sw","Kiswahili"],["ha","Hausa"],["pt","Português"],["yo","Yorùbá"],["ig","Igbo"],["ln","Lingála"],["am","አማርኛ"],["ru","Русский"],["es","Español"],["pl","Polski"],["uk","Українська"],["ro","Română"],["ht","Kreyòl ayisyen"],["jam","Patois"],["qu","Runa Simi"],["gn","Avañe'ẽ"],["ay","Aymar aru"],["tpi","Tok Pisin"],["sm","Gagana Samoa"],["fj","Vakaviti"],["hif","Fiji Hindi"],["mi","Te Reo Māori"]];
   const APP_LANGUAGE_NAMES = {"zh-Hant":"語言","zh-Hans":"语言",en:"Language",ja:"言語",ko:"언어",th:"ภาษา",vi:"Ngôn ngữ",ms:"Bahasa",id:"Bahasa",de:"Sprache",nl:"Taal",it:"Lingua",fr:"Langue",eo:"Lingvo"};
   const appOriginalText = new WeakMap(), appOriginalAttributes = new WeakMap();
   function appLanguage() {
