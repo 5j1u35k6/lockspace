@@ -209,9 +209,10 @@
     .public-details { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; padding: 10px 0; border-block: 1px solid #ffffff10; }
     .public-details span { font-size: 12px; color: #cfccd7; background: #ffffff08; padding: 5px 8px; border-radius: 8px; }
     .language-control {
-      position: fixed; top: 12px; right: 12px; z-index: 80; display: flex; align-items: center; gap: 8px;
-      margin: 0; padding: 6px 8px 6px 10px; border: 1px solid var(--line); border-radius: 6px;
-      background: #121412f2; box-shadow: 0 8px 24px #0008; color: var(--muted); font-size: 12px;
+      position: relative; display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+      width: min(1120px, calc(100% - 36px)); min-height: 48px; margin: 12px auto 0;
+      padding: 6px 8px 6px 10px; border: 1px solid var(--line); border-radius: 6px;
+      background: #121412; color: var(--muted); font-size: 12px;
     }
     .language-control select { width: auto; min-height: 34px; margin: 0; padding: 5px 30px 5px 8px; background-position: calc(100% - 15px) 14px, calc(100% - 10px) 14px; }
     .section-intro { max-width: 72ch; margin: 4px 0 14px; color: var(--muted); font-size: 13px; }
@@ -261,13 +262,8 @@
       .member-chip { display: none; }
       .boot-page, .auth-page, .registration-page { min-height: calc(100vh - 60px); padding: 14px; }
       .language-control {
-        position: relative;
-        inset: auto;
         width: calc(100% - 30px);
-        min-height: 48px;
-        margin: 12px auto 0;
         justify-content: space-between;
-        box-shadow: none;
       }
       .language-control select { flex: 1; max-width: 210px; }
       .auth-card, .registration-card { padding: 19px 16px; }
@@ -280,10 +276,12 @@
 </head>
 <body>
   <label class="language-control" for="languageSelect"><span>語言</span>
-    <select id="languageSelect" aria-label="介面語言">
+    <select id="languageSelect" aria-label="介面語言" data-no-translate>
       <option value="zh-Hant">繁體中文</option><option value="zh-Hans">简体中文</option><option value="en">English</option>
       <option value="ja">日本語</option><option value="ko">한국어</option><option value="th">ไทย</option>
-      <option value="vi">Tiếng Việt</option><option value="id">Bahasa Indonesia</option><option value="eo">Esperanto</option>
+      <option value="vi">Tiếng Việt</option><option value="ms">Bahasa Malaysia</option><option value="id">Bahasa Indonesia</option>
+      <option value="de">Deutsch</option><option value="nl">Nederlands</option><option value="it">Italiano</option>
+      <option value="fr">Français</option><option value="eo">Esperanto</option>
     </select>
   </label>
   <main id="bootPage" class="boot-page">
@@ -328,7 +326,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.17.2</p>
+      <p class="version-stamp">Lockspace v0.18.0</p>
     </section>
   </main>
 
@@ -519,7 +517,7 @@
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.17.2</p>
+      <p class="version-stamp">Lockspace v0.18.0</p>
     </form>
   </main>
 
@@ -551,7 +549,7 @@
         <div id="feed"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.17.2</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.18.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -575,7 +573,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.17.2</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.18.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -631,6 +629,11 @@
       th: {"語言":"ภาษา","登入 Lockspace":"เข้าสู่ระบบ Lockspace","僅限年滿 18 歲使用":"สำหรับผู้มีอายุ 18 ปีขึ้นไป","基本資料":"ข้อมูลพื้นฐาน","貞操鎖資料":"อุปกรณ์พรหมจรรย์","鎖具識別":"ข้อมูลอุปกรณ์","尺寸與合身":"ขนาดและความพอดี","配戴狀態":"สถานะการสวมใส่","品牌":"แบรนด์","型號":"รุ่น","材質":"วัสดุ","請選擇":"เลือก","公開":"สาธารณะ","私人":"ส่วนตัว"},
       vi: {"語言":"Ngôn ngữ","登入 Lockspace":"Đăng nhập Lockspace","僅限年滿 18 歲使用":"Chỉ dành cho người từ 18 tuổi","基本資料":"Thông tin cơ bản","貞操鎖資料":"Thiết bị khóa trinh tiết","鎖具識別":"Thiết bị","尺寸與合身":"Kích thước và độ vừa","配戴狀態":"Tình trạng đeo","品牌":"Thương hiệu","型號":"Mẫu","材質":"Chất liệu","請選擇":"Chọn","公開":"Công khai","私人":"Riêng tư"},
       id: {"語言":"Bahasa","登入 Lockspace":"Masuk ke Lockspace","僅限年滿 18 歲使用":"Khusus usia 18+","基本資料":"Profil dasar","貞操鎖資料":"Perangkat chastity","鎖具識別":"Perangkat","尺寸與合身":"Ukuran dan kecocokan","配戴狀態":"Status pemakaian","品牌":"Merek","型號":"Model","材質":"Bahan","請選擇":"Pilih","公開":"Publik","私人":"Privat"},
+      ms: {},
+      de: {},
+      nl: {},
+      it: {},
+      fr: {},
       eo: {"語言":"Lingvo","正在確認登入狀態…":"Kontrolante ensaluton…","登入 Lockspace":"Ensaluti en Lockspace","僅限年滿 18 歲使用":"Nur por plenkreskuloj 18+","帳號登入":"Ensaluti","註冊會員":"Registriĝi","基本資料":"Bazaj informoj","貞操鎖資料":"Ĉasteca aparato","鎖具識別":"Aparato","尺寸與合身":"Grandeco kaj konveno","配戴狀態":"Portostato","品牌":"Marko","型號":"Modelo","顏色":"Koloro","材質":"Materialo","鎖具類型":"Aparattipo","籠體形式":"Kaĝa formo","環型":"Ringa formo","固定方式":"Fiksado","籠長":"Kaĝa longo","籠寬":"Kaĝa larĝo","環內徑":"Interna ringa diametro","環籠間距":"Ringa interspaco","合身狀態":"Konveno","未配戴長度":"Longo sen aparato","未配戴周長":"Cirkonferenco sen aparato","鎖定方式":"Ŝlosa metodo","配戴頻率":"Portofteco","經驗程度":"Sperto","持鑰狀態":"Ŝlosiltenado","上鎖日期":"Ŝlosdato","預計開鎖日期":"Planita malŝlosdato","請選擇":"Elektu","公開":"Publika","私人":"Privata","個人概況":"Superrigardo","鎖具與配戴":"Aparato kaj portado"}
     };
     const COMPLETE_EN = {
@@ -755,6 +758,7 @@
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       let node;
       while ((node = walker.nextNode())) {
+        if (node.parentElement?.closest("script, style, .notranslate, [data-no-translate]")) continue;
         if (!originalText.has(node)) originalText.set(node, node.nodeValue);
         node.nodeValue = translateString(originalText.get(node));
       }
@@ -795,8 +799,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.17.2";
+    const APP_VERSION = "0.18.0";
     const RELEASE_NOTES = [
+      { version: "0.18.0", date: "2026-09-26", changes: ["語言選擇列改為頁面內工具列，桌面與手機皆不再遮住操作按鈕。", "參考中華航空國際網站的語言選擇，新增馬來文、德文、荷蘭文、義大利文與法文。", "新增語言已涵蓋首頁、任務、通知、回饋、後台、隱私權政策與使用條款。"] },
       { version: "0.17.2", date: "2026-09-26", changes: ["修正版本更新通知在非中文介面仍顯示繁體中文。", "版本紀錄改為依目前語言逐條取得譯文，並在缺漏時顯示本地化提示。", "補齊 v0.17.1 版本說明的九種語言翻譯。"] },
       { version: "0.17.1", date: "2026-09-25", changes: ["修正手機版語言選擇列遮住會員首頁品牌與操作按鈕。", "窄螢幕下語言列改為正常頁面流，桌面版仍維持右上角固定顯示。", "同步調整登入與註冊畫面的可視高度，避免語言列造成多餘空白。"] },
       { version: "0.17.0", date: "2026-09-25", changes: ["建立全站共用語言核心，首頁、問題回饋、通知、政策與管理頁共用相同語言偏好。", "補齊問題回饋、通知、管理狀態與版本紀錄等動態介面的九種語言翻譯。", "語言選擇跨頁保存，並採用國際網站常見的固定全站語言入口。"] },
