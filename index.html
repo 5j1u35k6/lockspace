@@ -614,6 +614,7 @@
     <div class="calendar-actions"><button id="calendarClose" class="button" type="button">取消</button></div>
   </dialog>
 
+  <script src="i18n-ui-1.js"></script><script src="i18n-ui-2.js"></script><script src="i18n-ui-3.js"></script><script src="i18n-ui-4.js"></script>
   <script src="i18n-content.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
@@ -780,7 +781,12 @@
         ko:{authPage:"회원 로그인",registrationPage:"회원 프로필",dashboardPage:"회원 홈",taskPage:"인증 과제",bootPage:"불러오는 중"},
         th:{authPage:"เข้าสู่ระบบสมาชิก",registrationPage:"โปรไฟล์สมาชิก",dashboardPage:"หน้าหลักสมาชิก",taskPage:"งานยืนยัน",bootPage:"กำลังโหลด"},
         vi:{authPage:"Đăng nhập thành viên",registrationPage:"Hồ sơ thành viên",dashboardPage:"Trang thành viên",taskPage:"Nhiệm vụ xác minh",bootPage:"Đang tải"},
+        ms:{authPage:"Log masuk ahli",registrationPage:"Profil ahli",dashboardPage:"Halaman ahli",taskPage:"Tugasan pengesahan",bootPage:"Memuatkan"},
         id:{authPage:"Masuk anggota",registrationPage:"Profil anggota",dashboardPage:"Beranda anggota",taskPage:"Tugas verifikasi",bootPage:"Memuat"},
+        de:{authPage:"Mitgliederzugang",registrationPage:"Mitgliedsprofil",dashboardPage:"Mitgliederbereich",taskPage:"Verifizierungsaufgabe",bootPage:"Wird geladen"},
+        nl:{authPage:"Ledenaanmelding",registrationPage:"Ledenprofiel",dashboardPage:"Ledenpagina",taskPage:"Verificatietaak",bootPage:"Laden"},
+        it:{authPage:"Accesso membri",registrationPage:"Profilo membro",dashboardPage:"Pagina membri",taskPage:"Attività di verifica",bootPage:"Caricamento"},
+        fr:{authPage:"Accès membre",registrationPage:"Profil membre",dashboardPage:"Page membre",taskPage:"Tâche de vérification",bootPage:"Chargement"},
         eo:{authPage:"Membra ensaluto",registrationPage:"Membra profilo",dashboardPage:"Membra hejmo",taskPage:"Konfirma tasko",bootPage:"Ŝargante"}
       };
       document.title = `lockspace. ${localizedPageNames[language]?.[visiblePage] || pageNames[visiblePage] || "Member access"}`;
