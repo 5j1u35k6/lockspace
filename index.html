@@ -171,9 +171,13 @@
     .policy-links a { color: var(--cyan); }
     .site-shell { max-width: 1280px; margin: auto; padding: 22px 30px 60px; }
     .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 19px; border-bottom: 1px solid #ffffff18; }
+    .topbar-brand { display: flex; align-items: center; gap: 9px; }
     .header-actions { display: flex; align-items: center; gap: 9px; }
-    .language-button { display: inline-grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 1px solid var(--line); border-radius: 6px; background: #121412; color: var(--lime); font-size: 21px; line-height: 1; }
-    .language-button:hover { border-color: var(--lime); background: #b6ff7014; }
+    .language-button { display: inline-grid; place-items: center; width: 38px; height: 38px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: #afacba; }
+    .language-button:hover { background: #ffffff0b; color: var(--text); }
+    .globe-icon { position: relative; display: block; width: 18px; height: 18px; border: 1.5px solid currentColor; border-radius: 50%; }
+    .globe-icon::before { position: absolute; inset: 2px 5px; border-inline: 1px solid currentColor; border-radius: 50%; content: ""; }
+    .globe-icon::after { position: absolute; right: 2px; left: 2px; top: 7px; border-top: 1px solid currentColor; content: ""; }
     .auth-language-button { position: fixed; top: 12px; right: 12px; z-index: 20; }
     .dashboard-active .auth-language-button { display: none; }
     .language-control { display: none; }
@@ -196,6 +200,7 @@
       color: #d8d5e0;
       font-size: 13px;
     }
+    .member-chip { display: none; }
     .private-tag { color: var(--cyan); background: #86e8ff12; border: 0; }
     .public-tag { color: var(--lime); background: #b6ff7018; font-size: 11px; margin-left: 6px; }
     .dashboard-main { width: min(760px, 100%); margin: 32px auto 0; }
@@ -280,7 +285,7 @@
   </style>
 </head>
 <body>
-  <button id="authLanguageButton" class="language-button auth-language-button" type="button" aria-label="選擇語言" title="選擇語言">🌐</button>
+  <button id="authLanguageButton" class="language-button auth-language-button" type="button" aria-label="選擇語言" title="選擇語言"><span class="globe-icon" aria-hidden="true"></span></button>
   <label class="language-control" for="languageSelect"><span>語言</span>
     <select id="languageSelect" aria-label="介面語言" data-no-translate>
       <option value="zh-Hant">繁體中文</option><option value="zh-Hans">简体中文</option><option value="en">English</option>
@@ -536,9 +541,8 @@
 
   <main id="dashboardPage" class="site-shell hidden">
     <header class="topbar">
-      <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
+      <div class="topbar-brand"><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div><button id="dashboardLanguageButton" class="language-button" type="button" aria-label="選擇語言" title="選擇語言"><span class="globe-icon" aria-hidden="true"></span></button></div>
       <div class="header-actions">
-        <button id="dashboardLanguageButton" class="language-button" type="button" aria-label="選擇語言" title="選擇語言">🌐</button>
         <span id="memberChip" class="member-chip">已登入</span>
         <a id="adminLink" class="button secondary hidden" href="admin.html">後台管理</a>
         <button id="notificationsButton" class="button secondary notification-button" type="button">通知<span id="notificationsBadge" class="notification-badge hidden">1</span></button>
