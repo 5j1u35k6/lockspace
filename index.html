@@ -172,6 +172,22 @@
     .site-shell { max-width: 1280px; margin: auto; padding: 22px 30px 60px; }
     .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 19px; border-bottom: 1px solid #ffffff18; }
     .header-actions { display: flex; align-items: center; gap: 9px; }
+    .language-button { display: inline-grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 1px solid var(--line); border-radius: 6px; background: #121412; color: var(--lime); font-size: 21px; line-height: 1; }
+    .language-button:hover { border-color: var(--lime); background: #b6ff7014; }
+    .auth-language-button { position: fixed; top: 12px; right: 12px; z-index: 20; }
+    .dashboard-active .auth-language-button { display: none; }
+    .language-control { display: none; }
+    .language-dialog { width: min(610px, calc(100% - 28px)); padding: 0; border: 1px solid #b6ff7065; border-radius: 8px; background: var(--panel); color: var(--text); }
+    .language-dialog::backdrop { background: #000c; }
+    .language-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; border-bottom: 1px solid #ffffff16; }
+    .language-dialog-head h2 { margin: 0; font-size: 19px; }
+    .language-dialog-body { display: grid; gap: 18px; padding: 18px; }
+    .language-region { display: grid; gap: 8px; }
+    .language-region h3 { margin: 0; color: var(--cyan); font-size: 13px; }
+    .language-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .language-option { display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 8px 10px; border: 1px solid #ffffff16; border-radius: 6px; background: #ffffff06; color: var(--text); text-align: left; }
+    .language-option:hover, .language-option.active { border-color: var(--lime); background: #b6ff7014; color: var(--lime); }
+    .language-flag { width: 22px; font-size: 17px; text-align: center; }
     .member-chip, .private-tag, .public-tag {
       padding: 6px 10px;
       border-radius: 999px;
@@ -208,13 +224,6 @@
     .preview-frame img { display: block; width: auto; height: auto; max-width: 100%; max-height: 70vh; object-fit: contain; margin: auto; }
     .public-details { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; padding: 10px 0; border-block: 1px solid #ffffff10; }
     .public-details span { font-size: 12px; color: #cfccd7; background: #ffffff08; padding: 5px 8px; border-radius: 8px; }
-    .language-control {
-      position: relative; display: flex; align-items: center; justify-content: flex-end; gap: 8px;
-      width: min(1120px, calc(100% - 36px)); min-height: 48px; margin: 12px auto 0;
-      padding: 6px 8px 6px 10px; border: 1px solid var(--line); border-radius: 6px;
-      background: #121412; color: var(--muted); font-size: 12px;
-    }
-    .language-control select { width: auto; min-height: 34px; margin: 0; padding: 5px 30px 5px 8px; background-position: calc(100% - 15px) 14px, calc(100% - 10px) 14px; }
     .section-intro { max-width: 72ch; margin: 4px 0 14px; color: var(--muted); font-size: 13px; }
     .subsection-title { margin: 19px 0 5px; color: var(--cyan); font-size: 13px; letter-spacing: 0; text-transform: uppercase; }
     .profile-groups { display: grid; gap: 18px; }
@@ -261,11 +270,7 @@
       .header-actions { width: 100%; flex-wrap: wrap; }
       .member-chip { display: none; }
       .boot-page, .auth-page, .registration-page { min-height: calc(100vh - 60px); padding: 14px; }
-      .language-control {
-        width: calc(100% - 30px);
-        justify-content: space-between;
-      }
-      .language-control select { flex: 1; max-width: 210px; }
+      .language-grid { grid-template-columns: 1fr; }
       .auth-card, .registration-card { padding: 19px 16px; }
     }
     @media (max-width: 520px) {
@@ -275,6 +280,7 @@
   </style>
 </head>
 <body>
+  <button id="authLanguageButton" class="language-button auth-language-button" type="button" aria-label="選擇語言" title="選擇語言">🌐</button>
   <label class="language-control" for="languageSelect"><span>語言</span>
     <select id="languageSelect" aria-label="介面語言" data-no-translate>
       <option value="zh-Hant">繁體中文</option><option value="zh-Hans">简体中文</option><option value="en">English</option>
@@ -284,6 +290,13 @@
       <option value="fr">Français</option><option value="eo">Esperanto</option>
     </select>
   </label>
+  <dialog id="languageDialog" class="language-dialog" aria-labelledby="languageDialogTitle">
+    <div class="language-dialog-head"><h2 id="languageDialogTitle">選擇語言</h2><button id="closeLanguageDialog" class="button quiet" type="button" aria-label="關閉">×</button></div>
+    <div class="language-dialog-body" data-no-translate>
+      <section class="language-region"><h3>亞洲</h3><div class="language-grid"><button class="language-option" data-language="zh-Hant" type="button"><span class="language-flag">🇹🇼</span>繁體中文</button><button class="language-option" data-language="zh-Hans" type="button"><span class="language-flag">🇨🇳</span>简体中文</button><button class="language-option" data-language="ja" type="button"><span class="language-flag">🇯🇵</span>日本語</button><button class="language-option" data-language="ko" type="button"><span class="language-flag">🇰🇷</span>한국어</button><button class="language-option" data-language="th" type="button"><span class="language-flag">🇹🇭</span>ไทย</button><button class="language-option" data-language="vi" type="button"><span class="language-flag">🇻🇳</span>Tiếng Việt</button><button class="language-option" data-language="ms" type="button"><span class="language-flag">🇲🇾</span>Bahasa Malaysia</button><button class="language-option" data-language="id" type="button"><span class="language-flag">🇮🇩</span>Bahasa Indonesia</button></div></section>
+      <section class="language-region"><h3>歐洲與其他</h3><div class="language-grid"><button class="language-option" data-language="en" type="button"><span class="language-flag">🌐</span>English</button><button class="language-option" data-language="de" type="button"><span class="language-flag">🇩🇪</span>Deutsch</button><button class="language-option" data-language="nl" type="button"><span class="language-flag">🇳🇱</span>Nederlands</button><button class="language-option" data-language="it" type="button"><span class="language-flag">🇮🇹</span>Italiano</button><button class="language-option" data-language="fr" type="button"><span class="language-flag">🇫🇷</span>Français</button><button class="language-option" data-language="eo" type="button"><span class="language-flag">🌍</span>Esperanto</button></div></section>
+    </div>
+  </dialog>
   <main id="bootPage" class="boot-page">
     <div><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div><p>正在確認登入狀態…</p></div>
   </main>
@@ -525,6 +538,7 @@
     <header class="topbar">
       <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
       <div class="header-actions">
+        <button id="dashboardLanguageButton" class="language-button" type="button" aria-label="選擇語言" title="選擇語言">🌐</button>
         <span id="memberChip" class="member-chip">已登入</span>
         <a id="adminLink" class="button secondary hidden" href="admin.html">後台管理</a>
         <button id="notificationsButton" class="button secondary notification-button" type="button">通知<span id="notificationsBadge" class="notification-badge hidden">1</span></button>
@@ -794,11 +808,25 @@
     }
     function setupLanguage() {
       const selector = document.getElementById("languageSelect");
+      const dialog = document.getElementById("languageDialog");
+      const openLanguageDialog = () => {
+        document.querySelectorAll(".language-option").forEach(option => option.classList.toggle("active", option.dataset.language === selector.value));
+        dialog.showModal();
+      };
       const saved = localStorage.getItem(LANGUAGE_KEY);
       const supported = [...selector.options].map(option => option.value);
       const browserLanguage = navigator.language === "zh-TW" || navigator.language === "zh-HK" ? "zh-Hant" : navigator.language.split("-")[0];
       selector.value = supported.includes(saved) ? saved : supported.includes(browserLanguage) ? browserLanguage : "zh-Hant";
       selector.addEventListener("change", () => { localStorage.setItem(LANGUAGE_KEY, selector.value); translatePage(); });
+      document.getElementById("authLanguageButton").addEventListener("click", openLanguageDialog);
+      document.getElementById("dashboardLanguageButton").addEventListener("click", openLanguageDialog);
+      document.getElementById("closeLanguageDialog").addEventListener("click", () => dialog.close());
+      document.querySelectorAll(".language-option").forEach(option => option.addEventListener("click", () => {
+        selector.value = option.dataset.language;
+        selector.dispatchEvent(new Event("change"));
+        dialog.close();
+      }));
+      dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
       translatePage();
       new MutationObserver(records => {
         if (!translatingPage && records.some(record => record.addedNodes.length)) requestAnimationFrame(translatePage);
@@ -1235,6 +1263,7 @@
       dashboardPage.classList.add("hidden");
       taskPage.classList.add("hidden");
       page.classList.remove("hidden");
+      document.body.classList.toggle("dashboard-active", page === dashboardPage);
 
       const pageTitles = {
         bootPage: "lockspace. 載入中",
