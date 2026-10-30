@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.19.0 - 2026-10-30
+
+- Added a Traditional Chinese welcome introduction beside the existing member access forms, with an official X link and registration shortcut.
+- Explained daily tasks, member verification, reviewed task ideas, and photo-sharing expectations without exposing member content.
+- Kept member access first on narrow screens and retained the existing entry layout in other languages.
+
 ## 0.14.2 - 2026-09-25
 
 - Prevent feedback and admin pages from appearing stuck when Firestore reads fail.
