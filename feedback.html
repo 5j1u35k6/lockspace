@@ -3,12 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.17.0">
+  <meta name="application-version" content="0.20.0">
   <title>lockspace. 問題回饋</title>
   <style>
     :root{color-scheme:dark;--bg:#090a09;--panel:#121412;--line:#30352f;--text:#f5f4f7;--muted:#afacba;--lime:#b6ff70;--red:#ff91a6}
     *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:var(--bg);color:var(--text);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
     button,input,textarea{font:inherit}.card{width:min(700px,100%);padding:24px;border:1px solid #ffffff17;border-radius:8px;background:var(--panel)}.page-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}.brand{font-size:22px;font-weight:800}.brand b{color:var(--lime)}h1{margin:18px 0 8px}h2{margin:28px 0 10px;font-size:18px}.muted{color:var(--muted);font-size:14px}.hidden{display:none!important}label{display:block;margin:15px 0;color:#d9d6e1;font-size:14px;font-weight:650}input,textarea{display:block;width:100%;margin-top:6px;padding:10px 11px;border:1px solid var(--line);border-radius:5px;background:#101017;color:var(--text)}input{min-height:44px}textarea{min-height:170px;resize:vertical}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 14px;border:1px solid var(--line);border-radius:6px;background:#ffffff08;color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}.button.primary{background:var(--lime);border-color:var(--lime);color:#151711}.button.quiet{border-color:transparent;color:var(--muted)}.status{margin:14px 0 0;padding:10px 12px;border:1px solid #ffffff18;border-radius:6px}.status.error{color:#ffb0bf;border-color:#ff617538;background:#ff617510}.feedback-list{display:grid;gap:10px}.feedback-item{padding:13px;border:1px solid #ffffff16;border-radius:6px;background:#ffffff07}.feedback-item p{margin:6px 0;white-space:pre-wrap}.reply{padding:10px;border-left:3px solid var(--lime);background:#b6ff700b}
+    .status-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}.status-row p{margin:0;flex:1;min-width:180px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 10px}.section-head h2{margin:0}.button:disabled{opacity:.6;cursor:wait}.feedback-item{overflow-wrap:anywhere}button,input,textarea,a{outline-offset:3px}.button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--lime)}
+    @media(max-width:560px){body{padding:14px;display:block}.card{padding:19px 16px}.page-top{gap:10px;flex-wrap:wrap}.page-top .button{padding-inline:0}.actions .button{width:100%}.section-head{align-items:flex-start;flex-wrap:wrap}.section-head .button{min-height:44px}.status-row p{min-width:0;flex-basis:100%}}
   </style>
 </head>
 <body>
@@ -17,23 +19,32 @@
     <h1>問題回饋</h1>
     <p class="muted">登入會員可以提交意見與詳細內容，管理員會在後台查看。</p>
 
+    <section id="memberLoadState" class="status status-row" role="status" aria-live="polite">
+      <p id="memberLoadMessage" data-no-translate>正在確認登入狀態…</p>
+      <button id="retryMember" class="button hidden" type="button" data-no-translate>重試</button>
+    </section>
+
     <section id="signedOut" class="hidden">
       <p class="status">請先回到會員首頁登入，再提交回饋。</p>
       <div class="actions"><a class="button primary" href="index.html">回會員首頁</a></div>
     </section>
 
     <form id="feedbackForm" class="hidden">
-      <p id="memberLabel" class="muted"></p>
+      <p id="memberLabel" class="muted" data-no-translate></p>
       <label>意見
         <input name="opinion" maxlength="80" placeholder="例如：操作建議、錯誤回報" required>
       </label>
       <label>內容
         <textarea name="content" maxlength="1200" placeholder="請描述你遇到的問題或建議。" required></textarea>
       </label>
-      <p id="feedbackStatus" class="status hidden" role="status"></p>
-      <div class="actions"><button class="button primary" type="submit">送出回饋</button></div>
+      <p id="feedbackStatus" class="status hidden" role="status" aria-live="polite" data-no-translate></p>
+      <div class="actions"><button class="button primary" type="submit" data-no-translate>送出回饋</button></div>
     </form>
-    <section id="myFeedbackSection" class="hidden"><h2>我的回饋</h2><div id="myFeedbackList" class="feedback-list"></div></section>
+    <section id="myFeedbackSection" class="hidden" aria-labelledby="feedbackListTitle">
+      <div class="section-head"><h2 id="feedbackListTitle">我的回饋</h2><button id="refreshFeedback" class="button" type="button" data-no-translate>重新載入</button></div>
+      <p id="feedbackListStatus" class="status hidden" role="status" aria-live="polite" data-no-translate></p>
+      <div id="myFeedbackList" class="feedback-list"></div>
+    </section>
   </main>
 
   <script src="i18n-ui-1.js"></script><script src="i18n-ui-2.js"></script><script src="i18n-ui-3.js"></script><script src="i18n-ui-4.js"></script>
@@ -44,51 +55,113 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION="0.17.0";
+    const APP_VERSION="0.20.0";
     const config={apiKey:"AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",authDomain:"lockspace-19edc.firebaseapp.com",projectId:"lockspace-19edc",storageBucket:"lockspace-19edc.firebasestorage.app",messagingSenderId:"726438557640",appId:"1:726438557640:web:d0e51ec0280cd1066e32fd"};
     const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
     const form=document.getElementById("feedbackForm"),signedOut=document.getElementById("signedOut"),statusBox=document.getElementById("feedbackStatus");
-    let member=null;
+    const memberState=document.getElementById("memberLoadState"),memberMessage=document.getElementById("memberLoadMessage"),retryMember=document.getElementById("retryMember");
+    const feedbackSection=document.getElementById("myFeedbackSection"),feedbackList=document.getElementById("myFeedbackList"),listStatus=document.getElementById("feedbackListStatus"),refreshFeedback=document.getElementById("refreshFeedback");
+    const submitButton=form.querySelector('button[type="submit"]');
+    const NEW_COPY={
+      "重試":{en:"Retry","zh-Hans":"重试"},
+      "重新載入":{en:"Reload","zh-Hans":"重新加载"},
+      "正在讀取會員資料…":{en:"Loading your membership…","zh-Hans":"正在读取会员资料…"},
+      "無法讀取會員資料，請檢查網路後再試。":{en:"Could not load your membership. Check your connection and retry.","zh-Hans":"无法读取会员资料，请检查网络后重试。"},
+      "正在讀取回饋列表…":{en:"Loading your feedback…","zh-Hans":"正在读取反馈列表…"},
+      "無法更新回饋列表，請重新載入。":{en:"Could not refresh your feedback list. Reload the list to try again.","zh-Hans":"无法更新反馈列表，请重新加载。"},
+      "請填寫意見與內容，不能只有空白。":{en:"Enter a subject and message; spaces alone are not enough.","zh-Hans":"请填写意见与内容，不能只有空白。"},
+      "正在送出回饋…":{en:"Sending feedback…","zh-Hans":"正在发送反馈…"}
+    };
+    let member=null,lastAuthUser=null,formOwnerUid=null,memberRevision=0,listRevision=0,listLoading=false,submitting=false;
 
-    onAuthStateChanged(auth,async user=>{
-      form.classList.add("hidden");
-      if(!user){signedOut.classList.remove("hidden");return}
+    function copy(source){
+      const language=window.LockspaceI18n?.language()||"zh-Hant";
+      if(language==="zh-Hant")return source;
+      const translated=window.LockspaceI18n?.translate(source,language);
+      if(translated&&translated!==source)return translated;
+      return NEW_COPY[source]?.[language]||NEW_COPY[source]?.en||window.LockspaceI18n?.translate(source,"en")||source;
+    }
+    function text(element,source){element.dataset.feedbackCopy=source;element.textContent=copy(source)}
+    function notice(element,source,error=false){text(element,source);element.classList.toggle("error",error);element.classList.remove("hidden")}
+    function syncCopy(){document.querySelectorAll("[data-feedback-copy]").forEach(element=>{element.textContent=copy(element.dataset.feedbackCopy)});renderMemberLabel()}
+    function renderMemberLabel(){if(member)document.getElementById("memberLabel").textContent=`${member.profile?.displayName||member.username||copy("會員")} · ${copy("已登入")}`}
+    function withReadTimeout(promise){
+      let timer;
+      return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error("read_timeout")),15000)})]).finally(()=>clearTimeout(timer));
+    }
+    text(retryMember,"重試");text(refreshFeedback,"重新載入");text(submitButton,"送出回饋");
+    document.addEventListener("change",event=>{if(event.target.closest("[data-global-language]"))syncCopy()});
+    retryMember.addEventListener("click",()=>loadMember(lastAuthUser));
+    refreshFeedback.addEventListener("click",()=>loadMyFeedback());
+    onAuthStateChanged(auth,user=>{lastAuthUser=user;void loadMember(user)});
+
+    async function loadMember(user){
+      if(formOwnerUid&&formOwnerUid!==user?.uid)form.reset();
+      formOwnerUid=user?.uid||null;
+      const revision=++memberRevision;
+      ++listRevision;listLoading=false;member=null;
+      form.classList.add("hidden");signedOut.classList.add("hidden");feedbackSection.classList.add("hidden");feedbackList.innerHTML="";
+      statusBox.classList.add("hidden");retryMember.classList.add("hidden");retryMember.disabled=true;refreshFeedback.disabled=false;
+      memberState.classList.remove("hidden","error");memberState.setAttribute("aria-busy","true");text(memberMessage,"正在讀取會員資料…");
+      if(!user){memberState.classList.add("hidden");memberState.setAttribute("aria-busy","false");signedOut.classList.remove("hidden");return}
       try{
-        const snapshot=await getDoc(doc(db,"members",user.uid));
-        if(!snapshot.exists()||snapshot.data().deleted===true){signedOut.classList.remove("hidden");return}
+        const snapshot=await withReadTimeout(getDoc(doc(db,"members",user.uid)));
+        if(revision!==memberRevision)return;
+        if(!snapshot.exists()||snapshot.data().deleted===true){signedOut.classList.remove("hidden");memberState.classList.add("hidden");return}
         member={uid:user.uid,...snapshot.data()};
-        document.getElementById("memberLabel").textContent=`${member.profile?.displayName||member.username||"會員"} · 已登入`;
-        signedOut.classList.add("hidden");form.classList.remove("hidden");
-        await loadMyFeedback();
+        renderMemberLabel();
+        memberState.classList.add("hidden");form.classList.remove("hidden");
       }catch{
-        signedOut.classList.remove("hidden");
-        signedOut.querySelector(".status").textContent="無法讀取會員資料，請檢查網路後再試。";
+        if(revision!==memberRevision)return;
+        memberState.classList.add("error");text(memberMessage,"無法讀取會員資料，請檢查網路後再試。");retryMember.classList.remove("hidden");
+      }finally{
+        if(revision===memberRevision){memberState.setAttribute("aria-busy","false");retryMember.disabled=false}
       }
-    });
+      if(member&&revision===memberRevision)await loadMyFeedback();
+    }
 
     form.addEventListener("submit",async event=>{
       event.preventDefault();
-      if(!member)return;
+      if(!member||submitting)return;
       const data=Object.fromEntries(new FormData(form).entries());
       const opinion=String(data.opinion||"").trim(),content=String(data.content||"").trim();
-      if(!opinion||!content)return;
-      const button=form.querySelector('button[type="submit"]');
-      button.disabled=true;statusBox.classList.add("hidden");statusBox.classList.remove("error");
+      if(!opinion||!content){
+        notice(statusBox,"請填寫意見與內容，不能只有空白。",true);
+        form.querySelector(!opinion?'[name="opinion"]':'[name="content"]').focus();return;
+      }
+      const writer=member,fields=[...form.querySelectorAll("input,textarea")];
+      submitting=true;submitButton.disabled=true;form.setAttribute("aria-busy","true");fields.forEach(field=>{field.readOnly=true});
+      text(submitButton,"正在送出回饋…");notice(statusBox,"正在送出回饋…");
+      let saved=false;
       try{
         const ref=doc(collection(db,"feedback"));
-        await setDoc(ref,{userId:member.uid,username:member.username||"",displayName:member.profile?.displayName||member.username||"會員",opinion,content,status:"open",appVersion:APP_VERSION,createdAt:serverTimestamp(),createdAtIso:new Date().toISOString()});
-        form.reset();statusBox.textContent="已收到你的回饋，管理員回覆後會顯示在首頁通知。";statusBox.classList.remove("hidden");await loadMyFeedback();
+        await setDoc(ref,{userId:writer.uid,username:writer.username||"",displayName:writer.profile?.displayName||writer.username||"會員",opinion,content,status:"open",appVersion:APP_VERSION,createdAt:serverTimestamp(),createdAtIso:new Date().toISOString()});
+        saved=true;
+        if(member?.uid===writer.uid){form.reset();notice(statusBox,"已收到你的回饋，管理員回覆後會顯示在首頁通知。")}
       }catch{
-        statusBox.textContent="回饋送出失敗，請稍後再試。";statusBox.classList.add("error");statusBox.classList.remove("hidden");
-      }finally{button.disabled=false}
+        if(member?.uid===writer.uid)notice(statusBox,"回饋送出失敗，請稍後再試。",true);
+      }finally{
+        submitting=false;submitButton.disabled=false;form.setAttribute("aria-busy","false");fields.forEach(field=>{field.readOnly=false});text(submitButton,"送出回饋");
+      }
+      // A refresh failure must not turn an acknowledged write into a failed submission.
+      if(saved&&member?.uid===writer.uid)await loadMyFeedback();
     });
 
     async function loadMyFeedback(){
-      const snapshot=await getDocs(query(collection(db,"feedback"),where("userId","==",member.uid)));
-      const items=snapshot.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>String(b.createdAtIso||"").localeCompare(String(a.createdAtIso||"")));
-      const section=document.getElementById("myFeedbackSection"),list=document.getElementById("myFeedbackList");
-      section.classList.toggle("hidden",items.length===0);
-      list.innerHTML=items.map(item=>`<article class="feedback-item"><strong data-no-translate>${esc(item.opinion||"問題回饋")}</strong><p data-no-translate>${esc(item.content||"")}</p><span class="muted">${item.adminReply?"管理員已回覆":"等待回覆"}</span>${item.adminReply?`<div class="reply"><strong>管理員回覆</strong><p data-no-translate>${esc(item.adminReply)}</p></div>`:""}</article>`).join("");
+      if(!member||listLoading)return;
+      const uid=member.uid,revision=++listRevision;
+      listLoading=true;refreshFeedback.disabled=true;feedbackSection.classList.remove("hidden");feedbackList.setAttribute("aria-busy","true");notice(listStatus,"正在讀取回饋列表…");
+      try{
+        const snapshot=await withReadTimeout(getDocs(query(collection(db,"feedback"),where("userId","==",uid))));
+        if(revision!==listRevision||member?.uid!==uid)return;
+        const items=snapshot.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>String(b.createdAtIso||"").localeCompare(String(a.createdAtIso||"")));
+        feedbackList.innerHTML=items.map(item=>`<article class="feedback-item"><strong data-no-translate>${esc(item.opinion||"問題回饋")}</strong><p data-no-translate>${esc(item.content||"")}</p><span class="muted">${item.adminReply?"管理員已回覆":"等待回覆"}</span>${item.adminReply?`<div class="reply"><strong>管理員回覆</strong><p data-no-translate>${esc(item.adminReply)}</p></div>`:""}</article>`).join("");
+        if(items.length)listStatus.classList.add("hidden");else notice(listStatus,"尚無回饋");
+      }catch{
+        if(revision===listRevision&&member?.uid===uid)notice(listStatus,"無法更新回饋列表，請重新載入。",true);
+      }finally{
+        if(revision===listRevision){listLoading=false;refreshFeedback.disabled=false;feedbackList.setAttribute("aria-busy","false")}
+      }
     }
 
     function esc(value){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[char])}

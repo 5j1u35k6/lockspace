@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.19.0">
+  <meta name="application-version" content="0.20.0">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員社群：每日任務、會員驗證與創意投稿。了解參與方式，建立自己的會員帳號。僅限 18+，自願參與。">
   <style>
@@ -283,7 +283,7 @@
       .option-menu { grid-template-columns: 1fr; }
     }
   </style>
-  <link rel="stylesheet" href="welcome.css?v=0.19.0">
+  <link rel="stylesheet" href="welcome.css?v=0.20.0">
 </head>
 <body>
   <button id="authLanguageButton" class="language-button auth-language-button" type="button" aria-label="選擇語言" title="選擇語言"><span class="globe-icon" aria-hidden="true"></span></button>
@@ -367,7 +367,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.19.0</p>
+      <p class="version-stamp">Lockspace v0.20.0</p>
     </section>
   </main>
 
@@ -557,8 +557,9 @@
       <div class="callout warning">標示公開的資料會顯示給已登入會員。</div>
       <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
+      <p id="profileError" class="error hidden" role="alert" tabindex="-1"></p>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.19.0</p>
+      <p class="version-stamp">Lockspace v0.20.0</p>
     </form>
   </main>
 
@@ -586,11 +587,13 @@
             <h2>大家的驗證紀錄</h2>
             <p class="muted">包含你的提交，最新紀錄優先。</p>
           </div>
+          <button id="refreshFeedButton" class="button secondary feed-refresh" type="button" data-no-translate>↻</button>
         </div>
-        <div id="feed"></div>
+        <p id="feedStatus" class="feed-status hidden" role="status" aria-live="polite" data-no-translate></p>
+        <div id="feed" aria-busy="false"></div>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.19.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.20.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -614,7 +617,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.19.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.20.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -863,8 +866,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.19.0";
+    const APP_VERSION = "0.20.0";
     const RELEASE_NOTES = [
+      { version: "0.20.0", date: "2026-10-30", changes: ["後台新增會員搜尋、查驗狀態篩選與手機卡片介面。", "會員紀錄與管理區塊新增載入狀態、錯誤提示與重試。", "回饋送出與列表更新分開處理；註冊失敗保留資料並可繼續完成。"] },
       { version: "0.19.0", date: "2026-10-30", changes: ["繁體中文登入入口新增平台介紹、註冊捷徑與常見問題。", "手機優先呈現會員登入與註冊表單，並加入官方 X 入口。"] },
       { version: "0.18.0", date: "2026-09-26", changes: ["語言選擇列改為頁面內工具列，桌面與手機皆不再遮住操作按鈕。", "參考中華航空國際網站的語言選擇，新增馬來文、德文、荷蘭文、義大利文與法文。", "新增語言已涵蓋首頁、任務、通知、回饋、後台、隱私權政策與使用條款。"] },
       { version: "0.17.2", date: "2026-09-26", changes: ["修正版本更新通知在非中文介面仍顯示繁體中文。", "版本紀錄改為依目前語言逐條取得譯文，並在缺漏時顯示本地化提示。", "補齊 v0.17.1 版本說明的九種語言翻譯。"] },
@@ -906,6 +910,8 @@
     const state = {
       member: null,
       pendingCredentials: null,
+      registrationSaving: false,
+      registrationDraftUid: null,
       authNotice: "",
       previewUrl: "",
       posts: [],
@@ -1158,6 +1164,7 @@
     document.getElementById("logoutButton").addEventListener("click", logout);
     document.getElementById("editProfileButton").addEventListener("click", editProfile);
     document.getElementById("openTaskButton").addEventListener("click", openTask);
+    document.getElementById("refreshFeedButton").addEventListener("click", () => void loadSubmissions());
     document.getElementById("taskIdeaButton").addEventListener("click", () => { document.getElementById("taskIdeaMessage").textContent = ""; document.getElementById("taskIdeaDialog").showModal(); });
     document.getElementById("profileBackButton").addEventListener("click", renderDashboard);
     document.getElementById("taskBackButton").addEventListener("click", renderDashboard);
@@ -1211,6 +1218,8 @@
 
     profileForm.addEventListener("submit", async event => {
       event.preventDefault();
+      if (state.registrationSaving) return;
+      hideError("profileError");
       const profileFormData = new FormData(profileForm);
       const profile = Object.fromEntries(profileFormData.entries());
       const taskProps = profileFormData.getAll("taskProps").map(value => String(value));
@@ -1234,23 +1243,36 @@
       }
       const submitButton = profileForm.querySelector('button[type="submit"]');
       submitButton.disabled = true;
+      state.registrationSaving = true;
+      profileForm.setAttribute("aria-busy", "true");
       const pendingCredentials = state.pendingCredentials;
       const account = pendingCredentials?.account || state.member?.account || auth.currentUser?.email?.split("@")[0];
       try {
+        // Check and process the selected file before creating an Auth account.
+        const proofFile = profileForm.elements.birthProof.files[0];
+        if ((!state.member && !proofFile) || (proofFile && (proofFile.size > 8 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(proofFile.type)))) {
+          throw new Error("invalid-proof");
+        }
+        let proofDataUrl = null;
+        if (proofFile) {
+          try {
+            proofDataUrl = await compressProof(proofFile);
+          } catch {
+            throw new Error("invalid-proof");
+          }
+        }
         let user = auth.currentUser;
         if (pendingCredentials) {
           const credential = await createUserWithEmailAndPassword(auth, accountEmail(pendingCredentials.account), pendingCredentials.password);
           user = credential.user;
+          // A later Firestore failure must resume this account, not create it again.
+          state.pendingCredentials = null;
         }
         if (!user) throw new Error("not-authenticated");
-        const proofFile = profileForm.elements.birthProof.files[0];
-        if (!state.member && (!proofFile || proofFile.size > 8 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(proofFile.type))) {
-          throw new Error("invalid-proof");
-        }
+        if (!state.member) state.registrationDraftUid = user.uid;
         let proofReady = Boolean(state.member?.verification?.proofReady);
         if (proofFile) {
-          const dataUrl = await compressProof(proofFile);
-          await setDoc(doc(db, "birthProofs", user.uid), { dataUrl, updatedAt: serverTimestamp() });
+          await setDoc(doc(db, "birthProofs", user.uid), { dataUrl: proofDataUrl, updatedAt: serverTimestamp() });
           proofReady = true;
         }
         delete profile.birthProof;
@@ -1271,13 +1293,24 @@
         }
         state.member = { uid: user.uid, account, profile, taskProps, verification: proofFile ? { status: "pending", proofReady } : state.member?.verification };
         state.pendingCredentials = null;
+        state.registrationDraftUid = null;
         renderDashboard();
       } catch (error) {
-        showOnly(authPage);
-        setAuthMode("signup");
         const message = error?.code === "auth/email-already-in-use" ? "這個帳號已註冊。" : error?.message === "invalid-proof" ? "請上傳 8 MB 以內的 JPG、PNG 或 WebP 圖片。" : "註冊失敗，請稍後再試。";
-        showError("signupError", message);
+        if (error?.code === "auth/email-already-in-use") {
+          // No new account was created; let the visitor correct account details.
+          showOnly(authPage);
+          setAuthMode("signup");
+          showError("signupError", message);
+        } else {
+          // Keep entered profile fields and the selected file available for retry.
+          showOnly(registrationPage);
+          showError("profileError", message);
+          document.getElementById("profileError").focus();
+        }
       } finally {
+        state.registrationSaving = false;
+        profileForm.removeAttribute("aria-busy");
         submitButton.disabled = false;
       }
     });
@@ -1471,6 +1504,7 @@
     }
 
     function setProfileMode(editing) {
+      hideError("profileError");
       document.getElementById("profileBackButton").classList.toggle("hidden", !editing);
       document.getElementById("profilePageTitle").textContent = editing ? "修改會員資料" : "完成會員註冊資料";
       document.getElementById("profilePageDescription").textContent = editing ? "更新你的會員檔案。" : "建立你的會員檔案。";
@@ -1747,16 +1781,69 @@
       }
     }
 
+    let feedLoadRevision = 0;
+    const FEED_TEXT = {
+      "zh-Hant": { refresh: "重新整理", loading: "正在載入驗證紀錄…", failed: "暫時無法載入驗證紀錄，請檢查網路後重新整理。", saved: "目前保留上次載入的紀錄。" },
+      "zh-Hans": { refresh: "刷新", loading: "正在加载验证记录…", failed: "暂时无法加载验证记录，请检查网络后刷新。", saved: "目前保留上次加载的记录。" },
+      en: { refresh: "Refresh", loading: "Loading verification records…", failed: "Records could not be loaded. Check your connection and refresh.", saved: "Previously loaded records are still shown." },
+      ja: { refresh: "再読み込み", loading: "認証記録を読み込み中…", failed: "記録を読み込めません。接続を確認して再読み込みしてください。", saved: "前回読み込んだ記録を表示しています。" },
+      ko: { refresh: "새로고침", loading: "인증 기록을 불러오는 중…", failed: "기록을 불러올 수 없습니다. 연결을 확인하고 새로고침하세요.", saved: "이전에 불러온 기록을 표시합니다." },
+      th: { refresh: "รีเฟรช", loading: "กำลังโหลดบันทึกการยืนยัน…", failed: "โหลดบันทึกไม่ได้ โปรดตรวจสอบการเชื่อมต่อแล้วรีเฟรช", saved: "ยังแสดงบันทึกที่โหลดไว้ก่อนหน้า" },
+      vi: { refresh: "Tải lại", loading: "Đang tải hồ sơ xác minh…", failed: "Không thể tải hồ sơ. Kiểm tra kết nối rồi tải lại.", saved: "Vẫn hiển thị hồ sơ đã tải trước đó." },
+      id: { refresh: "Muat ulang", loading: "Memuat catatan verifikasi…", failed: "Catatan gagal dimuat. Periksa koneksi lalu muat ulang.", saved: "Catatan yang dimuat sebelumnya tetap ditampilkan." },
+      de: { refresh: "Aktualisieren", loading: "Verifizierungen werden geladen…", failed: "Datensätze konnten nicht geladen werden. Verbindung prüfen und aktualisieren.", saved: "Zuvor geladene Datensätze bleiben sichtbar." },
+      fr: { refresh: "Actualiser", loading: "Chargement des vérifications…", failed: "Impossible de charger les données. Vérifiez la connexion et actualisez.", saved: "Les données précédemment chargées restent affichées." }
+    };
+    let feedStatusKind = "";
+    function renderFeedStatus() {
+      const language = document.getElementById("languageSelect")?.value || "zh-Hant";
+      const text = FEED_TEXT[language] || FEED_TEXT.en;
+      const button = document.getElementById("refreshFeedButton");
+      button.textContent = `↻ ${text.refresh}`;
+      button.setAttribute("aria-label", text.refresh);
+      const status = document.getElementById("feedStatus");
+      status.classList.toggle("hidden", !feedStatusKind);
+      status.classList.toggle("feed-status-error", feedStatusKind === "failed");
+      status.textContent = feedStatusKind === "loading" ? text.loading : feedStatusKind === "failed" ? `${text.failed}${state.posts.length ? ` ${text.saved}` : ""}` : "";
+    }
+    document.getElementById("languageSelect").addEventListener("change", renderFeedStatus);
+    renderFeedStatus();
+
     async function loadSubmissions() {
-      const [snapshot, reviewSnapshot, memberSnapshot] = await Promise.all([
-        getDocs(collection(db, "submissions")),
-        getDocs(collection(db, "reviews")),
-        getDocs(collection(db, "members"))
-      ]);
-      state.posts = snapshot.docs.map(item => ({ id: item.id, ...item.data() })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-      state.reviews = reviewSnapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-      state.members = new Map(memberSnapshot.docs.filter(item => item.data().deleted !== true).map(item => [item.id, { id: item.id, ...item.data() }]));
-      renderFeed();
+      const uid = state.member?.uid;
+      if (!uid) return false;
+      const revision = ++feedLoadRevision;
+      const feed = document.getElementById("feed");
+      const button = document.getElementById("refreshFeedButton");
+      feedStatusKind = "loading";
+      feed.setAttribute("aria-busy", "true");
+      button.disabled = true;
+      renderFeedStatus();
+      try {
+        const [snapshot, reviewSnapshot, memberSnapshot] = await withTimeout(Promise.all([
+          getDocs(collection(db, "submissions")),
+          getDocs(collection(db, "reviews")),
+          getDocs(collection(db, "members"))
+        ]), 12000, "feed-load-timeout");
+        if (revision !== feedLoadRevision || state.member?.uid !== uid) return false;
+        state.posts = snapshot.docs.map(item => ({ id: item.id, ...item.data() })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+        state.reviews = reviewSnapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+        state.members = new Map(memberSnapshot.docs.filter(item => item.data().deleted !== true).map(item => [item.id, { id: item.id, ...item.data() }]));
+        renderFeed();
+        feedStatusKind = "";
+        return true;
+      } catch (error) {
+        if (revision !== feedLoadRevision || state.member?.uid !== uid) return false;
+        console.warn("Verification records could not be loaded.", error);
+        feedStatusKind = "failed";
+        return false;
+      } finally {
+        if (revision === feedLoadRevision) {
+          feed.setAttribute("aria-busy", "false");
+          button.disabled = false;
+          renderFeedStatus();
+        }
+      }
     }
 
     async function loadFeedbackNotifications() {
@@ -1968,10 +2055,11 @@
     }
 
     function withTimeout(promise, timeoutMs, message) {
+      let timer;
       return Promise.race([
         promise,
-        new Promise((_, reject) => setTimeout(() => reject(new Error(message)), timeoutMs))
-      ]);
+        new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(message)), timeoutMs); })
+      ]).finally(() => clearTimeout(timer));
     }
 
     async function loadMemberTaskProps(uid) {
@@ -1992,9 +2080,22 @@
     let authRevision = 0;
     onAuthStateChanged(auth, async user => {
       const revision = ++authRevision;
+      // Auth can notify before createUser resolves or after a failed profile write.
+      // Neither callback should replace an in-progress registration draft.
+      if (user && (state.registrationSaving || state.registrationDraftUid === user.uid)) return;
       showOnly(bootPage);
       if (!user) {
         state.member = null;
+        state.registrationDraftUid = null;
+        ++feedLoadRevision;
+        state.posts = [];
+        state.reviews = [];
+        state.members = new Map();
+        document.getElementById("feed").innerHTML = "";
+        document.getElementById("feed").setAttribute("aria-busy", "false");
+        document.getElementById("refreshFeedButton").disabled = false;
+        feedStatusKind = "";
+        renderFeedStatus();
         showLoginPage();
         if (state.authNotice) {
           showError("loginError", state.authNotice);

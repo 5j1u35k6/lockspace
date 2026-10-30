@@ -135,3 +135,13 @@ html:not([lang="zh-Hant"]) #authPage > .auth-card { grid-row: auto; margin-top: 
   .welcome-features h2 { font-size: 14px; }
   .welcome-features p, .welcome-journey, .welcome-faq summary { font-size: 13px; }
 }
+
+.feed-refresh { flex: none; min-height: 44px; }
+.feed-status { margin: 0 0 18px; padding: 14px 16px; border: 1px solid #ffffff18; border-radius: 8px; color: var(--muted); font-size: 14px; line-height: 1.7; background: var(--panel); }
+.feed-status-error { border-color: #efd59e45; color: var(--amber); }
+.feed-refresh:disabled { opacity: .55; cursor: wait; }
+@media (max-width: 700px) {
+  .feed-heading { flex-direction: row; align-items: center; }
+  .feed-refresh { padding-inline: 11px; font-size: 13px; }
+  .feed-heading h2 { font-size: 17px; }
+}

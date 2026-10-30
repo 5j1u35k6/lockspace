@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.20.0 - 2026-10-30
+
+- Added member search, verification-status filters, responsive table cards, and per-section reload controls to the administrator interface.
+- Added visible progress, action locks, and recoverable error messages for verification-photo reads, report handling, and proposal review.
+- Added member-feed loading/error/retry states, retained existing records after failed refreshes, and rejected stale responses.
+- Separated feedback write acknowledgments from list refreshes; retained drafts on failed writes and surfaced whitespace validation.
+- Validated proof images before account creation and preserved registration drafts when later profile writes fail.
+
 ## 0.19.0 - 2026-10-30
 
 - Added a Traditional Chinese welcome introduction beside the existing member access forms, with an official X link and registration shortcut.
