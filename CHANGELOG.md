@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.21.1 - 2026-10-31
+
+- Add explicit member verification decisions to the administrator proof viewer: approve, request resubmission, or return to pending.
+- Bind the viewer to the member and administrator, clear private photo context on close/sign-out, and isolate task photos from verification actions.
+- Use a Firestore transaction to reject changed member/photo/status snapshots and update only the verification status, retaining proof metadata.
+- Lock duplicate actions, refresh member counts and filters after acknowledged writes, and distinguish a saved decision from a failed list refresh.
+
 ## 0.21.0 - 2026-10-31
 
 - Page community submissions with a 10-record Firestore cursor and query only reviews for the loaded page. Fetch member profiles on demand and defer image decoding.

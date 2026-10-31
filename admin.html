@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.21.0">
+  <meta name="application-version" content="0.21.1">
   <title>lockspace. 後台管理</title>
   <style>
     :root{color-scheme:dark;--bg:#090a09;--panel:#121412;--line:#30352f;--text:#f5f6f3;--muted:#aeb4ab;--lime:#b6ff70;--red:#ff91a6;--amber:#efd59e}
@@ -11,6 +11,7 @@
     .button:disabled{opacity:.55;cursor:wait}.button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--lime);outline-offset:3px}.member-toolbar{display:flex;align-items:flex-end;gap:12px;margin:24px 0 12px}.member-toolbar label{margin:0}.member-search{flex:1;min-width:0}.member-filter{width:190px}.member-toolbar .button{flex:none;min-height:44px}.result-count{margin:0 0 12px;font-size:12px}.section-notice{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}.section-notice p{margin:0;color:var(--muted);font-size:13px}.section-notice.failed p{color:var(--red)}.section-notice .button{min-height:36px;padding:6px 12px;font-size:12px}.action-status{padding:10px 12px;border:1px solid #b6ff7030;border-radius:6px;color:#cae6b7;background:#b6ff7008;font-size:13px}.inline-action-message{max-width:290px;white-space:normal;font-size:12px;line-height:1.7;margin:9px 0 0;color:var(--muted)}.inline-action-message.failed{color:var(--red)}.cell-label{display:none}.unknown{color:var(--muted);background:#ffffff0a}.row-actions{flex-wrap:wrap;white-space:normal}td{overflow-wrap:anywhere}.table-wrap table caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
     @media(max-width:700px){.shell{padding:16px}.top{align-items:flex-start;flex-direction:column}.actions{width:100%;flex-wrap:wrap}.top .actions>.button{flex:1}.stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-block:17px}.stat{padding:13px 10px}.stat .muted{font-size:12px}.stat strong{font-size:25px}.member-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}.member-search{grid-column:1/-1}.member-filter{width:auto}.member-toolbar label{font-size:12px}.member-toolbar .button{font-size:12px}.table-wrap{overflow:visible;border:0;background:transparent;border-radius:0}table{display:block;min-width:0;width:100%}thead{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap}tbody{display:block}tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid #ffffff1b;border-radius:8px;background:var(--panel);margin-bottom:12px;padding:3px 0}td{display:block;min-width:0;border:0;padding:10px 13px;font-size:14px}td:last-child{grid-column:1/-1;border-top:1px solid #ffffff0c;margin-top:2px;padding-top:12px}.cell-label{display:block;margin-bottom:5px;color:var(--muted);font-size:11px;font-weight:500;line-height:1.5}#taskRows td:nth-child(3),#feedbackRows td:nth-child(3),#ideaRows td:first-child,#ideaRows td:nth-child(2){grid-column:1/-1}.row-actions{gap:7px}.row-actions .button{min-height:41px;padding:8px 11px;font-size:12px}.feedback-copy{max-width:none}.empty{padding:27px 16px;border:1px dashed #ffffff21;border-radius:8px}.section-notice{padding-top:4px}.brand{font-size:21px}}
     .work-heading{margin:25px 0 11px;font-size:15px}.work-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:26px}.work-item{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;padding:16px;border:1px solid #b6ff7028;border-radius:8px;background:#b6ff7006;color:var(--text);text-align:left}.work-item:hover:not(:disabled){background:#b6ff7010;border-color:#b6ff7070}.work-item:disabled{cursor:default;opacity:.7}.work-item>span{color:#c6d4bc;font-size:13px}.work-item strong{font-size:28px;line-height:1.2}.work-item small{color:var(--muted);font-size:12px;line-height:1.6;min-height:19px}.queue-section{margin-top:32px;scroll-margin-top:20px}.queue-controls{display:grid;grid-template-columns:minmax(0,1fr) 180px auto;align-items:end;gap:12px;margin:20px 0 10px}.queue-controls label{margin:0;font-size:13px}.queue-controls .button{min-height:44px;font-size:13px}.queue-result{font-size:12px;margin:0 0 11px}.reply-hint{color:var(--muted);font-size:13px;line-height:1.8;margin:10px 0 0}.reply-actions .button:disabled{cursor:default}.reply-body .error{font-size:13px}button.work-item:focus-visible{outline:2px solid var(--lime);outline-offset:3px}@media(max-width:700px){.work-summary{gap:8px;margin-bottom:23px}.work-item{padding:13px 10px;gap:6px}.work-item>span{font-size:11px}.work-item strong{font-size:24px}.work-item small{font-size:10px}.queue-controls{grid-template-columns:minmax(0,1fr) auto;gap:11px}.queue-controls .queue-search{grid-column:1/-1}.queue-controls label,.queue-controls .button{font-size:12px}.queue-section{margin-top:29px}.work-heading{font-size:14px}}
+    #proofDialog{max-height:90dvh;overflow:auto}#proofDialog .proof-head{position:sticky;top:0;z-index:1;background:var(--panel);gap:12px}#proofDialog .proof-head strong{min-width:0;overflow-wrap:anywhere}#proofDialog .proof-head .button{flex:none}.proof-review{padding:16px 16px 0}.proof-review>strong{display:block;overflow-wrap:anywhere}.proof-review p{margin:9px 0}.proof-review-actions{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.proof-review-actions .button{min-height:44px}#proofDialog .proof-body img{max-height:54vh}#proofDialog .proof-body img:not([src]){display:none}@media(max-width:480px){.proof-review-actions{display:grid;grid-template-columns:1fr 1fr}.proof-review-actions .button{padding:10px 7px;font-size:13px}.proof-review{padding:14px 14px 0}#proofDialog .proof-body{padding:14px}}
   </style>
 </head>
 <body>
@@ -22,11 +23,11 @@
       <p id="loginError" class="error hidden"></p>
       <button class="button primary" type="submit">登入</button>
     </form>
-    <p class="version-stamp">Lockspace Admin v0.21.0</p>
+    <p class="version-stamp">Lockspace Admin v0.21.1</p>
   </main>
 
   <main id="dashboard" class="shell hidden">
-    <header class="top"><div><div class="brand">lockspace<b>.</b> 管理</div><span class="version-stamp">v0.21.0</span></div><div class="actions"><button id="refreshAll" class="button" type="button" data-admin-copy="refresh" data-no-translate>重新整理</button><a class="button" href="index.html">會員頁</a><button id="logout" class="button" type="button">登出</button></div></header>
+    <header class="top"><div><div class="brand">lockspace<b>.</b> 管理</div><span class="version-stamp">v0.21.1</span></div><div class="actions"><button id="refreshAll" class="button" type="button" data-admin-copy="refresh" data-no-translate>重新整理</button><a class="button" href="index.html">會員頁</a><button id="logout" class="button" type="button">登出</button></div></header>
     <p id="dashboardError" class="error hidden" role="alert" data-no-translate></p>
     <p id="actionError" class="error hidden" role="alert" data-no-translate></p>
     <p id="actionStatus" class="action-status hidden" role="status" data-no-translate></p>
@@ -42,7 +43,14 @@
     <section id="feedbackSection" class="queue-section" aria-labelledby="feedbackTitle"><h2 id="feedbackTitle" tabindex="-1">問題回饋</h2><p class="muted">查看會員從登入後首頁送出的意見與內容。</p><p id="feedbackReplyStatus" class="action-status hidden" role="status" data-no-translate></p><div class="queue-controls"><label class="queue-search"><span data-admin-copy="searchFeedback" data-no-translate>查找會員、意見或回覆</span><input id="feedbackSearch" type="search" autocomplete="off"></label><label><span data-admin-copy="feedbackStatus" data-no-translate>回饋狀態</span><select id="feedbackStatusFilter" data-no-translate><option value="all" data-admin-copy="allStatuses">所有狀態</option><option value="pending" data-admin-copy="feedbackPending">待回覆</option><option value="replied" data-admin-copy="feedbackReplied">已回覆</option><option value="done" data-admin-copy="feedbackDone">已完成</option></select></label><button class="button" type="button" data-clear-queue="feedback" data-admin-copy="clear" data-no-translate>清除篩選</button></div><p id="feedbackResultCount" class="muted queue-result" role="status" data-no-translate>—</p><div id="feedbackLoadNotice" class="section-notice hidden"><p id="feedbackLoadStatus" role="status" data-no-translate></p><button class="button hidden" type="button" data-retry-section="feedback" data-admin-copy="retry" data-no-translate>重試</button></div><div class="table-wrap" style="margin-top:14px"><table><caption>問題回饋</caption><thead><tr><th>會員</th><th>意見</th><th>內容</th><th>時間</th><th>狀態</th><th>操作</th></tr></thead><tbody id="feedbackRows"></tbody></table><div id="feedbackEmpty" class="empty hidden" data-no-translate>尚無回饋</div></div></section>
   </main>
 
-  <dialog id="proofDialog"><div class="proof-head"><strong>生日查驗照片</strong><button id="closeProof" class="button" type="button">關閉</button></div><div class="proof-body"><img id="proofImage" alt="證件生日照片"></div></dialog>
+  <dialog id="proofDialog" aria-labelledby="proofTitle"><div class="proof-head"><strong id="proofTitle">生日查驗照片</strong><button id="closeProof" class="button" type="button">關閉</button></div>
+    <section id="proofMemberReview" class="proof-review hidden" aria-labelledby="proofMemberIdentity">
+      <strong id="proofMemberIdentity" data-no-translate></strong><p id="proofMemberBirthday" class="muted" data-no-translate></p>
+      <p><span data-admin-copy="verificationStatus" data-no-translate>查驗狀態</span>：<span id="proofMemberState" class="status" data-no-translate></span></p>
+      <p class="muted" data-admin-copy="verificationHint" data-no-translate>請核對下方照片與會員填寫資料，再手動選擇查驗結果。</p>
+      <div class="proof-review-actions"><button id="approveMemberVerification" class="button primary" type="button" data-admin-copy="verificationApprove" data-no-translate disabled>通過查驗</button><button id="rejectMemberVerification" class="button danger" type="button" data-admin-copy="verificationReject" data-no-translate disabled>退回補件</button><button id="resetMemberVerification" class="button" type="button" data-admin-copy="verificationReset" data-no-translate disabled>改回待查驗</button><button id="reloadMemberProof" class="button" type="button" data-admin-copy="verificationReload" data-no-translate>重新讀取</button></div>
+      <p id="proofReviewMessage" class="action-status hidden" role="status" aria-live="polite" data-no-translate></p>
+    </section><div class="proof-body"><img id="proofImage" alt="證件生日照片"></div></dialog>
   <dialog id="replyDialog"><form id="replyForm"><div class="proof-head"><strong>回覆會員</strong><button id="closeReply" class="button" type="button">關閉</button></div><div class="reply-body"><label>回覆內容<textarea name="reply" maxlength="1200" required></textarea></label><p id="replyHint" class="reply-hint" role="status" data-no-translate></p><p id="replyError" class="error hidden" role="alert" data-no-translate></p></div><div class="reply-actions"><button class="button primary" type="submit">送出回覆</button></div></form></dialog>
 
   <script src="i18n-ui-1.js"></script><script src="i18n-ui-2.js"></script><script src="i18n-ui-3.js"></script><script src="i18n-ui-4.js"></script>
@@ -51,8 +59,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-    const APP_VERSION="0.21.0";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    const APP_VERSION="0.21.1";
     const config={apiKey:"AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",authDomain:"lockspace-19edc.firebaseapp.com",projectId:"lockspace-19edc",storageBucket:"lockspace-19edc.firebasestorage.app",messagingSenderId:"726438557640",appId:"1:726438557640:web:d0e51ec0280cd1066e32fd"};
     const app=initializeApp(config,"lockspace-admin"),auth=getAuth(app),db=getFirestore(app);await setPersistence(auth,browserSessionPersistence);
     const login=document.getElementById("login"),dashboard=document.getElementById("dashboard"),rows=document.getElementById("memberRows"),taskRows=document.getElementById("taskRows"),ideaRows=document.getElementById("ideaRows"),feedbackRows=document.getElementById("feedbackRows");
@@ -65,6 +73,13 @@
     };
     const QUEUE_COPY = {"zh-Hant":{"workTitle":"管理待辦","pendingReports":"待處理檢舉","relatedTasks":"涉及 {count} 件任務","pendingIdeas":"待審提案","pendingFeedback":"待回覆回饋","notLoaded":"尚未讀取","notUpdated":"未能更新","viewPending":"查看待辦 →","searchTasks":"查找發布者或任務內文","searchIdeas":"查找會員或提案內文","searchFeedback":"查找會員、意見或回覆","taskStatus":"檢舉狀態","ideaStatus":"提案狀態","feedbackStatus":"回饋狀態","taskPending":"待處理","taskAccepted":"已處理","taskNone":"無檢舉","ideaPending":"待審核","feedbackPending":"待回覆","feedbackReplied":"已回覆","feedbackDone":"已完成","records":"顯示 {shown} / {total} 筆","cachedRecords":"資料未更新：顯示 {shown} / {total} 筆","noMatches":"沒有符合條件的紀錄。請調整搜尋或清除篩選。","noTasks":"尚無任務紀錄","noIdeas":"尚無任務提案","noFeedback":"尚無回饋","reportCounts":"{open} 筆待處理 / 共 {total} 筆","replyBlank":"輸入回覆內容後才可送出。","replyUnchanged":"內容尚未變更，不會重複送出或新增通知。","replyChanged":"回覆已修改，送出後會通知會員。","replySaving":"回覆送出中，請稍候…","replySaved":"回覆已送出。","replyRefreshFailed":"回覆已送出，但列表未能更新。請重新整理確認。","replyError":"回覆未能送出。請確認連線後重試，內容已保留。","replyDiscard":"回覆尚未儲存。確定關閉並捨棄修改？"},"zh-Hans":{"workTitle":"管理待办","pendingReports":"待处理举报","relatedTasks":"涉及 {count} 项任务","pendingIdeas":"待审提案","pendingFeedback":"待回复反馈","notLoaded":"尚未读取","notUpdated":"未能更新","viewPending":"查看待办 →","searchTasks":"查找发布者或任务内容","searchIdeas":"查找会员或提案内容","searchFeedback":"查找会员、意见或回复","taskStatus":"举报状态","ideaStatus":"提案状态","feedbackStatus":"反馈状态","taskPending":"待处理","taskAccepted":"已处理","taskNone":"无举报","ideaPending":"待审核","feedbackPending":"待回复","feedbackReplied":"已回复","feedbackDone":"已完成","records":"显示 {shown} / {total} 条","cachedRecords":"数据未更新：显示 {shown} / {total} 条","noMatches":"没有符合条件的记录。请调整搜索或清除筛选。","noTasks":"暂无任务记录","noIdeas":"暂无任务提案","noFeedback":"暂无反馈","reportCounts":"{open} 条待处理 / 共 {total} 条","replyBlank":"输入回复内容后才可发送。","replyUnchanged":"内容尚未更改，不会重复发送或新增通知。","replyChanged":"回复已修改，发送后会通知会员。","replySaving":"回复发送中，请稍候…","replySaved":"回复已发送。","replyRefreshFailed":"回复已发送，但列表未能更新。请刷新确认。","replyError":"回复未能发送。请确认连接后重试，内容已保留。","replyDiscard":"回复尚未保存。确定关闭并放弃修改？"},"en":{"workTitle":"Work queue","pendingReports":"Open reports","relatedTasks":"Across {count} submissions","pendingIdeas":"Pending proposals","pendingFeedback":"Awaiting reply","notLoaded":"Not loaded","notUpdated":"Could not update","viewPending":"View pending →","searchTasks":"Find publisher or task text","searchIdeas":"Find member or proposal text","searchFeedback":"Find member, feedback or reply","taskStatus":"Report status","ideaStatus":"Proposal status","feedbackStatus":"Feedback status","taskPending":"Open reports","taskAccepted":"Handled","taskNone":"No reports","ideaPending":"Pending review","feedbackPending":"Awaiting reply","feedbackReplied":"Replied","feedbackDone":"Completed","records":"Showing {shown} of {total} records","cachedRecords":"Data not refreshed: showing {shown} of {total} records","noMatches":"No matching records. Adjust your search or clear the filters.","noTasks":"No submissions yet","noIdeas":"No proposals yet","noFeedback":"No feedback yet","reportCounts":"{open} open / {total} total reports","replyBlank":"Enter a reply before sending.","replyUnchanged":"The reply has not changed. No duplicate reply or notification will be sent.","replyChanged":"The reply has changed. Sending it will notify the member.","replySaving":"Sending reply. Please wait…","replySaved":"Reply sent.","replyRefreshFailed":"Reply sent, but the list could not update. Refresh to confirm.","replyError":"The reply could not be sent. Check your connection and retry. Your draft is preserved.","replyDiscard":"This reply has unsaved changes. Close and discard them?"}};
     Object.entries(QUEUE_COPY).forEach(([language, copy]) => Object.assign(ADMIN_COPY[language], copy));
+    const VERIFICATION_COPY = {
+      "zh-Hant":{verificationView:"查驗證件",verificationTitle:"會員生日查驗",verificationBirthday:"會員填寫生日：{date}",verificationHint:"請核對下方照片與會員填寫資料，再手動選擇查驗結果。",verificationApprove:"通過查驗",verificationReject:"退回補件",verificationReset:"改回待查驗",verificationReload:"重新讀取",verificationLoading:"正在讀取會員與查驗照片…",verificationReady:"請確認資料後選擇查驗結果。",verificationMissing:"未找到可用的查驗照片，暫時無法通過查驗。可退回補件。",verificationSaving:"正在儲存查驗結果，請稍候…",verificationSaved:"查驗狀態已更新。",verificationRefreshFailed:"查驗狀態已儲存，但列表未能更新。請重新整理確認。",verificationStale:"會員資料、照片或狀態已變更。請按「重新讀取」核對後再操作。",verificationError:"查驗狀態未能更新。請確認連線後重試。",verificationLoadError:"資料未能讀取。請按「重新讀取」再試。",verificationUnavailable:"會員已不存在或已停用，無法更新查驗狀態。"},
+      "zh-Hans":{verificationView:"查验证件",verificationTitle:"会员生日查验",verificationBirthday:"会员填写生日：{date}",verificationHint:"请核对下方照片与会员填写资料，再手动选择查验结果。",verificationApprove:"通过查验",verificationReject:"退回补件",verificationReset:"改回待查验",verificationReload:"重新读取",verificationLoading:"正在读取会员与查验照片…",verificationReady:"请确认资料后选择查验结果。",verificationMissing:"未找到可用的查验照片，暂时无法通过查验。可退回补件。",verificationSaving:"正在保存查验结果，请稍候…",verificationSaved:"查验状态已更新。",verificationRefreshFailed:"查验状态已保存，但列表未能更新。请刷新确认。",verificationStale:"会员资料、照片或状态已更改。请点击「重新读取」核对后再操作。",verificationError:"查验状态未能更新。请确认连接后重试。",verificationLoadError:"资料未能读取。请点击「重新读取」重试。",verificationUnavailable:"会员已不存在或已停用，无法更新查验状态。"},
+      en:{verificationView:"Review ID",verificationTitle:"Member birthday review",verificationBirthday:"Member's entered birthday: {date}",verificationHint:"Compare the photo with the member's details, then choose a review result.",verificationApprove:"Approve verification",verificationReject:"Request resubmission",verificationReset:"Set to pending",verificationReload:"Reload details",verificationLoading:"Loading member and verification photo…",verificationReady:"Check the details before choosing a review result.",verificationMissing:"No usable verification photo was found. Approval is unavailable; you may request resubmission.",verificationSaving:"Saving verification result. Please wait…",verificationSaved:"Verification status updated.",verificationRefreshFailed:"Verification status saved, but the list could not refresh. Refresh to confirm.",verificationStale:"The member's details, photo or status changed. Reload and check them before continuing.",verificationError:"Verification status could not be updated. Check your connection and retry.",verificationLoadError:"Could not load the details. Please reload and retry.",verificationUnavailable:"The member no longer exists or is disabled. Verification cannot be updated."}
+    };
+    Object.entries(VERIFICATION_COPY).forEach(([language, copy]) => Object.assign(ADMIN_COPY[language], copy));
+    const proofViewer = {kind:null, memberId:null, adminUid:null, revision:0, status:"unknown", member:null, proofFingerprint:"", submittedAt:"", birthDate:"", imageReady:false, ready:false, saving:false};
     let allMembers = [], membersLoaded = false, allLoadPromise = null;
     let allTasks = [], allReports = [], allIdeas = [], allFeedback = [];
     const queueLoaded = { tasks:false, ideas:false, feedback:false };
@@ -99,6 +114,7 @@
       if (queueLoaded.feedback) renderFeedback();
       updateWorkSummary();
       if (document.getElementById("replyForm").dataset.feedbackId) updateReplyState();
+      if (proofViewer.kind === "member") updateProofReviewState();
       document.querySelectorAll("table tbody").forEach(enhanceTable);
     }
     function taskReportSummary(taskId, reports) {
@@ -271,12 +287,18 @@
     syncAdminCopy();
     document.getElementById("loginForm").addEventListener("submit",async event=>{event.preventDefault();const data=Object.fromEntries(new FormData(event.target));try{await signInWithEmailAndPassword(auth,accountEmail(data.account),data.password)}catch{showError("帳號、密碼或管理權限不正確。")}});
     document.getElementById("logout").addEventListener("click",()=>signOut(auth));
-    document.getElementById("closeProof").addEventListener("click",()=>document.getElementById("proofDialog").close());
+    document.getElementById("closeProof").addEventListener("click", closeProofViewer);
+    document.getElementById("proofDialog").addEventListener("cancel", event => { event.preventDefault(); closeProofViewer(); });
+    document.getElementById("proofDialog").addEventListener("close", () => { if (!document.getElementById("proofDialog").open) resetProofViewer(false); });
+    document.getElementById("approveMemberVerification").addEventListener("click", () => setMemberVerification("approved"));
+    document.getElementById("rejectMemberVerification").addEventListener("click", () => setMemberVerification("rejected"));
+    document.getElementById("resetMemberVerification").addEventListener("click", () => setMemberVerification("pending"));
+    document.getElementById("reloadMemberProof").addEventListener("click", () => { if (proofViewer.kind === "member") viewProof({id:proofViewer.memberId}); });
     document.getElementById("closeReply").addEventListener("click", closeReplyDraft);
     document.getElementById("replyDialog").addEventListener("cancel", closeReplyDraft);
     document.getElementById("replyForm").elements.reply.addEventListener("input", () => { adminMessage("replyError", ""); updateReplyState(); });
     document.getElementById("replyForm").addEventListener("submit",submitFeedbackReply);
-    onAuthStateChanged(auth,async user=>{if(!user){login.classList.remove("hidden");dashboard.classList.add("hidden");return}try{const admin=await getDoc(doc(db,"admins",user.uid));if(!admin.exists()){showError("這個帳號沒有管理權限。");await signOut(auth);return}login.classList.add("hidden");dashboard.classList.remove("hidden");await loadAll()}catch{await signOut(auth);showError("管理資料載入失敗，請檢查網路後再試。")}});
+    onAuthStateChanged(auth,async user=>{if(!user){resetProofViewer();login.classList.remove("hidden");dashboard.classList.add("hidden");return}if(proofViewer.adminUid && proofViewer.adminUid!==user.uid)resetProofViewer();try{const admin=await getDoc(doc(db,"admins",user.uid));if(!admin.exists()){showError("這個帳號沒有管理權限。");await signOut(auth);return}login.classList.add("hidden");dashboard.classList.remove("hidden");await loadAll()}catch{await signOut(auth);showError("管理資料載入失敗，請檢查網路後再試。")}});
     function verificationState(member) {
       const status = member.verification?.status;
       return ["pending", "approved", "rejected"].includes(status) ? status : "unknown";
@@ -285,10 +307,13 @@
       const snapshot = await getDocs(collection(db, "members"));
       allMembers = snapshot.docs.map(item => ({ id:item.id, ...item.data() })).filter(member => member.deleted !== true);
       membersLoaded = true;
+      updateMemberSummary();
+      renderMembers();
+    }
+    function updateMemberSummary() {
       document.getElementById("total").textContent = allMembers.length;
       document.getElementById("pending").textContent = allMembers.filter(member => verificationState(member) === "pending").length;
       document.getElementById("approved").textContent = allMembers.filter(member => verificationState(member) === "approved").length;
-      renderMembers();
     }
     function renderMembers() {
       if (!membersLoaded) return;
@@ -301,7 +326,7 @@
       empty.textContent = adminCopy(allMembers.length ? "noResults" : "noMembers");
       rows.innerHTML = members.map(member => {
         const profile = member.profile || {}, state = verificationState(member);
-        return `<tr><td data-no-translate>${esc(member.username || "—")}</td><td data-no-translate>${esc(profile.displayName || "—")}</td><td><span class="status ${state}" data-admin-copy="${state}" data-no-translate>${esc(adminCopy(state))}</span></td><td data-no-translate>${esc(profile.birthDate || "—")}</td><td>${esc(profile.skinTone || "—")}</td><td>${esc(profile.bodyType || "—")}</td><td><div class="row-actions"><button class="button" type="button" data-view="${esc(member.id)}" data-operation-key="proof:${esc(member.id)}">查看證件</button><button class="button danger" type="button" data-delete-member="${esc(member.id)}">刪除</button></div></td></tr>`;
+        return `<tr><td data-no-translate>${esc(member.username || "—")}</td><td data-no-translate>${esc(profile.displayName || "—")}</td><td><span class="status ${state}" data-admin-copy="${state}" data-no-translate>${esc(adminCopy(state))}</span></td><td data-no-translate>${esc(profile.birthDate || "—")}</td><td>${esc(profile.skinTone || "—")}</td><td>${esc(profile.bodyType || "—")}</td><td><div class="row-actions"><button class="button" type="button" data-view="${esc(member.id)}" data-operation-key="proof:${esc(member.id)}" data-admin-copy="verificationView" data-no-translate>${esc(adminCopy("verificationView"))}</button><button class="button danger" type="button" data-delete-member="${esc(member.id)}">刪除</button></div></td></tr>`;
       }).join("");
       rows.querySelectorAll("[data-view]").forEach(button => button.addEventListener("click", () => viewProof(allMembers.find(member => member.id === button.dataset.view))));
       rows.querySelectorAll("[data-delete-member]").forEach(button => button.addEventListener("click", () => deleteMember(button.dataset.deleteMember)));
@@ -310,15 +335,130 @@
       updateOperationButtons();
     }
     async function deleteMember(id){if(!confirm("確定刪除這位會員的個人資料與相關內容，並停用其會員資格？此操作無法復原。"))return;const memberSnapshot=await getDoc(doc(db,"members",id));const username=memberSnapshot.exists()?memberSnapshot.data().username||"已刪除會員":"已刪除會員";const [submissionSnapshot,reviewSnapshot,reportSnapshot,feedbackSnapshot,taskSnapshot,ideaSnapshot]=await Promise.all([getDocs(collection(db,"submissions")),getDocs(collection(db,"reviews")),getDocs(collection(db,"reports")),getDocs(collection(db,"feedback")),getDocs(collection(db,"dailyMemberTasks")),getDocs(collection(db,"taskIdeas"))]);const ownedSubmissionIds=new Set(submissionSnapshot.docs.filter(item=>item.data().ownerId===id).map(item=>item.id));const relatedReviews=reviewSnapshot.docs.filter(item=>item.data().reviewerId===id||ownedSubmissionIds.has(item.data().submissionId));const relatedReports=reportSnapshot.docs.filter(item=>item.data().reporterId===id||ownedSubmissionIds.has(item.data().submissionId));const relatedFeedback=feedbackSnapshot.docs.filter(item=>item.data().userId===id);const relatedTasks=taskSnapshot.docs.filter(item=>item.data().ownerId===id);const relatedIdeas=ideaSnapshot.docs.filter(item=>item.data().ownerId===id);await setDoc(doc(db,"members",id),{username,deleted:true,deletedAt:new Date().toISOString()});await loadMembers();const cleanup=await Promise.allSettled([deleteDoc(doc(db,"birthProofs",id)),deleteDoc(doc(db,"memberPreferences",id)),...submissionSnapshot.docs.filter(item=>ownedSubmissionIds.has(item.id)).map(item=>deleteDoc(item.ref)),...relatedReviews.map(item=>deleteDoc(item.ref)),...relatedReports.map(item=>deleteDoc(item.ref)),...relatedFeedback.map(item=>deleteDoc(item.ref)),...relatedTasks.map(item=>deleteDoc(item.ref)),...relatedIdeas.map(item=>deleteDoc(item.ref))]);await Promise.all([loadTasks(),loadTaskIdeas(),loadFeedback()]);if(cleanup.some(result=>result.status==="rejected"))alert("會員已停用並從清單移除，但部分關聯資料清理失敗，請稍後再試。")}
+    function proofContextMatches(revision, memberId, adminUid) {
+      return proofViewer.kind === "member" && proofViewer.revision === revision && proofViewer.memberId === memberId && proofViewer.adminUid === adminUid && auth.currentUser?.uid === adminUid;
+    }
+    function resetProofViewer(close = true) {
+      if (proofViewer.memberId) operationLocks.delete(`proof:${proofViewer.memberId}`);
+      Object.assign(proofViewer, {kind:null, memberId:null, adminUid:null, revision:proofViewer.revision + 1, status:"unknown", member:null, proofFingerprint:"", submittedAt:"", birthDate:"", imageReady:false, ready:false, saving:false});
+      document.getElementById("proofImage").removeAttribute("src");
+      document.getElementById("proofMemberIdentity").textContent = "";
+      document.getElementById("proofMemberBirthday").textContent = "";
+      document.getElementById("proofMemberState").textContent = "";
+      document.getElementById("proofMemberReview").classList.add("hidden");
+      adminMessage("proofReviewMessage", "");
+      if (close && document.getElementById("proofDialog").open) document.getElementById("proofDialog").close();
+      updateProofReviewState();
+      updateOperationButtons();
+    }
+    function closeProofViewer() {
+      if (!proofViewer.saving) resetProofViewer();
+    }
+    function updateProofReviewState() {
+      const active = proofViewer.kind === "member", enabled = active && proofViewer.ready && !proofViewer.saving && auth.currentUser?.uid === proofViewer.adminUid;
+      document.getElementById("proofMemberReview").classList.toggle("hidden", !active);
+      if (active) document.getElementById("proofTitle").textContent = adminCopy("verificationTitle");
+      const state = document.getElementById("proofMemberState");
+      state.className = `status ${proofViewer.status}`;
+      state.textContent = active ? adminCopy(proofViewer.status) : "";
+      if (active) document.getElementById("proofMemberBirthday").textContent = adminFormat("verificationBirthday", {date:proofViewer.birthDate || "—"});
+      document.getElementById("approveMemberVerification").disabled = !enabled || proofViewer.status === "approved" || !proofViewer.imageReady || proofViewer.member?.verification?.proofReady !== true;
+      document.getElementById("rejectMemberVerification").disabled = !enabled || proofViewer.status === "rejected";
+      document.getElementById("resetMemberVerification").disabled = !enabled || proofViewer.status === "pending";
+      document.getElementById("reloadMemberProof").disabled = !active || proofViewer.saving;
+      document.getElementById("closeProof").disabled = proofViewer.saving;
+      document.getElementById("proofMemberReview").setAttribute("aria-busy", String(proofViewer.saving || active && operationLocks.has(`proof:${proofViewer.memberId}`)));
+    }
+    function usableProofImage(dataUrl) {
+      return typeof dataUrl === "string" && /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/\s]+=*$/.test(dataUrl);
+    }
+    function proofFingerprint(snapshot) {
+      if (!snapshot.exists()) return "missing";
+      const data = snapshot.data();
+      return JSON.stringify([data.dataUrl || "", data.updatedAt || null]);
+    }
     async function viewProof(member) {
-      return runAdminAction(`proof:${member.id}`, async () => {
-        const proof = await getDoc(doc(db, "birthProofs", member.id));
-        if (!proof.exists()) return "proofMissing";
-        document.querySelector("#proofDialog .proof-head strong").textContent = "生日查驗照片";
-        document.getElementById("proofImage").src = proof.data().dataUrl;
-        document.getElementById("proofDialog").showModal();
-        return "proofOpened";
-      }, null, "proofError");
+      if (!member?.id || !auth.currentUser || proofViewer.saving) return;
+      resetProofViewer(false);
+      const memberId = member.id, adminUid = auth.currentUser.uid, revision = proofViewer.revision;
+      Object.assign(proofViewer, {kind:"member", memberId, adminUid});
+      document.getElementById("proofTitle").textContent = adminCopy("verificationTitle");
+      document.getElementById("proofMemberIdentity").textContent = member.username || memberId;
+      document.getElementById("proofImage").alt = "證件生日照片";
+      adminMessage("proofReviewMessage", "verificationLoading");
+      operationLocks.add(`proof:${memberId}`);
+      updateProofReviewState();
+      const dialog = document.getElementById("proofDialog");
+      if (!dialog.open) dialog.showModal();
+      updateOperationButtons();
+      try {
+        const [memberSnapshot, proof] = await Promise.all([getDoc(doc(db, "members", memberId)), getDoc(doc(db, "birthProofs", memberId))]);
+        if (!proofContextMatches(revision, memberId, adminUid)) return;
+        if (!memberSnapshot.exists() || memberSnapshot.data().deleted === true) { adminMessage("proofReviewMessage", "verificationUnavailable"); return; }
+        const freshMember = {id:memberId, ...memberSnapshot.data()}, dataUrl = proof.exists() ? proof.data().dataUrl : "";
+        Object.assign(proofViewer, {member:freshMember, status:verificationState(freshMember), birthDate:freshMember.profile?.birthDate || "", submittedAt:freshMember.verification?.submittedAt || "", proofFingerprint:proofFingerprint(proof)});
+        document.getElementById("proofMemberIdentity").textContent = `${freshMember.profile?.displayName || freshMember.username || memberId} (@${freshMember.username || memberId})`;
+        updateProofReviewState();
+        if (!usableProofImage(dataUrl) || freshMember.verification?.proofReady !== true) { proofViewer.ready = true; adminMessage("proofReviewMessage", "verificationMissing"); return; }
+        const image = document.getElementById("proofImage");
+        image.src = dataUrl;
+        try { await image.decode(); }
+        catch { if (proofContextMatches(revision, memberId, adminUid)) { proofViewer.ready = true; image.removeAttribute("src"); adminMessage("proofReviewMessage", "verificationMissing"); } return; }
+        if (!proofContextMatches(revision, memberId, adminUid)) return;
+        proofViewer.ready = true;
+        proofViewer.imageReady = true;
+        adminMessage("proofReviewMessage", "verificationReady");
+      } catch {
+        if (proofContextMatches(revision, memberId, adminUid)) adminMessage("proofReviewMessage", "verificationLoadError");
+      } finally {
+        if (proofContextMatches(revision, memberId, adminUid)) { operationLocks.delete(`proof:${memberId}`); updateProofReviewState(); updateOperationButtons(); }
+      }
+    }
+    async function setMemberVerification(status) {
+      if (!["pending", "approved", "rejected"].includes(status) || proofViewer.kind !== "member" || !proofViewer.ready || proofViewer.saving || status === proofViewer.status || auth.currentUser?.uid !== proofViewer.adminUid) return;
+      if (status === "approved" && (!proofViewer.imageReady || proofViewer.member?.verification?.proofReady !== true)) return;
+      const {memberId, adminUid, revision, submittedAt, birthDate, proofFingerprint:seenProof, status:seenStatus} = proofViewer;
+      const lock = `verification:${memberId}:${revision}`;
+      proofViewer.saving = true;
+      operationLocks.add(lock);
+      updateProofReviewState(); updateOperationButtons();
+      adminMessage("proofReviewMessage", "verificationSaving");
+      let acknowledged = false;
+      try {
+        // Finish any older member-list read before committing a newer decision.
+        if (sectionPromises.has("members")) await sectionPromises.get("members");
+        if (!proofContextMatches(revision, memberId, adminUid)) return;
+        await runTransaction(db, async transaction => {
+          const ref = doc(db, "members", memberId);
+          const current = await transaction.get(ref), proof = await transaction.get(doc(db, "birthProofs", memberId));
+          if (!proofContextMatches(revision, memberId, adminUid)) throw new Error("verificationStale");
+          if (!current.exists() || current.data().deleted === true) throw new Error("verificationUnavailable");
+          const data = current.data();
+          if (verificationState(data) !== seenStatus || (data.verification?.submittedAt || "") !== submittedAt || (data.profile?.birthDate || "") !== birthDate || proofFingerprint(proof) !== seenProof) throw new Error("verificationStale");
+          if (status === "approved" && (data.verification?.proofReady !== true || !proof.exists() || !usableProofImage(proof.data().dataUrl))) throw new Error("verificationStale");
+          // Keep proofReady/submittedAt intact so a later member upload can reset to pending.
+          transaction.update(ref, {"verification.status":status, updatedAt:serverTimestamp()});
+        });
+        acknowledged = true;
+        if (!proofContextMatches(revision, memberId, adminUid)) return;
+        allMembers = allMembers.map(member => member.id === memberId ? {...member, verification:{...member.verification, status}} : member);
+        proofViewer.status = status;
+        proofViewer.member = {...proofViewer.member, verification:{...proofViewer.member.verification, status}};
+        updateMemberSummary(); renderMembers(); updateProofReviewState();
+        adminMessage("proofReviewMessage", "verificationSaved");
+        const refreshed = await loadSection("members");
+        if (proofContextMatches(revision, memberId, adminUid)) adminMessage("proofReviewMessage", refreshed ? "verificationSaved" : "verificationRefreshFailed");
+      } catch (error) {
+        if (proofContextMatches(revision, memberId, adminUid)) {
+          const key = acknowledged ? "verificationRefreshFailed" : ["verificationStale", "verificationUnavailable"].includes(error?.message) ? error.message : "verificationError";
+          if (["verificationStale", "verificationUnavailable"].includes(key)) { proofViewer.ready = false; proofViewer.imageReady = false; }
+          adminMessage("proofReviewMessage", key);
+        }
+      } finally {
+        operationLocks.delete(lock);
+        if (proofContextMatches(revision, memberId, adminUid)) { proofViewer.saving = false; updateProofReviewState(); }
+        updateOperationButtons();
+      }
     }
     async function loadTasks() {
       const [submissionSnapshot, reportSnapshot] = await Promise.all([getDocs(collection(db, "submissions")), getDocs(collection(db, "reports"))]);
@@ -346,7 +486,7 @@
       enhanceTable(taskRows);
       updateOperationButtons();
     }
-    function viewTask(task){document.getElementById("proofImage").src=task.imageDataUrl;document.querySelector("#proofDialog .proof-head strong").textContent="任務驗證照片";document.getElementById("proofDialog").showModal()}
+    function viewTask(task){if(!task || !auth.currentUser || proofViewer.saving)return;resetProofViewer(false);proofViewer.kind="task";proofViewer.adminUid=auth.currentUser.uid;document.getElementById("proofImage").src=task.imageDataUrl;document.getElementById("proofImage").alt="任務驗證照片";document.getElementById("proofTitle").textContent="任務驗證照片";if(!document.getElementById("proofDialog").open)document.getElementById("proofDialog").showModal()}
     async function acceptReports(submissionId, reports) {
       return runAdminAction(`reports:${submissionId}`, async () => {
         await Promise.all(reports.filter(report => report.submissionId === submissionId && report.status === "open").map(report => updateDoc(doc(db, "reports", report.id), { status:"accepted", reviewedAt:serverTimestamp(), reviewedBy:auth.currentUser.uid })));
