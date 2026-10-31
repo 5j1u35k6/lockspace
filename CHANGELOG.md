@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.21.0 - 2026-10-31
+
+- Page community submissions with a 10-record Firestore cursor and query only reviews for the loaded page. Fetch member profiles on demand and defer image decoding.
+- Filter loaded records by all, own, or awaiting personal review; remove self-report controls and preserve loaded pages after a review.
+- Add owner-scoped proposal history with review status, submission dates, loading/retry states, and persistent submission acknowledgements.
+- Add feedback history search, status filters, dates, and progressive display.
+- Add administrator work summaries and cached search/status filters for reports, proposals, and feedback; pending reports take precedence over previously accepted reports.
+- Prevent unchanged replies from triggering writes and notifications; distinguish acknowledged replies from failed list refreshes.
+- Preserve votes acknowledged during an older pending refresh and clear private dialogs when authentication ends.
+
 ## 0.20.0 - 2026-10-30
 
 - Added member search, verification-status filters, responsive table cards, and per-section reload controls to the administrator interface.

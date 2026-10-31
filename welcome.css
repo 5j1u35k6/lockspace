@@ -140,8 +140,17 @@ html:not([lang="zh-Hant"]) #authPage > .auth-card { grid-row: auto; margin-top: 
 .feed-status { margin: 0 0 18px; padding: 14px 16px; border: 1px solid #ffffff18; border-radius: 8px; color: var(--muted); font-size: 14px; line-height: 1.7; background: var(--panel); }
 .feed-status-error { border-color: #efd59e45; color: var(--amber); }
 .feed-refresh:disabled { opacity: .55; cursor: wait; }
+.feed-browser { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin: 0 0 16px; }
+.feed-browser label { margin: 0; width: min(220px, 100%); font-size: 12px; color: var(--muted); }
+.feed-browser select { width: 100%; margin-top: 6px; min-height: 44px; }
+.feed-browser .muted { margin: 0 0 9px; font-size: 12px; }
+.feed-more { min-height: 46px; margin-top: 16px; }
+.feed-more:disabled { opacity: .55; cursor: wait; }
 @media (max-width: 700px) {
   .feed-heading { flex-direction: row; align-items: center; }
   .feed-refresh { padding-inline: 11px; font-size: 13px; }
   .feed-heading h2 { font-size: 17px; }
+  .feed-browser { align-items: stretch; flex-direction: column; gap: 9px; }
+  .feed-browser label { width: 100%; }
+  .feed-browser .muted { margin: 0; }
 }

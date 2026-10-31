@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.20.0">
+  <meta name="application-version" content="0.21.0">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 成人會員社群：每日任務、會員驗證與創意投稿。了解參與方式，建立自己的會員帳號。僅限 18+，自願參與。">
   <style>
@@ -260,6 +260,7 @@
     .site-footer { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 18px; margin-top: 42px; padding-top: 20px; border-top: 1px solid #ffffff16; color: var(--muted); font-size: 12px; }
     .site-footer a { color: #d8d5e0; }
     .modal-dialog { width: min(620px, calc(100% - 28px)); padding: 0; border: 1px solid #b6ff704d; border-radius: 8px; background: var(--panel); color: var(--text); }
+    #taskIdeaDialog{max-height:min(88vh,900px);max-height:min(88dvh,900px);overflow:auto;overscroll-behavior:contain}#taskIdeaDialog>.modal-head{position:sticky;top:0;z-index:1;background:var(--panel)}.task-idea-history{padding:18px;border-top:1px solid #ffffff16}.task-idea-history-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.task-idea-history-head h2{margin:0;font-size:18px}.own-task-idea-list{display:grid;gap:10px}.own-task-idea{padding:13px;border:1px solid #ffffff16;border-radius:6px;overflow-wrap:anywhere}.own-task-idea-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}.own-task-idea p{margin:10px 0 0;white-space:pre-wrap;font-size:14px}.own-task-idea-state{padding:4px 8px;border:1px solid #ffffff20;border-radius:999px;color:var(--muted)}.own-task-idea-state.approved{color:var(--lime);border-color:#b6ff7040;background:#b6ff7010}.own-task-idea-state.rejected{color:var(--red);border-color:#ff91a640;background:#ff91a610}.task-idea-history-status{padding:10px 12px;border:1px solid #ffffff16;border-radius:6px;color:var(--muted);font-size:13px}.task-idea-history-status.error{border-color:#ff617538;color:#ffb0bf}#taskIdeaMessage.error{color:#ffb0bf}#taskIdeaDialog button:disabled{opacity:.6;cursor:wait}@media(max-width:420px){.task-idea-history-head{align-items:flex-start;flex-wrap:wrap}.task-idea-history{padding:16px}.task-idea-history-head .button{min-height:44px}}
     .modal-dialog::backdrop { background: #000d; }
     .modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid #ffffff16; }
     .modal-body { padding: 18px; }
@@ -283,7 +284,7 @@
       .option-menu { grid-template-columns: 1fr; }
     }
   </style>
-  <link rel="stylesheet" href="welcome.css?v=0.20.0">
+  <link rel="stylesheet" href="welcome.css?v=0.21.0">
 </head>
 <body>
   <button id="authLanguageButton" class="language-button auth-language-button" type="button" aria-label="選擇語言" title="選擇語言"><span class="globe-icon" aria-hidden="true"></span></button>
@@ -367,7 +368,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.20.0</p>
+      <p class="version-stamp">Lockspace v0.21.0</p>
     </section>
   </main>
 
@@ -559,7 +560,7 @@
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <p id="profileError" class="error hidden" role="alert" tabindex="-1"></p>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.20.0</p>
+      <p class="version-stamp">Lockspace v0.21.0</p>
     </form>
   </main>
 
@@ -589,11 +590,13 @@
           </div>
           <button id="refreshFeedButton" class="button secondary feed-refresh" type="button" data-no-translate>↻</button>
         </div>
+        <div class="feed-browser" data-no-translate><label><span id="feedFilterLabel">篩選已載入紀錄</span><select id="feedFilter"><option value="all">全部</option><option value="mine">我的紀錄</option><option value="unreviewed">待我驗證</option></select></label><p id="feedResultCount" class="muted" role="status"></p></div>
         <p id="feedStatus" class="feed-status hidden" role="status" aria-live="polite" data-no-translate></p>
         <div id="feed" aria-busy="false"></div>
+        <button id="loadMoreFeedButton" class="button secondary full feed-more hidden" type="button" data-no-translate>載入更多紀錄</button>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.20.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.21.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -617,7 +620,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.20.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.21.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -645,10 +648,15 @@
       <div class="modal-body">
         <p class="muted">通過管理員審核後，會加入之後的「用戶提供」每日任務池。</p>
         <label class="field-label">任務內容<textarea name="content" maxlength="180" rows="4" placeholder="簡短描述動作與拍攝方式" required></textarea></label>
-        <p id="taskIdeaMessage" class="muted"></p>
+        <p id="taskIdeaMessage" class="muted" role="status" aria-live="polite" data-no-translate></p>
       </div>
-      <div class="modal-actions"><button class="button primary" type="submit">送出想法</button></div>
+      <div class="modal-actions"><button id="submitTaskIdeaButton" class="button primary" type="submit" data-no-translate>送出想法</button></div>
     </form>
+    <section class="task-idea-history" aria-labelledby="myTaskIdeasTitle" data-no-translate>
+      <div class="task-idea-history-head"><h2 id="myTaskIdeasTitle">我的提案</h2><button id="refreshTaskIdeas" class="button secondary" type="button">重新載入</button></div>
+      <p id="taskIdeaHistoryStatus" class="task-idea-history-status hidden" role="status" aria-live="polite"></p>
+      <div id="myTaskIdeasList" class="own-task-idea-list" aria-busy="false"></div>
+    </section>
   </dialog>
 
   <dialog id="birthDateDialog" class="calendar-dialog">
@@ -663,7 +671,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, orderBy, limit, startAfter, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
     const LANGUAGE_KEY = "lockspace-language-v1";
     const TRANSLATIONS = {
@@ -866,8 +874,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.20.0";
+    const APP_VERSION = "0.21.0";
     const RELEASE_NOTES = [
+      { version: "0.21.0", date: "2026-10-31", changes: ["驗證紀錄改為每次讀取 10 筆，並新增已載入紀錄篩選。", "會員可查看自己的提案狀態與回饋歷史。", "後台新增管理待辦摘要與三區搜尋篩選，未變更回覆不再重送通知。", "修正重新整理覆蓋剛完成驗證的情境，登出時清除私密彈窗。"] },
       { version: "0.20.0", date: "2026-10-30", changes: ["後台新增會員搜尋、查驗狀態篩選與手機卡片介面。", "會員紀錄與管理區塊新增載入狀態、錯誤提示與重試。", "回饋送出與列表更新分開處理；註冊失敗保留資料並可繼續完成。"] },
       { version: "0.19.0", date: "2026-10-30", changes: ["繁體中文登入入口新增平台介紹、註冊捷徑與常見問題。", "手機優先呈現會員登入與註冊表單，並加入官方 X 入口。"] },
       { version: "0.18.0", date: "2026-09-26", changes: ["語言選擇列改為頁面內工具列，桌面與手機皆不再遮住操作按鈕。", "參考中華航空國際網站的語言選擇，新增馬來文、德文、荷蘭文、義大利文與法文。", "新增語言已涵蓋首頁、任務、通知、回饋、後台、隱私權政策與使用條款。"] },
@@ -1165,7 +1174,9 @@
     document.getElementById("editProfileButton").addEventListener("click", editProfile);
     document.getElementById("openTaskButton").addEventListener("click", openTask);
     document.getElementById("refreshFeedButton").addEventListener("click", () => void loadSubmissions());
-    document.getElementById("taskIdeaButton").addEventListener("click", () => { document.getElementById("taskIdeaMessage").textContent = ""; document.getElementById("taskIdeaDialog").showModal(); });
+    document.getElementById("loadMoreFeedButton").addEventListener("click", () => void loadSubmissions({ append: true }));
+    document.getElementById("feedFilter").addEventListener("change", renderFeed);
+    document.getElementById("taskIdeaButton").addEventListener("click", openTaskIdeas);
     document.getElementById("profileBackButton").addEventListener("click", renderDashboard);
     document.getElementById("taskBackButton").addEventListener("click", renderDashboard);
     document.getElementById("photoInput").addEventListener("change", event => choosePhoto(event.target.files[0]));
@@ -1461,27 +1472,84 @@
       codeElement.classList.toggle("hidden", !isCodeTask);
     }
 
+    const TASK_IDEA_TEXT={
+      "zh-Hant":{mine:"我的提案",reload:"重新載入",loading:"正在讀取你的提案…",empty:"你還沒有送出提案。",failed:"無法讀取提案，請重新載入。",saved:"提案列表更新失敗，仍顯示先前資料。",pending:"待審核",approved:"已通過",rejected:"已退回",submitted:"提交時間",noDate:"時間未提供",submit:"送出想法",sending:"正在送出想法…",short:"請至少輸入 6 個字。",long:"提案內容不得超過 180 個字。",success:"想法已送出，管理員通過後會加入每日任務。",writeFailed:"送出失敗，請稍後再試。"},
+      "zh-Hans":{mine:"我的提案",reload:"重新加载",loading:"正在读取你的提案…",empty:"你还没有发送提案。",failed:"无法读取提案，请重新加载。",saved:"提案列表更新失败，仍显示先前资料。",pending:"待审核",approved:"已通过",rejected:"已退回",submitted:"提交时间",noDate:"未提供时间",submit:"发送想法",sending:"正在发送想法…",short:"请至少输入 6 个字。",long:"提案内容不得超过 180 个字。",success:"想法已发送，管理员通过后会加入每日任务。",writeFailed:"发送失败，请稍后重试。"},
+      en:{mine:"My proposals",reload:"Reload",loading:"Loading your proposals…",empty:"You have not submitted any proposals yet.",failed:"Could not load your proposals. Reload to try again.",saved:"Could not refresh your proposals. Previously loaded entries remain visible.",pending:"Pending review",approved:"Approved",rejected:"Returned",submitted:"Submitted",noDate:"Time unavailable",submit:"Submit idea",sending:"Submitting idea…",short:"Enter at least 6 characters.",long:"Keep your proposal within 180 characters.",success:"Your idea was submitted. Approved ideas join the daily task pool.",writeFailed:"Could not submit your idea. Please try again."}
+    };
+    const ownTaskIdeas={ownerUid:null,request:0,writeRequest:0,items:[],loaded:false,status:"idle",message:"",submitting:false};
+    function taskIdeaCopy(key){
+      const language=document.getElementById("languageSelect").value||"zh-Hant",source=TASK_IDEA_TEXT["zh-Hant"][key];
+      if(language==="zh-Hant")return source;
+      return TRANSLATIONS[language]?.[source]||TASK_IDEA_TEXT[language]?.[key]||TASK_IDEA_TEXT.en[key]||source;
+    }
+    function taskIdeaUid(){const uid=state.member?.uid;return uid&&auth.currentUser?.uid===uid?uid:null}
+    function taskIdeaDate(value){
+      const date=value?new Date(value):null;
+      if(!date||!Number.isFinite(date.getTime()))return escapeHtml(taskIdeaCopy("noDate"));
+      let label;const options={timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"};
+      try{label=new Intl.DateTimeFormat(document.getElementById("languageSelect").value||"zh-Hant",options).format(date)}catch{label=new Intl.DateTimeFormat("en",options).format(date)}
+      return `<time datetime="${date.toISOString()}">${escapeHtml(label)}</time>`;
+    }
+    function resetOwnTaskIdeas(uid){
+      if(ownTaskIdeas.ownerUid===uid)return;
+      ownTaskIdeas.ownerUid=uid;++ownTaskIdeas.request;++ownTaskIdeas.writeRequest;ownTaskIdeas.items=[];ownTaskIdeas.loaded=false;ownTaskIdeas.status="idle";ownTaskIdeas.message="";ownTaskIdeas.submitting=false;
+      const form=document.getElementById("taskIdeaForm");form.reset();form.setAttribute("aria-busy","false");form.querySelector('[name="content"]').readOnly=false;
+      const dialog=document.getElementById("taskIdeaDialog");if(dialog.open)dialog.close();renderTaskIdeaCopy();
+    }
+    function renderTaskIdeaCopy(){
+      document.getElementById("myTaskIdeasTitle").textContent=taskIdeaCopy("mine");
+      const reload=document.getElementById("refreshTaskIdeas"),list=document.getElementById("myTaskIdeasList"),status=document.getElementById("taskIdeaHistoryStatus");
+      reload.textContent=taskIdeaCopy("reload");reload.disabled=ownTaskIdeas.status==="loading"||!taskIdeaUid();list.setAttribute("aria-busy",String(ownTaskIdeas.status==="loading"));
+      const statusKey=ownTaskIdeas.status==="loading"?"loading":ownTaskIdeas.status==="error"?(ownTaskIdeas.loaded&&ownTaskIdeas.items.length?"saved":"failed"):ownTaskIdeas.loaded&&!ownTaskIdeas.items.length?"empty":"";
+      status.classList.toggle("hidden",!statusKey);status.classList.toggle("error",ownTaskIdeas.status==="error");status.textContent=statusKey?taskIdeaCopy(statusKey):"";
+      list.innerHTML=ownTaskIdeas.items.map(item=>{const kind=["approved","rejected"].includes(item.status)?item.status:"pending";return `<article class="own-task-idea"><div class="own-task-idea-head"><span class="own-task-idea-state ${kind}">${escapeHtml(taskIdeaCopy(kind))}</span><span>${escapeHtml(taskIdeaCopy("submitted"))} · ${taskIdeaDate(item.createdAt)}</span></div><p>${escapeHtml(item.content||"")}</p></article>`}).join("");
+      const form=document.getElementById("taskIdeaForm"),submit=document.getElementById("submitTaskIdeaButton"),message=document.getElementById("taskIdeaMessage");
+      submit.textContent=taskIdeaCopy(ownTaskIdeas.submitting?"sending":"submit");submit.disabled=ownTaskIdeas.submitting||!taskIdeaUid();form.setAttribute("aria-busy",String(ownTaskIdeas.submitting));form.querySelector('[name="content"]').readOnly=ownTaskIdeas.submitting;
+      message.textContent=ownTaskIdeas.message?taskIdeaCopy(ownTaskIdeas.message):"";message.classList.toggle("error",["short","long","writeFailed"].includes(ownTaskIdeas.message));
+    }
+    function taskIdeaRead(promise){let timer;return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error("task_idea_read_timeout")),12000)})]).finally(()=>clearTimeout(timer))}
+    async function loadOwnTaskIdeas(){
+      const uid=taskIdeaUid();if(!uid)return false;
+      resetOwnTaskIdeas(uid);const request=++ownTaskIdeas.request;ownTaskIdeas.status="loading";renderTaskIdeaCopy();
+      try{
+        const snapshot=await taskIdeaRead(getDocs(query(collection(db,"taskIdeas"),where("ownerId","==",uid))));
+        if(request!==ownTaskIdeas.request||ownTaskIdeas.ownerUid!==uid||taskIdeaUid()!==uid)return false;
+        ownTaskIdeas.items=snapshot.docs.map(item=>({id:item.id,...item.data()})).filter(item=>item.ownerId===uid).sort((a,b)=>{const right=Date.parse(b.createdAt)||0,left=Date.parse(a.createdAt)||0;return right-left||String(b.id).localeCompare(String(a.id))});
+        ownTaskIdeas.loaded=true;ownTaskIdeas.status="ready";renderTaskIdeaCopy();return true;
+      }catch{
+        if(request!==ownTaskIdeas.request||ownTaskIdeas.ownerUid!==uid||taskIdeaUid()!==uid)return false;
+        ownTaskIdeas.status="error";renderTaskIdeaCopy();return false;
+      }
+    }
+    function openTaskIdeas(){
+      const uid=taskIdeaUid();if(!uid)return;
+      resetOwnTaskIdeas(uid);ownTaskIdeas.message="";renderTaskIdeaCopy();const dialog=document.getElementById("taskIdeaDialog");if(!dialog.open)dialog.showModal();void loadOwnTaskIdeas();
+    }
+    document.getElementById("refreshTaskIdeas").addEventListener("click",()=>void loadOwnTaskIdeas());
+    document.getElementById("languageSelect").addEventListener("change",renderTaskIdeaCopy);
+    onAuthStateChanged(auth,user=>resetOwnTaskIdeas(user?.uid||null));
+    renderTaskIdeaCopy();
+
     async function submitTaskIdea(event) {
       event.preventDefault();
-      const form = event.currentTarget;
-      const button = event.submitter;
-      const content = String(new FormData(form).get("content") || "").trim();
-      const message = document.getElementById("taskIdeaMessage");
-      if (content.length < 6) {
-        message.textContent = "請至少輸入 6 個字。";
-        return;
+      const uid=taskIdeaUid();if(!uid||ownTaskIdeas.submitting)return;
+      resetOwnTaskIdeas(uid);
+      const form=event.currentTarget||document.getElementById("taskIdeaForm"),button=event.submitter||form.querySelector('button[type="submit"]');
+      const field=form.querySelector('[name="content"]'),content=String(new FormData(form).get("content")||"").trim();
+      if(content.length<6||content.length>180){ownTaskIdeas.message=content.length<6?"short":"long";renderTaskIdeaCopy();field.focus();return}
+      const writer=state.member,writeRequest=++ownTaskIdeas.writeRequest;ownTaskIdeas.submitting=true;ownTaskIdeas.message="sending";button.disabled=true;renderTaskIdeaCopy();let saved=false;
+      try{
+        await addDoc(collection(db,"taskIdeas"),{ownerId:uid,displayName:writer.profile?.displayName||writer.account||writer.username||"會員",content,status:"pending",createdAt:new Date().toISOString(),updatedAt:serverTimestamp()});
+        saved=true;
+        if(writeRequest===ownTaskIdeas.writeRequest&&ownTaskIdeas.ownerUid===uid&&taskIdeaUid()===uid){form.reset();ownTaskIdeas.message="success"}
+      }catch{
+        if(writeRequest===ownTaskIdeas.writeRequest&&ownTaskIdeas.ownerUid===uid&&taskIdeaUid()===uid)ownTaskIdeas.message="writeFailed";
+      }finally{
+        if(writeRequest===ownTaskIdeas.writeRequest&&ownTaskIdeas.ownerUid===uid&&taskIdeaUid()===uid){ownTaskIdeas.submitting=false;renderTaskIdeaCopy()}
       }
-      button.disabled = true;
-      try {
-        await addDoc(collection(db, "taskIdeas"), { ownerId: state.member.uid, displayName: state.member.profile.displayName || state.member.account, content, status: "pending", createdAt: new Date().toISOString(), updatedAt: serverTimestamp() });
-        form.reset();
-        message.textContent = "想法已送出，管理員通過後會加入每日任務。";
-        setTimeout(() => document.getElementById("taskIdeaDialog").close(), 500);
-      } catch {
-        message.textContent = "送出失敗，請稍後再試。";
-      } finally {
-        button.disabled = false;
-      }
+      // Keep the acknowledged submission visible even when reloading its history fails.
+      if(saved&&writeRequest===ownTaskIdeas.writeRequest&&ownTaskIdeas.ownerUid===uid&&taskIdeaUid()===uid)await loadOwnTaskIdeas();
     }
 
     function editProfile() {
@@ -1781,7 +1849,10 @@
       }
     }
 
-    let feedLoadRevision = 0;
+    const FEED_PAGE_SIZE = 10;
+    let feedLoadRevision = 0, feedCursor = null, feedHasMore = false, feedLoading = false, profileLoadRevision = 0;
+    const reviewLocks = new Set(), acknowledgedReviews = new Map();
+    let reviewWriteEpoch = 0;
     const FEED_TEXT = {
       "zh-Hant": { refresh: "重新整理", loading: "正在載入驗證紀錄…", failed: "暫時無法載入驗證紀錄，請檢查網路後重新整理。", saved: "目前保留上次載入的紀錄。" },
       "zh-Hans": { refresh: "刷新", loading: "正在加载验证记录…", failed: "暂时无法加载验证记录，请检查网络后刷新。", saved: "目前保留上次加载的记录。" },
@@ -1794,6 +1865,29 @@
       de: { refresh: "Aktualisieren", loading: "Verifizierungen werden geladen…", failed: "Datensätze konnten nicht geladen werden. Verbindung prüfen und aktualisieren.", saved: "Zuvor geladene Datensätze bleiben sichtbar." },
       fr: { refresh: "Actualiser", loading: "Chargement des vérifications…", failed: "Impossible de charger les données. Vérifiez la connexion et actualisez.", saved: "Les données précédemment chargées restent affichées." }
     };
+    const FEED_BROWSE_TEXT = {
+      "zh-Hant": { label:"篩選已載入紀錄", all:"全部", mine:"我的紀錄", unreviewed:"待我驗證", count:"已載入 {total} 筆，符合 {matched} 筆", more:"載入更多紀錄", empty:"已載入的紀錄中沒有符合項目。可更改篩選，或載入更多較早的紀錄。", profileLoading:"正在讀取會員資料…", profileFailed:"無法讀取會員資料，請稍後再開啟。" },
+      "zh-Hans": { label:"筛选已加载记录", all:"全部", mine:"我的记录", unreviewed:"待我验证", count:"已加载 {total} 条，符合 {matched} 条", more:"加载更多记录", empty:"已加载记录中没有符合项。可更改筛选或加载更早的记录。", profileLoading:"正在读取会员资料…", profileFailed:"无法读取会员资料，请稍后重试。" },
+      en: { label:"Filter loaded records", all:"All", mine:"My records", unreviewed:"Needs my review", count:"{total} loaded · {matched} matching", more:"Load more records", empty:"No matches among loaded records. Change the filter or load earlier records.", profileLoading:"Loading member profile…", profileFailed:"The profile could not load. Please open it again later." }
+    };
+    function feedBrowseText(key) {
+      const language = document.getElementById("languageSelect")?.value || "zh-Hant";
+      return (FEED_BROWSE_TEXT[language] || FEED_BROWSE_TEXT.en)[key];
+    }
+    function filteredFeedPosts() {
+      const filter = document.getElementById("feedFilter").value;
+      return state.posts.filter(post => filter === "mine" ? post.ownerId === state.member?.uid : filter === "unreviewed" ? post.ownerId !== state.member?.uid && !state.reviews.some(review => review.submissionId === post.id && review.reviewerId === state.member?.uid) : true);
+    }
+    function renderFeedBrowser() {
+      document.getElementById("feedFilterLabel").textContent = feedBrowseText("label");
+      const filter = document.getElementById("feedFilter");
+      [...filter.options].forEach(option => { option.textContent = feedBrowseText(option.value); });
+      document.getElementById("feedResultCount").textContent = feedBrowseText("count").replace("{total}", state.posts.length).replace("{matched}", filteredFeedPosts().length);
+      const more = document.getElementById("loadMoreFeedButton");
+      more.textContent = feedBrowseText("more");
+      more.classList.toggle("hidden", !feedHasMore);
+      more.disabled = feedLoading;
+    }
     let feedStatusKind = "";
     function renderFeedStatus() {
       const language = document.getElementById("languageSelect")?.value || "zh-Hant";
@@ -1805,32 +1899,44 @@
       status.classList.toggle("hidden", !feedStatusKind);
       status.classList.toggle("feed-status-error", feedStatusKind === "failed");
       status.textContent = feedStatusKind === "loading" ? text.loading : feedStatusKind === "failed" ? `${text.failed}${state.posts.length ? ` ${text.saved}` : ""}` : "";
+      renderFeedBrowser();
     }
-    document.getElementById("languageSelect").addEventListener("change", renderFeedStatus);
+    document.getElementById("languageSelect").addEventListener("change", () => { renderFeedStatus(); if (state.member) renderFeed(); });
     renderFeedStatus();
 
-    async function loadSubmissions() {
+    async function loadSubmissions({ append = false } = {}) {
       const uid = state.member?.uid;
-      if (!uid) return false;
-      const revision = ++feedLoadRevision;
+      if (!uid || (append && (!feedHasMore || feedLoading))) return false;
+      const revision = ++feedLoadRevision, reviewEpochAtStart = reviewWriteEpoch;
       const feed = document.getElementById("feed");
       const button = document.getElementById("refreshFeedButton");
+      feedLoading = true;
       feedStatusKind = "loading";
       feed.setAttribute("aria-busy", "true");
       button.disabled = true;
       renderFeedStatus();
       try {
-        const [snapshot, reviewSnapshot, memberSnapshot] = await withTimeout(Promise.all([
-          getDocs(collection(db, "submissions")),
-          getDocs(collection(db, "reviews")),
-          getDocs(collection(db, "members"))
-        ]), 12000, "feed-load-timeout");
+        const constraints = [orderBy("createdAt", "desc")];
+        if (append && feedCursor) constraints.push(startAfter(feedCursor));
+        constraints.push(limit(FEED_PAGE_SIZE));
+        const { snapshot, reviews } = await withTimeout((async () => {
+          const snapshot = await getDocs(query(collection(db, "submissions"), ...constraints));
+          const ids = snapshot.docs.map(item => item.id);
+          const reviewSnapshot = ids.length ? await getDocs(query(collection(db, "reviews"), where("submissionId", "in", ids))) : null;
+          return { snapshot, reviews: reviewSnapshot ? reviewSnapshot.docs.map(item => ({ id:item.id, ...item.data() })) : [] };
+        })(), 12000, "feed-load-timeout");
         if (revision !== feedLoadRevision || state.member?.uid !== uid) return false;
-        state.posts = snapshot.docs.map(item => ({ id: item.id, ...item.data() })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-        state.reviews = reviewSnapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-        state.members = new Map(memberSnapshot.docs.filter(item => item.data().deleted !== true).map(item => [item.id, { id: item.id, ...item.data() }]));
-        renderFeed();
+        const posts = snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
+        state.posts = [...new Map([...(append ? state.posts : []), ...posts].map(post => [post.id, post])).values()];
+        // A read started before an acknowledged vote may still return an older snapshot.
+        const loadedIds = new Set(state.posts.map(post => post.id));
+        const newerVotes = [...acknowledgedReviews.values()].filter(item => item.epoch > reviewEpochAtStart && item.review.reviewerId === uid && loadedIds.has(item.review.submissionId)).map(item => item.review);
+        state.reviews = [...new Map([...(append ? state.reviews : []), ...reviews, ...newerVotes].map(review => [review.id, review])).values()];
+        for (const [id, item] of acknowledgedReviews) if (item.epoch <= reviewEpochAtStart && loadedIds.has(item.review.submissionId)) acknowledgedReviews.delete(id);
+        feedCursor = snapshot.docs[snapshot.docs.length - 1] || (append ? feedCursor : null);
+        feedHasMore = snapshot.docs.length === FEED_PAGE_SIZE;
         feedStatusKind = "";
+        renderFeed();
         return true;
       } catch (error) {
         if (revision !== feedLoadRevision || state.member?.uid !== uid) return false;
@@ -1839,6 +1945,7 @@
         return false;
       } finally {
         if (revision === feedLoadRevision) {
+          feedLoading = false;
           feed.setAttribute("aria-busy", "false");
           button.disabled = false;
           renderFeedStatus();
@@ -1886,11 +1993,14 @@
 
     function renderFeed() {
       const feed = document.getElementById("feed");
-      if (!state.posts.length) {
+      const posts = filteredFeedPosts();
+      renderFeedBrowser();
+      if (!posts.length) {
+        if (state.posts.length) { feed.innerHTML = `<div class="panel"><p class="muted" data-no-translate>${escapeHtml(feedBrowseText("empty"))}</p></div>`; return; }
         feed.innerHTML = '<div class="panel"><p class="muted">目前還沒有驗證紀錄。</p></div>';
         return;
       }
-      feed.innerHTML = state.posts.map(post => {
+      feed.innerHTML = posts.map(post => {
         const isLegacyCodeTask = !post.taskType && Boolean(post.taskCode);
         const taskType = post.taskType || (isLegacyCodeTask ? "驗證任務碼" : "驗證任務");
         const taskInstruction = post.taskInstruction || (isLegacyCodeTask ? CODE_TASK.instruction : "");
@@ -1912,18 +2022,34 @@
           </div>
           <div class="public-details">${taskType === "驗證任務碼" ? `<span>任務碼 ${escapeHtml(post.taskCode || "—")}</span>` : ""}<span>${escapeHtml(taskType)}</span></div>
           ${taskInstruction ? `<p class="task-summary">${escapeHtml(taskInstruction)}</p>` : ""}
-          <figure class="preview-frame"><img src="${post.imageDataUrl}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片"></figure>
-          <div class="review-actions">${reviewControls}<button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button></div>
+          <figure class="preview-frame"><img src="${escapeHtml(post.imageDataUrl || "")}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片" loading="lazy" decoding="async"></figure>
+          <div class="review-actions">${reviewControls}${post.ownerId !== state.member.uid ? `<button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button>` : ""}</div>
         </article>`;
       }).join("");
-      feed.querySelectorAll("[data-review]").forEach(button => button.addEventListener("click", () => reviewSubmission(button)));
+      feed.querySelectorAll("[data-review]").forEach(button => { button.disabled = reviewLocks.has(button.dataset.submission); button.addEventListener("click", () => reviewSubmission(button)); });
       feed.querySelectorAll("[data-report]").forEach(button => button.addEventListener("click", () => reportSubmission(button)));
       feed.querySelectorAll("[data-member-profile]").forEach(button => button.addEventListener("click", () => openMemberProfile(button.dataset.memberProfile)));
     }
 
-    function openMemberProfile(memberId) {
-      const member = state.members.get(memberId);
-      if (!member) return alert("這位會員的資料目前無法查看。");
+    async function openMemberProfile(memberId) {
+      const revision = ++profileLoadRevision, viewer = state.member?.uid;
+      const dialog = document.getElementById("memberProfileDialog");
+      let member = state.members.get(memberId);
+      if (!member) {
+        document.getElementById("memberProfileTitle").textContent = "會員資料";
+        document.getElementById("memberProfileContent").innerHTML = `<p class="muted" data-no-translate>${escapeHtml(feedBrowseText("profileLoading"))}</p>`;
+        if (!dialog.open) dialog.showModal();
+        try {
+          const snapshot = await withTimeout(getDoc(doc(db, "members", memberId)), 12000, "profile-load-timeout");
+          if (revision !== profileLoadRevision || state.member?.uid !== viewer || !dialog.open) return;
+          if (!snapshot.exists() || snapshot.data().deleted === true) throw new Error("profile-unavailable");
+          member = { id:snapshot.id, ...snapshot.data() };
+          state.members.set(memberId, member);
+        } catch {
+          if (revision === profileLoadRevision && dialog.open && state.member?.uid === viewer) document.getElementById("memberProfileContent").innerHTML = `<p class="error" data-no-translate>${escapeHtml(feedBrowseText("profileFailed"))}</p>`;
+          return;
+        }
+      }
       const profile = member.profile || {};
       const displayName = profile.displayName || member.username || "會員";
       const groups = [
@@ -1952,7 +2078,7 @@
         ? `<div class="profile-groups">${groups.map(([title, fields]) => `<section class="profile-group"><h3>${escapeHtml(title)}</h3><dl class="profile-list">${fields.map(([label, value]) => `<div class="profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl></section>`).join("")}</div>`
         : '<p class="muted">這位會員尚未填寫公開資料。</p>';
       translatePage();
-      document.getElementById("memberProfileDialog").showModal();
+      if (!dialog.open) dialog.showModal();
     }
 
     function selectedLabel(profile, key, otherKey) {
@@ -1960,19 +2086,23 @@
     }
 
     async function reviewSubmission(button) {
-      button.disabled = true;
-      const submissionId = button.dataset.submission;
+      const submissionId = button.dataset.submission, uid = state.member?.uid;
+      if (!uid || reviewLocks.has(submissionId)) return;
+      reviewLocks.add(submissionId);
+      document.querySelectorAll("[data-submission]").forEach(control => { if (control.dataset.submission === submissionId) control.disabled = true; });
+      const review = { submissionId, reviewerId:uid, decision:button.dataset.review, createdAt:new Date().toISOString() };
       try {
-        await setDoc(doc(db, "reviews", `${submissionId}_${state.member.uid}`), {
-          submissionId,
-          reviewerId: state.member.uid,
-          decision: button.dataset.review,
-          createdAt: new Date().toISOString()
-        });
-        await loadSubmissions();
+        const id = `${submissionId}_${uid}`;
+        await setDoc(doc(db, "reviews", id), review);
+        if (state.member?.uid !== uid) return;
+        const confirmedReview = { id, ...review };
+        acknowledgedReviews.set(id, { epoch: ++reviewWriteEpoch, review: confirmedReview });
+        state.reviews = [...state.reviews.filter(item => item.id !== id), confirmedReview];
       } catch {
-        button.disabled = false;
-        alert("無法送出審核，請稍後再試。");
+        if (state.member?.uid === uid) alert("無法送出審核，請稍後再試。");
+      } finally {
+        reviewLocks.delete(submissionId);
+        if (state.member?.uid === uid) renderFeed();
       }
     }
 
@@ -2088,6 +2218,18 @@
         state.member = null;
         state.registrationDraftUid = null;
         ++feedLoadRevision;
+        ++profileLoadRevision;
+        feedCursor = null; feedHasMore = false; feedLoading = false;
+        reviewLocks.clear(); acknowledgedReviews.clear(); reviewWriteEpoch = 0;
+        state.feedback = [];
+        for (const id of ["memberProfileDialog", "notificationsDialog", "taskIdeaDialog"]) { const dialog = document.getElementById(id); if (dialog.open) dialog.close(); }
+        document.getElementById("memberProfileTitle").textContent = "";
+        document.getElementById("memberProfileContent").innerHTML = "";
+        document.getElementById("notificationsList").innerHTML = "";
+        document.getElementById("feedbackRepliesSection").classList.add("hidden");
+        document.getElementById("notificationsBadge").textContent = "";
+        document.getElementById("notificationsBadge").classList.add("hidden");
+        document.getElementById("feedFilter").value = "all";
         state.posts = [];
         state.reviews = [];
         state.members = new Map();

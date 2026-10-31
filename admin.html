@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.20.0">
+  <meta name="application-version" content="0.21.0">
   <title>lockspace. 後台管理</title>
   <style>
     :root{color-scheme:dark;--bg:#090a09;--panel:#121412;--line:#30352f;--text:#f5f6f3;--muted:#aeb4ab;--lime:#b6ff70;--red:#ff91a6;--amber:#efd59e}
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}.shell{max-width:1280px;margin:auto;padding:22px 28px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:1px solid #ffffff18}.brand{font-size:22px;font-weight:800}.brand b{color:var(--lime)}.actions{display:flex;gap:8px;align-items:center}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 13px;border:1px solid var(--line);border-radius:6px;background:#ffffff08;color:var(--text);text-decoration:none;font-weight:700}.button.primary{background:var(--lime);border-color:var(--lime);color:#111410}.button.danger{color:var(--red)}.login{width:min(430px,calc(100% - 28px));margin:14vh auto 0;padding:22px;border:1px solid #ffffff17;border-radius:8px;background:var(--panel)}h1{font-size:28px;margin:10px 0}h2{font-size:18px;margin:0}.muted{color:var(--muted);font-size:14px}.eyebrow{margin:0;color:var(--lime);font-size:12px;font-weight:800}.version-stamp{color:var(--muted);font-size:12px}.login .version-stamp{margin:18px 0 0;text-align:center}label{display:block;margin:12px 0;color:#d9ddd7;font-size:14px;font-weight:700}input,select,textarea{display:block;width:100%;min-height:44px;margin-top:6px;padding:10px 11px;border:1px solid var(--line);border-radius:5px;background:#0b0c0b;color:var(--text)}textarea{min-height:150px;resize:vertical}.error{padding:10px 12px;border:1px solid #ff617538;border-radius:6px;color:#ffb0bf;background:#ff617510}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.stat{padding:16px;border:1px solid #ffffff14;background:var(--panel);border-radius:8px}.stat strong{display:block;font-size:28px}.table-wrap{overflow:auto;border:1px solid #ffffff16;border-radius:8px;background:var(--panel)}table{width:100%;border-collapse:collapse;min-width:880px}th,td{padding:13px 14px;text-align:left;border-bottom:1px solid #ffffff10;vertical-align:middle}th{color:var(--muted);font-size:13px;font-weight:700;background:#0e100e}td{font-size:14px}.status{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:750}.pending{color:var(--amber);background:#efd59e16}.approved{color:var(--lime);background:#b6ff7014}.rejected{color:var(--red);background:#ff91a614}.row-actions{display:flex;gap:6px;white-space:nowrap}.feedback-copy{max-width:520px;white-space:pre-wrap;word-break:break-word}.empty{padding:38px;text-align:center;color:var(--muted)}dialog{width:min(760px,calc(100% - 28px));padding:0;border:1px solid #ffffff20;border-radius:8px;background:var(--panel);color:var(--text)}dialog::backdrop{background:#000b}.proof-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #ffffff18}.proof-body{padding:16px;text-align:center}.proof-body img{display:block;max-width:100%;max-height:72vh;margin:auto;object-fit:contain}.reply-body{padding:16px}.reply-actions{display:flex;justify-content:flex-end;gap:8px;padding:0 16px 16px}
     .button:disabled{opacity:.55;cursor:wait}.button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--lime);outline-offset:3px}.member-toolbar{display:flex;align-items:flex-end;gap:12px;margin:24px 0 12px}.member-toolbar label{margin:0}.member-search{flex:1;min-width:0}.member-filter{width:190px}.member-toolbar .button{flex:none;min-height:44px}.result-count{margin:0 0 12px;font-size:12px}.section-notice{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}.section-notice p{margin:0;color:var(--muted);font-size:13px}.section-notice.failed p{color:var(--red)}.section-notice .button{min-height:36px;padding:6px 12px;font-size:12px}.action-status{padding:10px 12px;border:1px solid #b6ff7030;border-radius:6px;color:#cae6b7;background:#b6ff7008;font-size:13px}.inline-action-message{max-width:290px;white-space:normal;font-size:12px;line-height:1.7;margin:9px 0 0;color:var(--muted)}.inline-action-message.failed{color:var(--red)}.cell-label{display:none}.unknown{color:var(--muted);background:#ffffff0a}.row-actions{flex-wrap:wrap;white-space:normal}td{overflow-wrap:anywhere}.table-wrap table caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
     @media(max-width:700px){.shell{padding:16px}.top{align-items:flex-start;flex-direction:column}.actions{width:100%;flex-wrap:wrap}.top .actions>.button{flex:1}.stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-block:17px}.stat{padding:13px 10px}.stat .muted{font-size:12px}.stat strong{font-size:25px}.member-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}.member-search{grid-column:1/-1}.member-filter{width:auto}.member-toolbar label{font-size:12px}.member-toolbar .button{font-size:12px}.table-wrap{overflow:visible;border:0;background:transparent;border-radius:0}table{display:block;min-width:0;width:100%}thead{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap}tbody{display:block}tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid #ffffff1b;border-radius:8px;background:var(--panel);margin-bottom:12px;padding:3px 0}td{display:block;min-width:0;border:0;padding:10px 13px;font-size:14px}td:last-child{grid-column:1/-1;border-top:1px solid #ffffff0c;margin-top:2px;padding-top:12px}.cell-label{display:block;margin-bottom:5px;color:var(--muted);font-size:11px;font-weight:500;line-height:1.5}#taskRows td:nth-child(3),#feedbackRows td:nth-child(3),#ideaRows td:first-child,#ideaRows td:nth-child(2){grid-column:1/-1}.row-actions{gap:7px}.row-actions .button{min-height:41px;padding:8px 11px;font-size:12px}.feedback-copy{max-width:none}.empty{padding:27px 16px;border:1px dashed #ffffff21;border-radius:8px}.section-notice{padding-top:4px}.brand{font-size:21px}}
+    .work-heading{margin:25px 0 11px;font-size:15px}.work-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:26px}.work-item{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;padding:16px;border:1px solid #b6ff7028;border-radius:8px;background:#b6ff7006;color:var(--text);text-align:left}.work-item:hover:not(:disabled){background:#b6ff7010;border-color:#b6ff7070}.work-item:disabled{cursor:default;opacity:.7}.work-item>span{color:#c6d4bc;font-size:13px}.work-item strong{font-size:28px;line-height:1.2}.work-item small{color:var(--muted);font-size:12px;line-height:1.6;min-height:19px}.queue-section{margin-top:32px;scroll-margin-top:20px}.queue-controls{display:grid;grid-template-columns:minmax(0,1fr) 180px auto;align-items:end;gap:12px;margin:20px 0 10px}.queue-controls label{margin:0;font-size:13px}.queue-controls .button{min-height:44px;font-size:13px}.queue-result{font-size:12px;margin:0 0 11px}.reply-hint{color:var(--muted);font-size:13px;line-height:1.8;margin:10px 0 0}.reply-actions .button:disabled{cursor:default}.reply-body .error{font-size:13px}button.work-item:focus-visible{outline:2px solid var(--lime);outline-offset:3px}@media(max-width:700px){.work-summary{gap:8px;margin-bottom:23px}.work-item{padding:13px 10px;gap:6px}.work-item>span{font-size:11px}.work-item strong{font-size:24px}.work-item small{font-size:10px}.queue-controls{grid-template-columns:minmax(0,1fr) auto;gap:11px}.queue-controls .queue-search{grid-column:1/-1}.queue-controls label,.queue-controls .button{font-size:12px}.queue-section{margin-top:29px}.work-heading{font-size:14px}}
   </style>
 </head>
 <body>
@@ -21,26 +22,28 @@
       <p id="loginError" class="error hidden"></p>
       <button class="button primary" type="submit">登入</button>
     </form>
-    <p class="version-stamp">Lockspace Admin v0.20.0</p>
+    <p class="version-stamp">Lockspace Admin v0.21.0</p>
   </main>
 
   <main id="dashboard" class="shell hidden">
-    <header class="top"><div><div class="brand">lockspace<b>.</b> 管理</div><span class="version-stamp">v0.20.0</span></div><div class="actions"><button id="refreshAll" class="button" type="button" data-admin-copy="refresh" data-no-translate>重新整理</button><a class="button" href="index.html">會員頁</a><button id="logout" class="button" type="button">登出</button></div></header>
+    <header class="top"><div><div class="brand">lockspace<b>.</b> 管理</div><span class="version-stamp">v0.21.0</span></div><div class="actions"><button id="refreshAll" class="button" type="button" data-admin-copy="refresh" data-no-translate>重新整理</button><a class="button" href="index.html">會員頁</a><button id="logout" class="button" type="button">登出</button></div></header>
     <p id="dashboardError" class="error hidden" role="alert" data-no-translate></p>
     <p id="actionError" class="error hidden" role="alert" data-no-translate></p>
     <p id="actionStatus" class="action-status hidden" role="status" data-no-translate></p>
     <section class="stats"><div class="stat"><span class="muted">會員</span><strong id="total">—</strong></div><div class="stat"><span class="muted">待查驗</span><strong id="pending">—</strong></div><div class="stat"><span class="muted">已通過</span><strong id="approved">—</strong></div></section>
+    <h2 id="workSummaryTitle" class="work-heading" data-admin-copy="workTitle" data-no-translate>管理待辦</h2>
+    <section class="work-summary" aria-labelledby="workSummaryTitle"><button class="work-item" type="button" data-open-queue="tasks" disabled><span data-admin-copy="pendingReports" data-no-translate>待處理檢舉</span><strong id="pendingReportsCount" data-no-translate>—</strong><small id="pendingReportTasks" data-no-translate>尚未讀取</small></button><button class="work-item" type="button" data-open-queue="ideas" disabled><span data-admin-copy="pendingIdeas" data-no-translate>待審提案</span><strong id="pendingIdeasCount" data-no-translate>—</strong><small id="pendingIdeasNote" data-no-translate>尚未讀取</small></button><button class="work-item" type="button" data-open-queue="feedback" disabled><span data-admin-copy="pendingFeedback" data-no-translate>待回覆回饋</span><strong id="pendingFeedbackCount" data-no-translate>—</strong><small id="pendingFeedbackNote" data-no-translate>尚未讀取</small></button></section>
     <div class="member-toolbar"><label class="member-search"><span data-admin-copy="search" data-no-translate>搜尋帳號或顯示名稱</span><input id="memberSearch" type="search" autocomplete="off"></label><label class="member-filter"><span data-admin-copy="verificationStatus" data-no-translate>查驗狀態</span><select id="memberStatusFilter" data-no-translate><option value="all" data-admin-copy="allStatuses">所有狀態</option><option value="pending" data-admin-copy="pending">待查驗</option><option value="approved" data-admin-copy="approved">已通過</option><option value="rejected" data-admin-copy="rejected">已退回</option><option value="unknown" data-admin-copy="unknown">未提供狀態</option></select></label><button id="clearMemberFilters" class="button" type="button" data-admin-copy="clear" data-no-translate>清除篩選</button></div>
     <p id="memberResultCount" class="muted result-count" role="status" data-no-translate></p>
     <div id="membersLoadNotice" class="section-notice hidden"><p id="membersLoadStatus" role="status" data-no-translate></p><button class="button hidden" type="button" data-retry-section="members" data-admin-copy="retry" data-no-translate>重試</button></div>
     <div class="table-wrap"><table><caption>會員</caption><thead><tr><th>帳號</th><th>顯示名稱</th><th data-admin-copy="verificationStatus" data-no-translate>查驗狀態</th><th>生日</th><th>膚色</th><th>身材</th><th>操作</th></tr></thead><tbody id="memberRows"></tbody></table><div id="empty" class="empty hidden" data-no-translate>尚無會員資料</div></div>
-    <section style="margin-top:28px"><h2>任務與檢舉</h2><p class="muted">檢視已發布任務、接受會員檢舉或刪除違規內容。</p><div id="tasksLoadNotice" class="section-notice hidden"><p id="tasksLoadStatus" role="status" data-no-translate></p><button class="button hidden" type="button" data-retry-section="tasks" data-admin-copy="retry" data-no-translate>重試</button></div><div class="table-wrap" style="margin-top:14px"><table><caption>任務與檢舉</caption><thead><tr><th>發布者</th><th>日期</th><th>任務細項</th><th>檢舉</th><th>處理狀態</th><th>操作</th></tr></thead><tbody id="taskRows"></tbody></table><div id="taskEmpty" class="empty hidden">尚無任務紀錄</div></div></section>
-    <section style="margin-top:28px"><h2>用戶任務提案</h2><p class="muted">通過的提案會加入「用戶提供」每日任務池。</p><div id="ideasLoadNotice" class="section-notice hidden"><p id="ideasLoadStatus" role="status" data-no-translate></p><button class="button hidden" type="button" data-retry-section="ideas" data-admin-copy="retry" data-no-translate>重試</button></div><div class="table-wrap" style="margin-top:14px"><table><caption>用戶任務提案</caption><thead><tr><th>會員</th><th>提案內容</th><th>時間</th><th>狀態</th><th>操作</th></tr></thead><tbody id="ideaRows"></tbody></table><div id="ideaEmpty" class="empty hidden">尚無任務提案</div></div></section>
-    <section style="margin-top:28px"><h2>問題回饋</h2><p class="muted">查看會員從登入後首頁送出的意見與內容。</p><div id="feedbackLoadNotice" class="section-notice hidden"><p id="feedbackLoadStatus" role="status" data-no-translate></p><button class="button hidden" type="button" data-retry-section="feedback" data-admin-copy="retry" data-no-translate>重試</button></div><div class="table-wrap" style="margin-top:14px"><table><caption>問題回饋</caption><thead><tr><th>會員</th><th>意見</th><th>內容</th><th>時間</th><th>狀態</th><th>操作</th></tr></thead><tbody id="feedbackRows"></tbody></table><div id="feedbackEmpty" class="empty hidden">尚無回饋</div></div></section>
+    <section id="tasksSection" class="queue-section" aria-labelledby="tasksTitle"><h2 id="tasksTitle" tabindex="-1">任務與檢舉</h2><p class="muted">檢視已發布任務、接受會員檢舉或刪除違規內容。</p><div class="queue-controls"><label class="queue-search"><span data-admin-copy="searchTasks" data-no-translate>查找發布者或任務內文</span><input id="tasksSearch" type="search" autocomplete="off"></label><label><span data-admin-copy="taskStatus" data-no-translate>檢舉狀態</span><select id="tasksStatusFilter" data-no-translate><option value="all" data-admin-copy="allStatuses">所有狀態</option><option value="pending" data-admin-copy="taskPending">待處理</option><option value="accepted" data-admin-copy="taskAccepted">已處理</option><option value="none" data-admin-copy="taskNone">無檢舉</option></select></label><button class="button" type="button" data-clear-queue="tasks" data-admin-copy="clear" data-no-translate>清除篩選</button></div><p id="tasksResultCount" class="muted queue-result" role="status" data-no-translate>—</p><div id="tasksLoadNotice" class="section-notice hidden"><p id="tasksLoadStatus" role="status" data-no-translate></p><button class="button hidden" type="button" data-retry-section="tasks" data-admin-copy="retry" data-no-translate>重試</button></div><div class="table-wrap" style="margin-top:14px"><table><caption>任務與檢舉</caption><thead><tr><th>發布者</th><th>日期</th><th>任務細項</th><th>檢舉</th><th>處理狀態</th><th>操作</th></tr></thead><tbody id="taskRows"></tbody></table><div id="taskEmpty" class="empty hidden" data-no-translate>尚無任務紀錄</div></div></section>
+    <section id="ideasSection" class="queue-section" aria-labelledby="ideasTitle"><h2 id="ideasTitle" tabindex="-1">用戶任務提案</h2><p class="muted">通過的提案會加入「用戶提供」每日任務池。</p><div class="queue-controls"><label class="queue-search"><span data-admin-copy="searchIdeas" data-no-translate>查找會員或提案內文</span><input id="ideasSearch" type="search" autocomplete="off"></label><label><span data-admin-copy="ideaStatus" data-no-translate>提案狀態</span><select id="ideasStatusFilter" data-no-translate><option value="all" data-admin-copy="allStatuses">所有狀態</option><option value="pending" data-admin-copy="ideaPending">待審核</option><option value="approved" data-admin-copy="approved">已通過</option><option value="rejected" data-admin-copy="rejected">已退回</option></select></label><button class="button" type="button" data-clear-queue="ideas" data-admin-copy="clear" data-no-translate>清除篩選</button></div><p id="ideasResultCount" class="muted queue-result" role="status" data-no-translate>—</p><div id="ideasLoadNotice" class="section-notice hidden"><p id="ideasLoadStatus" role="status" data-no-translate></p><button class="button hidden" type="button" data-retry-section="ideas" data-admin-copy="retry" data-no-translate>重試</button></div><div class="table-wrap" style="margin-top:14px"><table><caption>用戶任務提案</caption><thead><tr><th>會員</th><th>提案內容</th><th>時間</th><th>狀態</th><th>操作</th></tr></thead><tbody id="ideaRows"></tbody></table><div id="ideaEmpty" class="empty hidden" data-no-translate>尚無任務提案</div></div></section>
+    <section id="feedbackSection" class="queue-section" aria-labelledby="feedbackTitle"><h2 id="feedbackTitle" tabindex="-1">問題回饋</h2><p class="muted">查看會員從登入後首頁送出的意見與內容。</p><p id="feedbackReplyStatus" class="action-status hidden" role="status" data-no-translate></p><div class="queue-controls"><label class="queue-search"><span data-admin-copy="searchFeedback" data-no-translate>查找會員、意見或回覆</span><input id="feedbackSearch" type="search" autocomplete="off"></label><label><span data-admin-copy="feedbackStatus" data-no-translate>回饋狀態</span><select id="feedbackStatusFilter" data-no-translate><option value="all" data-admin-copy="allStatuses">所有狀態</option><option value="pending" data-admin-copy="feedbackPending">待回覆</option><option value="replied" data-admin-copy="feedbackReplied">已回覆</option><option value="done" data-admin-copy="feedbackDone">已完成</option></select></label><button class="button" type="button" data-clear-queue="feedback" data-admin-copy="clear" data-no-translate>清除篩選</button></div><p id="feedbackResultCount" class="muted queue-result" role="status" data-no-translate>—</p><div id="feedbackLoadNotice" class="section-notice hidden"><p id="feedbackLoadStatus" role="status" data-no-translate></p><button class="button hidden" type="button" data-retry-section="feedback" data-admin-copy="retry" data-no-translate>重試</button></div><div class="table-wrap" style="margin-top:14px"><table><caption>問題回饋</caption><thead><tr><th>會員</th><th>意見</th><th>內容</th><th>時間</th><th>狀態</th><th>操作</th></tr></thead><tbody id="feedbackRows"></tbody></table><div id="feedbackEmpty" class="empty hidden" data-no-translate>尚無回饋</div></div></section>
   </main>
 
   <dialog id="proofDialog"><div class="proof-head"><strong>生日查驗照片</strong><button id="closeProof" class="button" type="button">關閉</button></div><div class="proof-body"><img id="proofImage" alt="證件生日照片"></div></dialog>
-  <dialog id="replyDialog"><form id="replyForm"><div class="proof-head"><strong>回覆會員</strong><button id="closeReply" class="button" type="button">關閉</button></div><div class="reply-body"><label>回覆內容<textarea name="reply" maxlength="1200" required></textarea></label><p id="replyError" class="error hidden"></p></div><div class="reply-actions"><button class="button primary" type="submit">送出回覆</button></div></form></dialog>
+  <dialog id="replyDialog"><form id="replyForm"><div class="proof-head"><strong>回覆會員</strong><button id="closeReply" class="button" type="button">關閉</button></div><div class="reply-body"><label>回覆內容<textarea name="reply" maxlength="1200" required></textarea></label><p id="replyHint" class="reply-hint" role="status" data-no-translate></p><p id="replyError" class="error hidden" role="alert" data-no-translate></p></div><div class="reply-actions"><button class="button primary" type="submit">送出回覆</button></div></form></dialog>
 
   <script src="i18n-ui-1.js"></script><script src="i18n-ui-2.js"></script><script src="i18n-ui-3.js"></script><script src="i18n-ui-4.js"></script>
   <script src="i18n-content.js"></script>
@@ -49,7 +52,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-    const APP_VERSION="0.20.0";
+    const APP_VERSION="0.21.0";
     const config={apiKey:"AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",authDomain:"lockspace-19edc.firebaseapp.com",projectId:"lockspace-19edc",storageBucket:"lockspace-19edc.firebasestorage.app",messagingSenderId:"726438557640",appId:"1:726438557640:web:d0e51ec0280cd1066e32fd"};
     const app=initializeApp(config,"lockspace-admin"),auth=getAuth(app),db=getFirestore(app);await setPersistence(auth,browserSessionPersistence);
     const login=document.getElementById("login"),dashboard=document.getElementById("dashboard"),rows=document.getElementById("memberRows"),taskRows=document.getElementById("taskRows"),ideaRows=document.getElementById("ideaRows"),feedbackRows=document.getElementById("feedbackRows");
@@ -60,12 +63,20 @@
       "zh-Hans": { refresh:"刷新", retry:"重试", search:"搜索账号或显示名称", verificationStatus:"查验状态", allStatuses:"所有状态", pending:"待查验", approved:"已通过", rejected:"已退回", unknown:"未提供状态", clear:"清除筛选", results:"显示 {shown} / {total} 位会员", noResults:"没有符合条件的会员。请调整搜索或清除筛选。", noMembers:"暂无会员资料", loading:"加载中…", loadFailed:"此区域加载失败，请确认连接后重试。", partialFailure:"部分管理资料加载失败。可在该区域重试，或刷新全部资料。", operationBusy:"正在处理，请稍候…", operationDone:"操作已完成。", refreshFailed:"操作已完成，但列表更新失败。请刷新确认最新状态。", proofError:"无法打开查验照片，请确认连接后重试。", proofMissing:"尚未上传证件生日照片。", proofOpened:"已打开查验照片。", reportsError:"举报更新未完成，请刷新确认后重试。", reportsDone:"举报处理已更新。", ideaError:"提案审核未完成，请刷新确认后重试。", ideaDone:"提案审核已更新。" },
       en: { refresh:"Refresh", retry:"Retry", search:"Search username or display name", verificationStatus:"Verification status", allStatuses:"All statuses", pending:"Pending", approved:"Approved", rejected:"Rejected", unknown:"No status", clear:"Clear filters", results:"Showing {shown} of {total} members", noResults:"No matching members. Adjust your search or clear the filters.", noMembers:"No members yet", loading:"Loading…", loadFailed:"This section could not load. Check your connection and retry.", partialFailure:"Some sections could not load. Retry a section or refresh all data.", operationBusy:"Processing. Please wait…", operationDone:"Action completed.", refreshFailed:"Action completed, but the list could not refresh. Refresh to confirm the latest status.", proofError:"The verification photo could not open. Check your connection and retry.", proofMissing:"No verification photo has been uploaded.", proofOpened:"Verification photo opened.", reportsError:"Report updates did not finish. Refresh to confirm the current status before retrying.", reportsDone:"Report status updated.", ideaError:"The proposal review did not finish. Refresh to confirm the current status before retrying.", ideaDone:"Proposal review updated." }
     };
+    const QUEUE_COPY = {"zh-Hant":{"workTitle":"管理待辦","pendingReports":"待處理檢舉","relatedTasks":"涉及 {count} 件任務","pendingIdeas":"待審提案","pendingFeedback":"待回覆回饋","notLoaded":"尚未讀取","notUpdated":"未能更新","viewPending":"查看待辦 →","searchTasks":"查找發布者或任務內文","searchIdeas":"查找會員或提案內文","searchFeedback":"查找會員、意見或回覆","taskStatus":"檢舉狀態","ideaStatus":"提案狀態","feedbackStatus":"回饋狀態","taskPending":"待處理","taskAccepted":"已處理","taskNone":"無檢舉","ideaPending":"待審核","feedbackPending":"待回覆","feedbackReplied":"已回覆","feedbackDone":"已完成","records":"顯示 {shown} / {total} 筆","cachedRecords":"資料未更新：顯示 {shown} / {total} 筆","noMatches":"沒有符合條件的紀錄。請調整搜尋或清除篩選。","noTasks":"尚無任務紀錄","noIdeas":"尚無任務提案","noFeedback":"尚無回饋","reportCounts":"{open} 筆待處理 / 共 {total} 筆","replyBlank":"輸入回覆內容後才可送出。","replyUnchanged":"內容尚未變更，不會重複送出或新增通知。","replyChanged":"回覆已修改，送出後會通知會員。","replySaving":"回覆送出中，請稍候…","replySaved":"回覆已送出。","replyRefreshFailed":"回覆已送出，但列表未能更新。請重新整理確認。","replyError":"回覆未能送出。請確認連線後重試，內容已保留。","replyDiscard":"回覆尚未儲存。確定關閉並捨棄修改？"},"zh-Hans":{"workTitle":"管理待办","pendingReports":"待处理举报","relatedTasks":"涉及 {count} 项任务","pendingIdeas":"待审提案","pendingFeedback":"待回复反馈","notLoaded":"尚未读取","notUpdated":"未能更新","viewPending":"查看待办 →","searchTasks":"查找发布者或任务内容","searchIdeas":"查找会员或提案内容","searchFeedback":"查找会员、意见或回复","taskStatus":"举报状态","ideaStatus":"提案状态","feedbackStatus":"反馈状态","taskPending":"待处理","taskAccepted":"已处理","taskNone":"无举报","ideaPending":"待审核","feedbackPending":"待回复","feedbackReplied":"已回复","feedbackDone":"已完成","records":"显示 {shown} / {total} 条","cachedRecords":"数据未更新：显示 {shown} / {total} 条","noMatches":"没有符合条件的记录。请调整搜索或清除筛选。","noTasks":"暂无任务记录","noIdeas":"暂无任务提案","noFeedback":"暂无反馈","reportCounts":"{open} 条待处理 / 共 {total} 条","replyBlank":"输入回复内容后才可发送。","replyUnchanged":"内容尚未更改，不会重复发送或新增通知。","replyChanged":"回复已修改，发送后会通知会员。","replySaving":"回复发送中，请稍候…","replySaved":"回复已发送。","replyRefreshFailed":"回复已发送，但列表未能更新。请刷新确认。","replyError":"回复未能发送。请确认连接后重试，内容已保留。","replyDiscard":"回复尚未保存。确定关闭并放弃修改？"},"en":{"workTitle":"Work queue","pendingReports":"Open reports","relatedTasks":"Across {count} submissions","pendingIdeas":"Pending proposals","pendingFeedback":"Awaiting reply","notLoaded":"Not loaded","notUpdated":"Could not update","viewPending":"View pending →","searchTasks":"Find publisher or task text","searchIdeas":"Find member or proposal text","searchFeedback":"Find member, feedback or reply","taskStatus":"Report status","ideaStatus":"Proposal status","feedbackStatus":"Feedback status","taskPending":"Open reports","taskAccepted":"Handled","taskNone":"No reports","ideaPending":"Pending review","feedbackPending":"Awaiting reply","feedbackReplied":"Replied","feedbackDone":"Completed","records":"Showing {shown} of {total} records","cachedRecords":"Data not refreshed: showing {shown} of {total} records","noMatches":"No matching records. Adjust your search or clear the filters.","noTasks":"No submissions yet","noIdeas":"No proposals yet","noFeedback":"No feedback yet","reportCounts":"{open} open / {total} total reports","replyBlank":"Enter a reply before sending.","replyUnchanged":"The reply has not changed. No duplicate reply or notification will be sent.","replyChanged":"The reply has changed. Sending it will notify the member.","replySaving":"Sending reply. Please wait…","replySaved":"Reply sent.","replyRefreshFailed":"Reply sent, but the list could not update. Refresh to confirm.","replyError":"The reply could not be sent. Check your connection and retry. Your draft is preserved.","replyDiscard":"This reply has unsaved changes. Close and discard them?"}};
+    Object.entries(QUEUE_COPY).forEach(([language, copy]) => Object.assign(ADMIN_COPY[language], copy));
     let allMembers = [], membersLoaded = false, allLoadPromise = null;
+    let allTasks = [], allReports = [], allIdeas = [], allFeedback = [];
+    const queueLoaded = { tasks:false, ideas:false, feedback:false };
+    const queueCounts = {};
     const operationLocks = new Set(), sectionPromises = new Map(), sectionStates = new Map();
     const sectionLoaders = { members:loadMembers, tasks:loadTasks, ideas:loadTaskIdeas, feedback:loadFeedback };
     function adminCopy(key) {
       const language = window.LockspaceI18n?.language() || "zh-Hant";
       return (ADMIN_COPY[language] || ADMIN_COPY.en)[key] || ADMIN_COPY.en[key] || "";
+    }
+    function adminFormat(key, values) {
+      return Object.entries(values).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, String(value)), adminCopy(key));
     }
     function adminMessage(id, key) {
       const element = document.getElementById(id);
@@ -83,7 +94,75 @@
         if (element.textContent !== text) element.textContent = text;
       });
       if (membersLoaded) renderMembers();
+      if (queueLoaded.tasks) renderTasks();
+      if (queueLoaded.ideas) renderTaskIdeas();
+      if (queueLoaded.feedback) renderFeedback();
+      updateWorkSummary();
+      if (document.getElementById("replyForm").dataset.feedbackId) updateReplyState();
       document.querySelectorAll("table tbody").forEach(enhanceTable);
+    }
+    function taskReportSummary(taskId, reports) {
+      const related = reports.filter(report => report.submissionId === taskId);
+      const open = related.filter(report => report.status === "open").length;
+      return { open, total:related.length, status:open ? "pending" : related.some(report => report.status === "accepted") ? "accepted" : "none" };
+    }
+    function ideaState(item) {
+      return ["approved", "rejected"].includes(item.status) ? item.status : "pending";
+    }
+    function feedbackState(item) {
+      return String(item.adminReply || "").trim() ? "replied" : item.status === "done" ? "done" : "pending";
+    }
+    function filterQueueItems(name, items, search, status) {
+      const needle = String(search || "").trim().toLowerCase();
+      return items.filter(item => {
+        const state = name === "tasks" ? taskReportSummary(item.id, allReports).status : name === "ideas" ? ideaState(item) : feedbackState(item);
+        const fields = name === "tasks" ? [item.displayName, item.taskType, item.taskInstruction, item.taskCode, item.submittedDate] : name === "ideas" ? [item.displayName, item.content] : [item.username, item.displayName, item.opinion, item.content, item.adminReply];
+        return (status === "all" || state === status) && (!needle || fields.some(value => String(value || "").toLowerCase().includes(needle)));
+      });
+    }
+    function queueReadable(name) {
+      return queueLoaded[name] && !["loading", "failed"].includes(sectionStates.get(name));
+    }
+    function updateWorkSummary() {
+      const ids = { tasks:["pendingReportsCount", "pendingReportTasks"], ideas:["pendingIdeasCount", "pendingIdeasNote"], feedback:["pendingFeedbackCount", "pendingFeedbackNote"] };
+      Object.entries(ids).forEach(([name, [countId, noteId]]) => {
+        const ready = queueReadable(name);
+        document.querySelector(`[data-open-queue="${name}"]`).disabled = !ready;
+        const count = document.getElementById(countId), note = document.getElementById(noteId);
+        if (!ready) {
+          count.textContent = "—";
+          note.textContent = adminCopy(sectionStates.get(name) === "failed" ? "notUpdated" : sectionStates.get(name) === "loading" ? "loading" : "notLoaded");
+          return;
+        }
+        if (name === "tasks") {
+          const open = allReports.filter(report => report.status === "open");
+          count.textContent = String(open.length);
+          note.textContent = adminFormat("relatedTasks", { count:new Set(open.map(report => report.submissionId)).size });
+        } else {
+          count.textContent = String(name === "ideas" ? allIdeas.filter(item => ideaState(item) === "pending").length : allFeedback.filter(item => feedbackState(item) === "pending").length);
+          note.textContent = adminCopy("viewPending");
+        }
+      });
+    }
+    function updateQueueResult(name) {
+      const count = queueCounts[name], element = document.getElementById(`${name}ResultCount`);
+      element.textContent = count ? adminFormat(queueReadable(name) ? "records" : "cachedRecords", count) : "—";
+    }
+    function setQueueResults(name, shown, total) {
+      queueCounts[name] = { shown, total };
+      updateQueueResult(name);
+      const emptyId = { tasks:"taskEmpty", ideas:"ideaEmpty", feedback:"feedbackEmpty" }[name];
+      const empty = document.getElementById(emptyId);
+      empty.classList.toggle("hidden", shown > 0);
+      empty.textContent = adminCopy(total ? "noMatches" : { tasks:"noTasks", ideas:"noIdeas", feedback:"noFeedback" }[name]);
+    }
+    function openWorkQueue(name) {
+      if (!queueReadable(name)) return;
+      document.getElementById(`${name}Search`).value = "";
+      document.getElementById(`${name}StatusFilter`).value = "pending";
+      ({ tasks:renderTasks, ideas:renderTaskIdeas, feedback:renderFeedback })[name]();
+      document.getElementById(`${name}Section`).scrollIntoView({ behavior:window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block:"start" });
+      document.getElementById(`${name}Title`).focus({ preventScroll:true });
     }
     function enhanceTable(body) {
       const table = body.closest("table"), headings = [...table.querySelectorAll("thead th")];
@@ -105,7 +184,7 @@
     }
     function updateOperationButtons() {
       document.querySelectorAll("[data-operation-key]").forEach(button => {
-        const group = { proof:"members", reports:"tasks", idea:"ideas" }[button.dataset.operationKey.split(":")[0]];
+        const group = { proof:"members", reports:"tasks", idea:"ideas", feedback:"feedback" }[button.dataset.operationKey.split(":")[0]];
         const busy = operationLocks.has(button.dataset.operationKey) || sectionStates.get(group) === "loading";
         button.disabled = busy;
         button.setAttribute("aria-busy", String(busy));
@@ -156,6 +235,8 @@
       notice.closest("section")?.setAttribute("aria-busy", String(state === "loading"));
       updateLoadSummary();
       updateOperationButtons();
+      updateWorkSummary();
+      if (name !== "members") updateQueueResult(name);
     }
     async function loadSection(name) {
       if (sectionPromises.has(name)) return sectionPromises.get(name);
@@ -180,12 +261,20 @@
     document.getElementById("memberSearch").addEventListener("input", renderMembers);
     document.getElementById("memberStatusFilter").addEventListener("change", renderMembers);
     document.getElementById("clearMemberFilters").addEventListener("click", () => { document.getElementById("memberSearch").value = ""; document.getElementById("memberStatusFilter").value = "all"; renderMembers(); document.getElementById("memberSearch").focus(); });
+    Object.entries({ tasks:renderTasks, ideas:renderTaskIdeas, feedback:renderFeedback }).forEach(([name, render]) => {
+      document.getElementById(`${name}Search`).addEventListener("input", render);
+      document.getElementById(`${name}StatusFilter`).addEventListener("change", render);
+      document.querySelector(`[data-clear-queue="${name}"]`).addEventListener("click", () => { document.getElementById(`${name}Search`).value = ""; document.getElementById(`${name}StatusFilter`).value = "all"; render(); document.getElementById(`${name}Search`).focus(); });
+      document.querySelector(`[data-open-queue="${name}"]`).addEventListener("click", () => openWorkQueue(name));
+    });
     document.querySelector("[data-global-language] select")?.addEventListener("change", () => { syncAdminCopy(); });
     syncAdminCopy();
     document.getElementById("loginForm").addEventListener("submit",async event=>{event.preventDefault();const data=Object.fromEntries(new FormData(event.target));try{await signInWithEmailAndPassword(auth,accountEmail(data.account),data.password)}catch{showError("帳號、密碼或管理權限不正確。")}});
     document.getElementById("logout").addEventListener("click",()=>signOut(auth));
     document.getElementById("closeProof").addEventListener("click",()=>document.getElementById("proofDialog").close());
-    document.getElementById("closeReply").addEventListener("click",()=>document.getElementById("replyDialog").close());
+    document.getElementById("closeReply").addEventListener("click", closeReplyDraft);
+    document.getElementById("replyDialog").addEventListener("cancel", closeReplyDraft);
+    document.getElementById("replyForm").elements.reply.addEventListener("input", () => { adminMessage("replyError", ""); updateReplyState(); });
     document.getElementById("replyForm").addEventListener("submit",submitFeedbackReply);
     onAuthStateChanged(auth,async user=>{if(!user){login.classList.remove("hidden");dashboard.classList.add("hidden");return}try{const admin=await getDoc(doc(db,"admins",user.uid));if(!admin.exists()){showError("這個帳號沒有管理權限。");await signOut(auth);return}login.classList.add("hidden");dashboard.classList.remove("hidden");await loadAll()}catch{await signOut(auth);showError("管理資料載入失敗，請檢查網路後再試。")}});
     function verificationState(member) {
@@ -231,7 +320,32 @@
         return "proofOpened";
       }, null, "proofError");
     }
-    async function loadTasks(){const [submissionSnapshot,reportSnapshot]=await Promise.all([getDocs(collection(db,"submissions")),getDocs(collection(db,"reports"))]);const reports=reportSnapshot.docs.map(item=>({id:item.id,...item.data()}));const tasks=submissionSnapshot.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));document.getElementById("taskEmpty").classList.toggle("hidden",tasks.length>0);taskRows.innerHTML=tasks.map(task=>{const related=reports.filter(report=>report.submissionId===task.id),open=related.filter(report=>report.status==="open").length,accepted=related.some(report=>report.status==="accepted");const type=task.taskType||"驗證任務",detail=task.taskInstruction||task.taskCode||"—";return `<tr><td>${esc(task.displayName||"會員")}</td><td>${esc(task.submittedDate||"—")}</td><td><strong>${esc(type)}</strong><br><span class="muted">${esc(detail)}</span></td><td>${open||related.length}</td><td>${accepted?"已接受":open?"待處理":"無檢舉"}</td><td><div class="row-actions"><button class="button" type="button" data-task-view="${task.id}">查看任務</button>${open?`<button class="button primary" type="button" data-handle="${task.id}" data-operation-key="reports:${task.id}">接受檢舉</button>`:""}<button class="button danger" type="button" data-delete-task="${task.id}">刪除任務</button></div></td></tr>`}).join("");taskRows.querySelectorAll("[data-task-view]").forEach(button=>button.addEventListener("click",()=>viewTask(tasks.find(task=>task.id===button.dataset.taskView))));taskRows.querySelectorAll("[data-handle]").forEach(button=>button.addEventListener("click",()=>acceptReports(button.dataset.handle,reports)));taskRows.querySelectorAll("[data-delete-task]").forEach(button=>button.addEventListener("click",()=>deleteTask(button.dataset.deleteTask)));window.LockspaceI18n?.translateDocument(document);enhanceTable(taskRows);updateOperationButtons()}
+    async function loadTasks() {
+      const [submissionSnapshot, reportSnapshot] = await Promise.all([getDocs(collection(db, "submissions")), getDocs(collection(db, "reports"))]);
+      allReports = reportSnapshot.docs.map(item => ({ id:item.id, ...item.data() }));
+      allTasks = submissionSnapshot.docs.map(item => ({ id:item.id, ...item.data() })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+      queueLoaded.tasks = true;
+      renderTasks();
+      updateWorkSummary();
+    }
+    function renderTasks() {
+      if (!queueLoaded.tasks) return;
+      const tasks = filterQueueItems("tasks", allTasks, document.getElementById("tasksSearch").value, document.getElementById("tasksStatusFilter").value);
+      setQueueResults("tasks", tasks.length, allTasks.length);
+      taskRows.innerHTML = tasks.map(task => {
+        const report = taskReportSummary(task.id, allReports);
+        const statusKey = { pending:"taskPending", accepted:"taskAccepted", none:"taskNone" }[report.status];
+        const statusClass = { pending:"pending", accepted:"approved", none:"unknown" }[report.status];
+        const type = task.taskType || "驗證任務", detail = task.taskInstruction || task.taskCode || "—";
+        return `<tr><td data-no-translate>${esc(task.displayName || "會員")}</td><td data-no-translate>${esc(task.submittedDate || "—")}</td><td><strong>${esc(type)}</strong><br><span class="muted" data-no-translate>${esc(detail)}</span></td><td data-no-translate>${esc(report.total ? adminFormat("reportCounts", report) : adminCopy("taskNone"))}</td><td><span class="status ${statusClass}" data-admin-copy="${statusKey}" data-no-translate>${esc(adminCopy(statusKey))}</span></td><td><div class="row-actions"><button class="button" type="button" data-task-view="${esc(task.id)}">查看任務</button>${report.open ? `<button class="button primary" type="button" data-handle="${esc(task.id)}" data-operation-key="reports:${esc(task.id)}">接受檢舉</button>` : ""}<button class="button danger" type="button" data-delete-task="${esc(task.id)}">刪除任務</button></div></td></tr>`;
+      }).join("");
+      taskRows.querySelectorAll("[data-task-view]").forEach(button => button.addEventListener("click", () => viewTask(allTasks.find(task => task.id === button.dataset.taskView))));
+      taskRows.querySelectorAll("[data-handle]").forEach(button => button.addEventListener("click", () => acceptReports(button.dataset.handle, allReports)));
+      taskRows.querySelectorAll("[data-delete-task]").forEach(button => button.addEventListener("click", () => deleteTask(button.dataset.deleteTask)));
+      window.LockspaceI18n?.translateDocument(document);
+      enhanceTable(taskRows);
+      updateOperationButtons();
+    }
     function viewTask(task){document.getElementById("proofImage").src=task.imageDataUrl;document.querySelector("#proofDialog .proof-head strong").textContent="任務驗證照片";document.getElementById("proofDialog").showModal()}
     async function acceptReports(submissionId, reports) {
       return runAdminAction(`reports:${submissionId}`, async () => {
@@ -240,7 +354,29 @@
       }, () => loadSection("tasks"), "reportsError");
     }
     async function deleteTask(submissionId){if(!confirm("確定永久刪除這筆任務，以及相關審核與檢舉紀錄？此操作無法復原。"))return;const [reviewSnapshot,reportSnapshot]=await Promise.all([getDocs(collection(db,"reviews")),getDocs(collection(db,"reports"))]);await Promise.all([deleteDoc(doc(db,"submissions",submissionId)),...reviewSnapshot.docs.filter(item=>item.data().submissionId===submissionId).map(item=>deleteDoc(item.ref)),...reportSnapshot.docs.filter(item=>item.data().submissionId===submissionId).map(item=>deleteDoc(item.ref))]);await loadTasks()}
-    async function loadTaskIdeas(){const snapshot=await getDocs(collection(db,"taskIdeas"));const ideas=snapshot.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>String(b.createdAt||"").localeCompare(String(a.createdAt||"")));document.getElementById("ideaEmpty").classList.toggle("hidden",ideas.length>0);ideaRows.innerHTML=ideas.map(item=>{const approve=item.status!=="approved"?'<button class="button primary" type="button" data-idea-action="approved" data-idea-id="'+item.id+'" data-operation-key="idea:'+item.id+'">通過</button>':"";const reject=item.status!=="rejected"?'<button class="button" type="button" data-idea-action="rejected" data-idea-id="'+item.id+'" data-operation-key="idea:'+item.id+'">退回</button>':"";return `<tr><td>${esc(item.displayName||"會員")}</td><td><div class="feedback-copy">${esc(item.content||"—")}</div></td><td>${esc(formatDate(item.createdAt))}</td><td><span class="status ${item.status||"pending"}">${item.status==="approved"?"已通過":item.status==="rejected"?"已退回":"待審核"}</span></td><td><div class="row-actions">${approve}${reject}<button class="button danger" data-delete-idea="${item.id}">刪除</button></div></td></tr>`}).join("");ideaRows.querySelectorAll("[data-idea-action]").forEach(button=>button.addEventListener("click",()=>reviewTaskIdea(button.dataset.ideaId,button.dataset.ideaAction)));ideaRows.querySelectorAll("[data-delete-idea]").forEach(button=>button.addEventListener("click",()=>deleteTaskIdea(button.dataset.deleteIdea)));window.LockspaceI18n?.translateDocument(document);enhanceTable(ideaRows);updateOperationButtons()}
+    async function loadTaskIdeas() {
+      const snapshot = await getDocs(collection(db, "taskIdeas"));
+      allIdeas = snapshot.docs.map(item => ({ id:item.id, ...item.data() })).sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+      queueLoaded.ideas = true;
+      renderTaskIdeas();
+      updateWorkSummary();
+    }
+    function renderTaskIdeas() {
+      if (!queueLoaded.ideas) return;
+      const ideas = filterQueueItems("ideas", allIdeas, document.getElementById("ideasSearch").value, document.getElementById("ideasStatusFilter").value);
+      setQueueResults("ideas", ideas.length, allIdeas.length);
+      ideaRows.innerHTML = ideas.map(item => {
+        const state = ideaState(item), statusKey = state === "pending" ? "ideaPending" : state;
+        const approve = state !== "approved" ? `<button class="button primary" type="button" data-idea-action="approved" data-idea-id="${esc(item.id)}" data-operation-key="idea:${esc(item.id)}">通過</button>` : "";
+        const reject = state !== "rejected" ? `<button class="button" type="button" data-idea-action="rejected" data-idea-id="${esc(item.id)}" data-operation-key="idea:${esc(item.id)}">退回</button>` : "";
+        return `<tr><td data-no-translate>${esc(item.displayName || "會員")}</td><td><div class="feedback-copy" data-no-translate>${esc(item.content || "—")}</div></td><td data-no-translate>${esc(formatDate(item.createdAt))}</td><td><span class="status ${state}" data-admin-copy="${statusKey}" data-no-translate>${esc(adminCopy(statusKey))}</span></td><td><div class="row-actions">${approve}${reject}<button class="button danger" type="button" data-delete-idea="${esc(item.id)}">刪除</button></div></td></tr>`;
+      }).join("");
+      ideaRows.querySelectorAll("[data-idea-action]").forEach(button => button.addEventListener("click", () => reviewTaskIdea(button.dataset.ideaId, button.dataset.ideaAction)));
+      ideaRows.querySelectorAll("[data-delete-idea]").forEach(button => button.addEventListener("click", () => deleteTaskIdea(button.dataset.deleteIdea)));
+      window.LockspaceI18n?.translateDocument(document);
+      enhanceTable(ideaRows);
+      updateOperationButtons();
+    }
     async function reviewTaskIdea(id, status) {
       return runAdminAction(`idea:${id}`, async () => {
         await updateDoc(doc(db, "taskIdeas", id), { status, reviewedAt:serverTimestamp(), reviewedBy:auth.currentUser.uid });
@@ -248,17 +384,100 @@
       }, () => loadSection("ideas"), "ideaError");
     }
     async function deleteTaskIdea(id){if(!confirm("確定刪除這筆任務提案？"))return;await deleteDoc(doc(db,"taskIdeas",id));await loadTaskIdeas()}
-    async function loadFeedback(){
-      const snapshot=await getDocs(collection(db,"feedback"));
-      const items=snapshot.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>String(b.createdAtIso||"").localeCompare(String(a.createdAtIso||"")));
-      document.getElementById("feedbackEmpty").classList.toggle("hidden",items.length>0);
-      feedbackRows.innerHTML=items.map(item=>`<tr><td>${esc(item.displayName||item.username||"會員")}<br><span class="muted">${esc(item.username||"")}</span></td><td>${esc(item.opinion||"—")}</td><td><div class="feedback-copy">${esc(item.content||"—")}${item.adminReply?`<br><span class="muted">回覆：${esc(item.adminReply)}</span>`:""}</div></td><td>${esc(formatDate(item.createdAtIso))}</td><td>${item.adminReply?"已回覆":item.status==="done"?"已完成":"待處理"}</td><td><div class="row-actions"><button class="button primary" type="button" data-feedback-reply="${item.id}">${item.adminReply?"修改回覆":"回覆"}</button><button class="button danger" type="button" data-feedback-delete="${item.id}">刪除</button></div></td></tr>`).join("");
-      feedbackRows.querySelectorAll("[data-feedback-reply]").forEach(button=>button.addEventListener("click",()=>openFeedbackReply(items.find(item=>item.id===button.dataset.feedbackReply))));
-      feedbackRows.querySelectorAll("[data-feedback-delete]").forEach(button=>button.addEventListener("click",()=>deleteFeedback(button)));
-      window.LockspaceI18n?.translateDocument(document);enhanceTable(feedbackRows);
+    async function loadFeedback() {
+      const snapshot = await getDocs(collection(db, "feedback"));
+      allFeedback = snapshot.docs.map(item => ({ id:item.id, ...item.data() })).sort((a, b) => String(b.createdAtIso || "").localeCompare(String(a.createdAtIso || "")));
+      queueLoaded.feedback = true;
+      renderFeedback();
+      updateWorkSummary();
     }
-    function openFeedbackReply(item){const form=document.getElementById("replyForm");form.dataset.feedbackId=item.id;form.elements.reply.value=item.adminReply||"";document.getElementById("replyError").classList.add("hidden");document.getElementById("replyDialog").showModal()}
-    async function submitFeedbackReply(event){event.preventDefault();const form=event.currentTarget,button=form.querySelector('button[type="submit"]'),reply=String(form.elements.reply.value||"").trim();if(!reply)return;button.disabled=true;try{await updateDoc(doc(db,"feedback",form.dataset.feedbackId),{adminReply:reply,status:"replied",repliedAt:serverTimestamp(),repliedAtIso:new Date().toISOString(),repliedBy:auth.currentUser.uid});document.getElementById("replyDialog").close();await loadFeedback()}catch(error){const box=document.getElementById("replyError");box.textContent=`回覆失敗：${error.message||"請稍後再試"}`;box.classList.remove("hidden")}finally{button.disabled=false}}
+    function renderFeedback() {
+      if (!queueLoaded.feedback) return;
+      const items = filterQueueItems("feedback", allFeedback, document.getElementById("feedbackSearch").value, document.getElementById("feedbackStatusFilter").value);
+      setQueueResults("feedback", items.length, allFeedback.length);
+      feedbackRows.innerHTML = items.map(item => {
+        const state = feedbackState(item), statusKey = { pending:"feedbackPending", replied:"feedbackReplied", done:"feedbackDone" }[state];
+        return `<tr><td data-no-translate>${esc(item.displayName || item.username || "會員")}<br><span class="muted">${esc(item.username || "")}</span></td><td data-no-translate>${esc(item.opinion || "—")}</td><td><div class="feedback-copy" data-no-translate>${esc(item.content || "—")}${String(item.adminReply || "").trim() ? `<br><span class="muted">${esc(adminCopy("feedbackReplied"))}：${esc(item.adminReply)}</span>` : ""}</div></td><td data-no-translate>${esc(formatDate(item.createdAtIso))}</td><td><span class="status ${state === "pending" ? "pending" : "approved"}" data-admin-copy="${statusKey}" data-no-translate>${esc(adminCopy(statusKey))}</span></td><td><div class="row-actions"><button class="button primary" type="button" data-feedback-reply="${esc(item.id)}" data-operation-key="feedback:${esc(item.id)}">${String(item.adminReply || "").trim() ? "修改回覆" : "回覆"}</button><button class="button danger" type="button" data-feedback-delete="${esc(item.id)}">刪除</button></div></td></tr>`;
+      }).join("");
+      feedbackRows.querySelectorAll("[data-feedback-reply]").forEach(button => button.addEventListener("click", () => openFeedbackReply(allFeedback.find(item => item.id === button.dataset.feedbackReply))));
+      feedbackRows.querySelectorAll("[data-feedback-delete]").forEach(button => button.addEventListener("click", () => deleteFeedback(button)));
+      window.LockspaceI18n?.translateDocument(document);
+      enhanceTable(feedbackRows);
+      updateOperationButtons();
+    }
+    function openFeedbackReply(item) {
+      const form = document.getElementById("replyForm");
+      if (form.dataset.replyBusy === "true") return;
+      form.dataset.feedbackId = item.id;
+      form.dataset.originalReply = String(item.adminReply || "").trim();
+      form.dataset.replyBusy = "false";
+      form.elements.reply.value = item.adminReply || "";
+      adminMessage("replyError", "");
+      updateReplyState();
+      document.getElementById("replyDialog").showModal();
+    }
+    function updateReplyState() {
+      const form = document.getElementById("replyForm"), reply = String(form.elements.reply.value || "").trim();
+      const busy = form.dataset.replyBusy === "true", unchanged = reply === (form.dataset.originalReply || "");
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = busy || !reply || unchanged;
+      button.setAttribute("aria-busy", String(busy));
+      document.getElementById("closeReply").disabled = busy;
+      adminMessage("replyHint", busy ? "replySaving" : !reply ? "replyBlank" : unchanged ? "replyUnchanged" : "replyChanged");
+    }
+    function closeReplyDraft(event) {
+      event?.preventDefault();
+      const form = document.getElementById("replyForm");
+      if (form.dataset.replyBusy === "true") return;
+      const dirty = String(form.elements.reply.value || "").trim() !== (form.dataset.originalReply || "");
+      if (dirty && !window.confirm(adminCopy("replyDiscard"))) return;
+      document.getElementById("replyDialog").close();
+    }
+    async function submitFeedbackReply(event) {
+      event.preventDefault();
+      const form = event.currentTarget, reply = String(form.elements.reply.value || "").trim();
+      if (form.dataset.replyBusy === "true") return;
+      if (!reply || reply === (form.dataset.originalReply || "")) { updateReplyState(); return; }
+      const id = form.dataset.feedbackId, repliedAtIso = new Date().toISOString(), operationKey = `feedback:${id}`;
+      if (operationLocks.has(operationKey)) return;
+      operationLocks.add(operationKey);
+      updateOperationButtons();
+      form.dataset.replyBusy = "true";
+      updateReplyState();
+      adminMessage("replyError", "");
+      adminMessage("feedbackReplyStatus", "");
+      let acknowledged = false;
+      try {
+        await updateDoc(doc(db, "feedback", id), { adminReply:reply, status:"replied", repliedAt:serverTimestamp(), repliedAtIso, repliedBy:auth.currentUser.uid });
+        acknowledged = true;
+        form.dataset.originalReply = reply;
+        const item = allFeedback.find(item => item.id === id);
+        if (item) Object.assign(item, { adminReply:reply, status:"replied", repliedAtIso });
+        renderFeedback();
+        adminMessage("actionError", "");
+        adminMessage("actionStatus", "replySaved");
+        adminMessage("feedbackReplyStatus", "replySaved");
+        document.getElementById("replyDialog").close();
+        // A read started before this write cannot confirm the saved reply.
+        const existingRead = sectionPromises.get("feedback");
+        if (existingRead) await existingRead;
+        const refreshed = await loadSection("feedback");
+        if (!refreshed) {
+          adminMessage("actionStatus", "replyRefreshFailed");
+          adminMessage("feedbackReplyStatus", "replyRefreshFailed");
+        }
+      } catch {
+        if (acknowledged) {
+          adminMessage("actionStatus", "replyRefreshFailed");
+          adminMessage("feedbackReplyStatus", "replyRefreshFailed");
+        } else adminMessage("replyError", "replyError");
+      } finally {
+        form.dataset.replyBusy = "false";
+        updateReplyState();
+        operationLocks.delete(operationKey);
+        updateOperationButtons();
+      }
+    }
     async function deleteFeedback(button){if(!confirm("確定刪除這筆回饋？此操作無法復原。"))return;button.disabled=true;const original=button.textContent;button.textContent="刪除中…";try{await deleteDoc(doc(db,"feedback",button.dataset.feedbackDelete));await loadFeedback()}catch(error){button.disabled=false;button.textContent=original;alert(`回饋刪除失敗：${error.message||"請稍後再試"}`)}}
     function formatDate(value){if(!value)return "—";const date=new Date(value);return Number.isNaN(date.getTime())?String(value):date.toLocaleString("zh-TW",{timeZone:"Asia/Taipei"})}
     function showError(message){const box=document.getElementById("loginError");box.textContent=message;box.classList.remove("hidden")}
