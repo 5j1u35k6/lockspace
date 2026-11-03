@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.22.0 - 2026-11-03
+
+### Changed
+
+- Redesigned the public member-acquisition surface around the clearest Lockspace value proposition: daily tasks, member-submitted task ideas, and community verification activity.
+- Reworked the signed-in member home into a clearer action hub with stronger hierarchy, mobile-friendly action cards, and a more visible community feed.
+- Standardized Traditional Chinese member-facing terminology around common Taiwan usage, including 使用者, 帳號, 搜尋, and 回上一頁.
+- Member release notifications now omit operational and administrator-only changes.
+
 ## 0.21.1 - 2026-10-31
 
 - Add explicit member verification decisions to the administrator proof viewer: approve, request resubmission, or return to pending.

@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.21.1">
+  <meta name="application-version" content="0.22.0">
   <title>lockspace. 會員登入</title>
-  <meta name="description" content="Lockspace 成人會員社群：每日任務、會員驗證與創意投稿。了解參與方式，建立自己的會員帳號。僅限 18+，自願參與。">
+  <meta name="description" content="Lockspace 18+ 成人會員社群：每天獲得隨機任務、提交驗證，也能把自己的任務點子送進每日任務池。僅限成年人自願參與。">
   <style>
     :root {
       color-scheme: dark;
@@ -284,7 +284,7 @@
       .option-menu { grid-template-columns: 1fr; }
     }
   </style>
-  <link rel="stylesheet" href="welcome.css?v=0.21.1">
+  <link rel="stylesheet" href="welcome.css?v=0.22.0">
 </head>
 <body>
   <button id="authLanguageButton" class="language-button auth-language-button" type="button" aria-label="選擇語言" title="選擇語言"><span class="globe-icon" aria-hidden="true"></span></button>
@@ -310,25 +310,26 @@
   <main id="authPage" class="auth-page hidden">
     <section class="welcome-story" lang="zh-Hant" data-no-translate aria-labelledby="welcomeTitle">
       <div class="welcome-brand" aria-label="Lockspace"><span class="welcome-brand-mark" aria-hidden="true">⌑</span>lockspace<span class="welcome-brand-dot" aria-hidden="true">.</span></div>
-      <p class="welcome-eyebrow">成人會員招募中 · YOUR SPACE, YOUR PACE</p>
-      <h1 id="welcomeTitle">每天一個挑戰，<br><span>讓互動更有想像。</span></h1>
-      <p class="welcome-intro">在 Lockspace 接收每日任務、提交會員驗證，<br>也讓你的創意，有機會成為下一次的每日任務。</p>
+      <p class="welcome-eyebrow">18+ 成人會員社群 · 現正開放加入</p>
+      <h1 id="welcomeTitle">不只接受挑戰。<br><span>你也能決定下一個任務。</span></h1>
+      <p class="welcome-intro">每天獲得一個不同的任務、提交驗證、看看社群最近完成了什麼；你也可以送出自己的任務點子，通過審核後加入每日任務池。</p>
       <div class="welcome-actions">
-        <button id="welcomeSignup" type="button">建立會員帳號 ↗</button>
-        <a href="https://x.com/LockspaceTW" target="_blank" rel="noopener noreferrer">官方 X</a>
+        <button id="welcomeSignup" type="button">立即加入 Lockspace ↗</button>
+        <a href="https://x.com/LockspaceTW" target="_blank" rel="noopener noreferrer">看看官方 X</a>
       </div>
-      <p class="welcome-entry-note"><strong>18+</strong> 僅限成年人自主參與。完成登入與會員註冊後，才可查看會員內容。任何時候都可以停止參與。</p>
+      <div class="welcome-trust" aria-label="加入前重點"><span>🔒 登入後才可查看會員內容</span><span>🎲 每天不同任務</span><span>💡 會員也能出題</span></div>
+      <p class="welcome-entry-note"><strong>18+</strong> 僅限成年人自主參與。所有任務都可自行決定是否參加，也可以隨時停止。</p>
 
       <ul class="welcome-features" aria-label="平台功能">
-        <li><span class="welcome-feature-no">01 / DISCOVER</span><h2>每日任務</h2><p>每天接收自己的任務，<br>依意願選擇參與。</p></li>
-        <li><span class="welcome-feature-no">02 / CONNECT</span><h2>會員驗證</h2><p>提交驗證紀錄，<br>與其他會員互動。</p></li>
-        <li><span class="welcome-feature-no">03 / CREATE</span><h2>創意投稿</h2><p>提案通過管理員審核，<br>可加入每日任務池。</p></li>
+        <li><span class="welcome-feature-no">01 / DAILY</span><h2>每天都有新的任務</h2><p>每天取得自己的任務，完成後可提交驗證。</p></li>
+        <li><span class="welcome-feature-no">02 / CREATE</span><h2>你的點子真的能進任務池</h2><p>提出任務想法，通過審核後可能被其他會員抽到。</p></li>
+        <li><span class="welcome-feature-no">03 / COMMUNITY</span><h2>不只是自己完成</h2><p>查看最新驗證紀錄，參與會員間的任務驗證與互動。</p></li>
       </ul>
 
-      <p class="welcome-journey" aria-label="加入的三個步驟"><strong>如何開始</strong><span><b>01</b>建立帳號</span><i aria-hidden="true">→</i><span><b>02</b>完成會員資料</span><i aria-hidden="true">→</i><span><b>03</b>自主參與任務</span></p>
+      <p class="welcome-journey" aria-label="加入的三個步驟"><strong>開始很簡單</strong><span><b>01</b>建立帳號</span><i aria-hidden="true">→</i><span><b>02</b>完成會員資料</span><i aria-hidden="true">→</i><span><b>03</b>解鎖今日任務</span></p>
 
       <details class="welcome-faq"><summary>加入前，需要先知道什麼？</summary><p>平台僅供年滿 18 歲者使用。請依註冊頁完成會員資料、成年確認與生日查驗流程；帳號登入本身不等於年齡驗證。參與任務應出於本人意願，可隨時停止。加入前請閱讀<a href="terms.html">平台使用須知與條款</a>。</p></details>
-      <details class="welcome-faq"><summary>照片與會員資料的可見範圍是什麼？</summary><p>此入口不展示會員照片或個人資料。會員內容需登入並完成註冊後查看；填寫資料時，請留意各欄位的公開與私人標示。照片可能被其他會員保存、截圖或轉傳，浮水印無法阻止這些行為。請先閱讀<a href="privacy.html">隱私權政策</a>，衡量分享風險後再決定上傳。</p></details>
+      <details class="welcome-faq"><summary>照片與會員資料的可見範圍是什麼？</summary><p>此入口不展示會員照片或個人資料。會員內容需登入並完成註冊後查看；填寫資料時，請留意各欄位的公開與私人標示。照片可能被其他會員儲存、截圖或轉傳，浮水印無法阻止這些行為。請先閱讀<a href="privacy.html">隱私權政策</a>，衡量分享風險後再決定上傳。</p></details>
     </section>
     <section class="auth-card" id="memberAccess" aria-labelledby="memberAccessTitle">
       <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
@@ -368,13 +369,13 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit">下一步：填寫個人資料</button>
       </form>
-      <p class="version-stamp">Lockspace v0.21.1</p>
+      <p class="version-stamp">Lockspace v0.22.0</p>
     </section>
   </main>
 
   <main id="registrationPage" class="registration-page hidden">
     <form id="profileForm" class="registration-card">
-      <button id="profileBackButton" class="button quiet hidden" type="button">← 返回</button>
+      <button id="profileBackButton" class="button quiet hidden" type="button">← 回上一頁</button>
       <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
       <p class="eyebrow">MEMBER REGISTRATION</p>
       <h1 id="profilePageTitle">完成會員註冊資料</h1>
@@ -556,11 +557,11 @@
       </div>
 
       <div class="callout warning">標示公開的資料會顯示給已登入會員。</div>
-      <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳戶由我本人使用。</span></label>
+      <label class="check-row"><input type="checkbox" name="adultConfirmed" required><span>我已年滿 18 歲，並確認會員帳號由我本人使用。</span></label>
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <p id="profileError" class="error hidden" role="alert" tabindex="-1"></p>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.21.1</p>
+      <p class="version-stamp">Lockspace v0.22.0</p>
     </form>
   </main>
 
@@ -577,16 +578,28 @@
       </div>
     </header>
     <div class="dashboard-main">
-      <section class="upload-entry">
-        <button id="openTaskButton" class="button primary" type="button">上傳驗證任務</button>
-        <button id="taskIdeaButton" class="button secondary" type="button">提供任務想法</button>
+      <section class="member-hero" aria-labelledby="memberHeroTitle">
+        <div class="member-hero-copy">
+          <span class="member-hero-kicker">TODAY ON LOCKSPACE</span>
+          <h1 id="memberHeroTitle">今天，想接受挑戰還是出題？</h1>
+          <p>每天都有新的任務。完成後可以提交驗證，也可以把自己的點子送進任務池。</p>
+        </div>
+        <div class="member-action-grid">
+          <button id="openTaskButton" class="member-action member-action-primary" type="button"><span class="member-action-icon" aria-hidden="true">↗</span><span><strong>查看今日任務</strong><small>開啟今天的任務並提交驗證</small></span></button>
+          <button id="taskIdeaButton" class="member-action" type="button"><span class="member-action-icon" aria-hidden="true">＋</span><span><strong>提出任務點子</strong><small>你的提案可能成為其他會員的每日任務</small></span></button>
+        </div>
+        <div class="member-value-strip" aria-label="平台特色">
+          <span><b>🎲 每日任務</b><small>每天都有新的挑戰</small></span>
+          <span><b>💡 任務提案</b><small>讓你的點子進入任務池</small></span>
+          <span><b>👥 會員互動</b><small>查看最新紀錄並參與驗證</small></span>
+        </div>
       </section>
 
       <section>
         <div class="section-heading feed-heading">
           <div>
-            <h2>大家的驗證紀錄</h2>
-            <p class="muted">包含你的提交，最新紀錄優先。</p>
+            <h2>最新驗證動態</h2>
+            <p class="muted">看看最近完成的任務，也可以參與驗證。</p>
           </div>
           <button id="refreshFeedButton" class="button secondary feed-refresh" type="button" data-no-translate>↻</button>
         </div>
@@ -596,11 +609,11 @@
         <button id="loadMoreFeedButton" class="button secondary full feed-more hidden" type="button" data-no-translate>載入更多紀錄</button>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.21.1</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.22.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
-    <header class="topbar"><button id="taskBackButton" class="button quiet" type="button">← 返回</button><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div></header>
+    <header class="topbar"><button id="taskBackButton" class="button quiet" type="button">← 回上一頁</button><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div></header>
     <div class="dashboard-main">
       <section id="taskFlow" class="task-flow">
         <section class="task-panel">
@@ -620,7 +633,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.21.1</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.22.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -646,7 +659,7 @@
     <div class="modal-head"><strong>提供任務想法</strong><button id="closeTaskIdea" class="button quiet" type="button">關閉</button></div>
     <form id="taskIdeaForm">
       <div class="modal-body">
-        <p class="muted">通過管理員審核後，會加入之後的「用戶提供」每日任務池。</p>
+        <p class="muted">通過管理員審核後，會加入之後的「使用者提供」每日任務池。</p>
         <label class="field-label">任務內容<textarea name="content" maxlength="180" rows="4" placeholder="簡短描述動作與拍攝方式" required></textarea></label>
         <p id="taskIdeaMessage" class="muted" role="status" aria-live="polite" data-no-translate></p>
       </div>
@@ -693,7 +706,7 @@
       "繁體中文":"Traditional Chinese","简体中文":"Simplified Chinese","日本語":"Japanese",
       "私人任務與會員驗證空間。":"Private tasks and member verification.","隱私權政策":"Privacy Policy","平台使用須知、條款與懲處規範":"Platform Rules, Terms and Penalties",
       "至少 8 個字元，須包含 1 個英文大寫字母與 1 個特殊符號。":"At least 8 characters, including one uppercase letter and one special character.",
-      "確認密碼":"Confirm password","下一步：填寫個人資料":"Next: complete profile","← 返回":"← Back","完成會員註冊資料":"Complete member registration",
+      "確認密碼":"Confirm password","下一步：填寫個人資料":"Next: complete profile","← 回上一頁":"← Back","完成會員註冊資料":"Complete member registration",
       "建立你的會員檔案。":"Create your member profile.","公開顯示名稱":"Public display name","生日":"Date of birth","選擇出生日期":"Select date of birth",
       "日曆":"Calendar","僅開放年滿 18 歲的出生日期。":"Only dates of birth for adults aged 18 or older are accepted.","身高":"Height","體重":"Weight",
       "膚色":"Skin tone","白皙":"Fair","偏白":"Light","自然":"Medium","小麥":"Tan","棕色":"Brown","深色":"Dark","其他":"Other",
@@ -715,7 +728,7 @@
       "胸部":"Chest","乳夾":"Nipple clamps","鏈式乳夾":"Chain nipple clamps","可調式乳夾":"Adjustable nipple clamps","乳環／裝飾夾":"Decorative nipple clips",
       "插入式道具":"Insertable equipment","小型肛塞":"Small plug","一般肛塞":"Standard plug","尾巴肛塞":"Tail plug","感官":"Sensory","眼罩":"Blindfold","耳罩":"Earmuffs","嘴部配件／口枷":"Mouth accessory / gag",
       "BDSM 展示":"BDSM display","拍板":"Clapperboard","鞭子":"Whip","藤條":"Cane","教鞭":"Pointer","拍打器":"Paddle","羽毛棒":"Feather wand","角色":"Roleplay","犬耳":"Dog ears","外掛式犬尾":"Wearable dog tail",
-      "標示公開的資料會顯示給已登入會員。":"Fields marked public are visible to signed-in members.","我已年滿 18 歲，並確認會員帳戶由我本人使用。":"I am at least 18 and confirm this account is for my own use.",
+      "標示公開的資料會顯示給已登入會員。":"Fields marked public are visible to signed-in members.","我已年滿 18 歲，並確認會員帳號由我本人使用。":"I am at least 18 and confirm this account is for my own use.",
       "我已閱讀並同意":"I have read and agree to","及":"and","；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。":"; I agree that completed fields marked Public may be shown to members. My private equipment list is excluded.",
       "完成註冊並進入任務":"Complete registration","已登入":"Signed in","後台管理":"Admin","通知":"Notifications","問題回饋":"Feedback","編輯公開檔案":"Edit public profile","登出":"Sign out",
       "上傳驗證任務":"Upload verification task","提供任務想法":"Suggest a task","大家的驗證紀錄":"Community verification records","包含你的提交，最新紀錄優先。":"Includes your submissions, newest first.",
@@ -729,7 +742,7 @@
       "選擇繼續即表示你確認已年滿 18 歲，並同意遵守上述政策與規範。":"By continuing, you confirm that you are at least 18 and agree to follow these policies and rules.","離開":"Leave","我已年滿 18 歲並同意":"I am 18+ and agree",
       "會員資料":"Member profile","關閉":"Close","通知與版本更新":"Notifications and updates","版本更新":"Release notes","版本編號規則":"Version numbering","主版本號":"Major","次版本號":"Minor","修訂號":"Patch",
       "：不相容的 API 或資料契約修改。":": incompatible API or data-contract changes.","：向下相容的新功能。":": backward-compatible features.","：向下相容的問題修正。":": backward-compatible fixes.",
-      "通過管理員審核後，會加入之後的「用戶提供」每日任務池。":"After administrator approval, this may enter the user-submitted daily-task pool.","任務內容":"Task details","送出想法":"Submit idea",
+      "通過管理員審核後，會加入之後的「使用者提供」每日任務池。":"After administrator approval, this may enter the user-submitted daily-task pool.","任務內容":"Task details","送出想法":"Submit idea",
       "日":"Sun","一":"Mon","二":"Tue","三":"Wed","四":"Thu","五":"Fri","六":"Sat","取消":"Cancel","這位會員的資料目前無法查看。":"This member's profile is unavailable.","會員":"Member",
       "鎖具品牌":"Device brand","籠體尺寸":"Cage dimensions","包皮狀態":"Circumcision status","公開備註":"Public note","這位會員尚未填寫公開資料。":"This member has not added public profile details.",
       "無法讀取會員資料，請檢查網路後再試。":"Unable to load member data. Check your connection and try again.","此會員帳號已停用。":"This member account has been disabled.",
@@ -790,6 +803,11 @@
       eo:{"限制級內容警告":"Averto pri plenkreska enhavo","隱私權政策":"Privateca Politiko","平台使用須知、條款與懲處規範":"Kondiĉoj, komunumaj reguloj kaj punoj","後台管理":"Administrado","通知":"Sciigoj","問題回饋":"Reago","登出":"Elsaluti","關閉":"Fermi","取消":"Nuligi"}
     };
     Object.entries(EXTRA_LOCALIZED).forEach(([language, values]) => Object.assign(TRANSLATIONS[language], values));
+    Object.assign(TRANSLATIONS.en, {
+      "重新設計登入入口與會員首頁，讓每日任務、任務提案與最新驗證動態更容易找到。":"Redesigned member access and home so daily tasks, task ideas, and recent verification activity are easier to find.",
+      "加入更清楚的功能亮點與加入引導，新會員可以更快了解 Lockspace 的玩法。":"Added clearer feature highlights and onboarding so new members can understand Lockspace faster.",
+      "繁體中文介面改用台灣常用詞彙，並統一會員可見的操作文字。":"Updated Traditional Chinese wording to common Taiwan usage and standardized member-facing labels."
+    });
     const originalAttributes = new WeakMap();
     const originalText = new WeakMap();
     let translatingPage = false;
@@ -874,8 +892,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.21.1";
+    const APP_VERSION = "0.22.0";
     const RELEASE_NOTES = [
+      { version: "0.22.0", date: "2026-11-03", changes: ["重新設計登入入口與會員首頁，讓每日任務、任務提案與最新驗證動態更容易找到。", "加入更清楚的功能亮點與加入引導，新會員可以更快了解 Lockspace 的玩法。", "繁體中文介面改用台灣常用詞彙，並統一會員可見的操作文字。"] },
       { version: "0.21.1", date: "2026-10-31", changes: ["後台補上會員證件查驗操作，可通過、退回補件或改回待查驗。", "儲存時核對會員與照片版本，並同步更新列表與統計。"] },
       { version: "0.21.0", date: "2026-10-31", changes: ["驗證紀錄改為每次讀取 10 筆，並新增已載入紀錄篩選。", "會員可查看自己的提案狀態與回饋歷史。", "後台新增管理待辦摘要與三區搜尋篩選，未變更回覆不再重送通知。", "修正重新整理覆蓋剛完成驗證的情境，登出時清除私密彈窗。"] },
       { version: "0.20.0", date: "2026-10-30", changes: ["後台新增會員搜尋、查驗狀態篩選與手機卡片介面。", "會員紀錄與管理區塊新增載入狀態、錯誤提示與重試。", "回饋送出與列表更新分開處理；註冊失敗保留資料並可繼續完成。"] },
@@ -900,11 +919,19 @@
       { version: "0.11.0", date: "2026-09-24", changes: ["依 93 則人工審核註解重整指定動作：替換 91 條無挑戰、重複、難以達成或分類不吻合的任務，並保留 180 條總數。", "所有指定動作現在都明確標示服裝要求：下半身裸露、上半身裸露（下身仍需讓鎖具可見）或全裸。", "驗證任務頁新增 18+、自願參與、私密安全空間與可隨時停止的警語。", "服從感任務改以計時、順序、姿勢轉換與明確流程增加差異與挑戰。"] },
       { version: "0.10.1", date: "2026-09-24", changes: ["瀏覽器分頁標題現在會依所在頁面顯示，例如「lockspace. 會員首頁」、「lockspace. 驗證任務」與「lockspace. 問題回饋」。", "同步整理管理後台、隱私權政策與使用條款等頁面的分頁名稱。"] },
       { version: "0.10.0", date: "2026-09-24", changes: ["將內建指定動作素材池擴充至 180 條，涵蓋站姿、跪姿、地面姿勢、鏡子、道具、羞恥感與服從感七種類型。", "每條指定動作改為更清楚的姿勢與拍攝說明，並以私人空間、鎖具外觀清楚可辨識為主要原則。", "排除公共暴露、危險束縛與影響呼吸等高風險任務。"] },
-      { version: "0.9.1", date: "2026-09-24", changes: ["修正每日任務首次載入權限，避免新的一天無法建立任務。", "每日任務明確改為「驗證任務碼、指定動作、用戶提供」三種類型擇一；指定動作不再混入任務碼紙條要求。", "將「提供任務想法」移到登入後首頁，並擴充指定動作素材。", "修正已建立的舊指定動作仍顯示任務碼紙條文字。"] },
-      { version: "0.9.0", date: "2026-09-24", changes: ["每日任務改為每位會員獨立抽選驗證任務碼、指定動作或用戶提供任務。", "新增大量指定動作素材，以及會員任務提案與後台審核。", "個人資料欄位「陰莖周長」更名為「陰莖粗度」。"] },
-      { version: "0.8.0", date: "2026-09-24", changes: ["新增登入後功能列通知中心與未讀提示。", "新增版本更新紀錄及版本編號規則說明。", "問題回饋頁的返回首頁移至左上角。"] },
+      { version: "0.9.1", date: "2026-09-24", changes: ["修正每日任務首次載入權限，避免新的一天無法建立任務。", "每日任務明確改為「驗證任務碼、指定動作、使用者提供」三種類型擇一；指定動作不再混入任務碼紙條要求。", "將「提供任務想法」移到登入後首頁，並擴充指定動作素材。", "修正已建立的舊指定動作仍顯示任務碼紙條文字。"] },
+      { version: "0.9.0", date: "2026-09-24", changes: ["每日任務改為每位會員獨立抽選驗證任務碼、指定動作或使用者提供任務。", "新增大量指定動作素材，以及會員任務提案與後台審核。", "個人資料欄位「陰莖周長」更名為「陰莖粗度」。"] },
+      { version: "0.8.0", date: "2026-09-24", changes: ["新增登入後功能列通知中心與未讀提示。", "新增版本更新紀錄及版本編號規則說明。", "問題回饋頁的回首頁移至左上角。"] },
       { version: "0.7.2", date: "2026-09-24", changes: ["任務發布者頭像可開啟公開會員資料。", "改善登入狀態判定，避免登入頁與首頁反覆跳轉。", "新增管理員回覆、會員通知、隱私權政策及使用條款。"] }
     ];
+
+    const INTERNAL_RELEASE_PATTERNS = [
+      /^後台/, /^儲存時核對/, /管理待辦/, /管理區塊/, /管理員刪除會員/,
+      /管理與回饋頁/, /Firestore/, /後台新增/, /管理後台/
+    ];
+    const PUBLIC_RELEASE_NOTES = RELEASE_NOTES
+      .map(release => ({ ...release, changes: release.changes.filter(change => !INTERNAL_RELEASE_PATTERNS.some(pattern => pattern.test(change))) }))
+      .filter(release => release.changes.length);
 
     const firebaseConfig = {
       apiKey: "AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",
@@ -932,7 +959,7 @@
     };
 
     const CODE_TASK = { type: "驗證任務碼", instruction: "將今日隨機任務碼寫在紙條上，與鎖具外觀同框拍照。" };
-    // 指定動作使用程序式組合產生；驗證任務碼與用戶提供任務維持原邏輯。
+    // 指定動作使用程序式組合產生；驗證任務碼與使用者提供任務維持原邏輯。
     // 每個任務只描述一個可由單張照片確認的靜態狀態，不使用計時或連續動作。
     const ACTION_POSTURES = [
       { id: "P01", text: "站直" },
@@ -1462,12 +1489,16 @@
       return normalizeTask(task);
     }
 
+    function displayTaskType(type) {
+      return type === "用戶提供" ? "使用者提供" : type;
+    }
+
     function renderDailyTask() {
       const task = normalizeTask(state.dailyTask);
       state.dailyTask = task;
       const codeElement = document.getElementById("taskCode");
       const isCodeTask = task.type === "驗證任務碼";
-      document.getElementById("taskType").textContent = task.type || "今日指定動作";
+      document.getElementById("taskType").textContent = displayTaskType(task.type) || "今日指定動作";
       document.getElementById("taskInstruction").textContent = task.instruction;
       codeElement.textContent = isCodeTask ? formatTaskCode(task.taskCode) : "";
       codeElement.classList.toggle("hidden", !isCodeTask);
@@ -1772,10 +1803,10 @@
     }
 
     async function deleteAccount() {
-      if (!confirm("永久刪除 Lockspace 帳戶與會員資料？")) return;
+      if (!confirm("永久刪除 Lockspace 帳號與會員資料？")) return;
       const user = auth.currentUser;
       if (!user) return;
-      const password = prompt("為保護帳戶安全，請輸入目前密碼後完成永久刪除：");
+      const password = prompt("為保護帳號安全，請輸入目前密碼後完成永久刪除：");
       if (!password) return;
       try {
         await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, password));
@@ -1796,7 +1827,7 @@
         await deleteDoc(doc(db, "members", user.uid));
         await deleteUser(user);
       } catch (error) {
-        const message = error?.code === "auth/invalid-credential" ? "密碼不正確，帳戶未刪除。" : "帳戶刪除未完成，請檢查網路後再試。";
+        const message = error?.code === "auth/invalid-credential" ? "密碼不正確，帳號未刪除。" : "帳號刪除未完成，請檢查網路後再試。";
         alert(message);
       }
     }
@@ -1963,7 +1994,7 @@
     }
 
     function openNotifications() {
-      document.getElementById("releaseNotesList").innerHTML = RELEASE_NOTES.map(release => `<article class="release-item"><div class="release-head"><strong>v${escapeHtml(release.version)}</strong><span class="muted">${escapeHtml(release.date)}</span></div><ul>${release.changes.map(change => `<li>${escapeHtml(localizedReleaseChange(change))}</li>`).join("")}</ul></article>`).join("");
+      document.getElementById("releaseNotesList").innerHTML = PUBLIC_RELEASE_NOTES.map(release => `<article class="release-item"><div class="release-head"><strong>v${escapeHtml(release.version)}</strong><span class="muted">${escapeHtml(release.date)}</span></div><ul>${release.changes.map(change => `<li>${escapeHtml(localizedReleaseChange(change))}</li>`).join("")}</ul></article>`).join("");
       localStorage.setItem(`lockspace-seen-version-${state.member.uid}`, APP_VERSION);
       localStorage.setItem(`lockspace-seen-reply-${state.member.uid}`, state.feedback[0]?.repliedAtIso || "");
       updateNotificationBadge();
@@ -2003,7 +2034,8 @@
       }
       feed.innerHTML = posts.map(post => {
         const isLegacyCodeTask = !post.taskType && Boolean(post.taskCode);
-        const taskType = post.taskType || (isLegacyCodeTask ? "驗證任務碼" : "驗證任務");
+        const rawTaskType = post.taskType || (isLegacyCodeTask ? "驗證任務碼" : "驗證任務");
+        const taskType = displayTaskType(rawTaskType);
         const taskInstruction = post.taskInstruction || (isLegacyCodeTask ? CODE_TASK.instruction : "");
         const reviews = state.reviews.filter(review => review.submissionId === post.id);
         const approved = reviews.filter(review => review.decision === "approved").length;
@@ -2021,7 +2053,7 @@
             <button class="publisher-button" type="button" data-member-profile="${escapeHtml(post.ownerId)}" aria-label="查看 ${escapeHtml(post.displayName || "會員")} 的資料"><span class="member-avatar">${escapeHtml(String(post.displayName || "會").trim().charAt(0) || "會")}</span><strong>${escapeHtml(post.displayName || "會員")}${post.ownerId === state.member.uid ? "（我）" : ""}</strong></button>
             <span class="muted">${new Date(post.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}</span>
           </div>
-          <div class="public-details">${taskType === "驗證任務碼" ? `<span>任務碼 ${escapeHtml(post.taskCode || "—")}</span>` : ""}<span>${escapeHtml(taskType)}</span></div>
+          <div class="public-details">${rawTaskType === "驗證任務碼" ? `<span>任務碼 ${escapeHtml(post.taskCode || "—")}</span>` : ""}<span>${escapeHtml(taskType)}</span></div>
           ${taskInstruction ? `<p class="task-summary">${escapeHtml(taskInstruction)}</p>` : ""}
           <figure class="preview-frame"><img src="${escapeHtml(post.imageDataUrl || "")}" alt="${escapeHtml(post.displayName || "會員")}的任務驗證照片" loading="lazy" decoding="async"></figure>
           <div class="review-actions">${reviewControls}${post.ownerId !== state.member.uid ? `<button class="button quiet" type="button" data-report="${escapeHtml(post.id)}">檢舉此任務</button>` : ""}</div>

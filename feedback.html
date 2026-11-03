@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.21.1">
+  <meta name="application-version" content="0.22.0">
   <title>lockspace. 問題回饋</title>
   <style>
     :root{color-scheme:dark;--bg:#090a09;--panel:#121412;--line:#30352f;--text:#f5f4f7;--muted:#afacba;--lime:#b6ff70;--red:#ff91a6}
@@ -17,7 +17,7 @@
 </head>
 <body>
   <main class="card">
-    <div class="page-top"><a class="button quiet" href="index.html">← 返回首頁</a><div class="brand">lockspace<b>.</b></div></div>
+    <div class="page-top"><a class="button quiet" href="index.html">← 回首頁</a><div class="brand">lockspace<b>.</b></div></div>
     <h1>問題回饋</h1>
     <p class="muted">登入會員可以提交意見與詳細內容，管理員會在後台查看。</p>
 
@@ -48,7 +48,7 @@
       <div id="feedbackHistoryTools" class="history-tools hidden">
         <label for="feedbackSearch"><span id="feedbackSearchLabel" data-no-translate>搜尋回饋</span>
           <input id="feedbackSearch" type="search" maxlength="200" aria-describedby="feedbackSearchHint" autocomplete="off">
-          <span id="feedbackSearchHint" class="field-hint" data-no-translate>查找意見、內容或管理員回覆</span>
+          <span id="feedbackSearchHint" class="field-hint" data-no-translate>搜尋意見、內容或管理員回覆</span>
         </label>
         <label for="feedbackState"><span id="feedbackStateLabel" data-no-translate>回饋狀態</span>
           <select id="feedbackState" data-no-translate>
@@ -75,7 +75,7 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const APP_VERSION="0.21.1";
+    const APP_VERSION="0.22.0";
     const config={apiKey:"AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",authDomain:"lockspace-19edc.firebaseapp.com",projectId:"lockspace-19edc",storageBucket:"lockspace-19edc.firebasestorage.app",messagingSenderId:"726438557640",appId:"1:726438557640:web:d0e51ec0280cd1066e32fd"};
     const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
     const form=document.getElementById("feedbackForm"),signedOut=document.getElementById("signedOut"),statusBox=document.getElementById("feedbackStatus");
@@ -87,7 +87,7 @@
     const HISTORY_PAGE_SIZE=10;
     const NEW_COPY={
       "搜尋回饋":{en:"Search feedback","zh-Hans":"搜索反馈"},
-      "查找意見、內容或管理員回覆":{en:"Search subjects, messages, or administrator replies","zh-Hans":"查找意见、内容或管理员回复"},
+      "搜尋意見、內容或管理員回覆":{en:"Search subjects, messages, or administrator replies","zh-Hans":"查找意见、内容或管理员回复"},
       "回饋狀態":{en:"Feedback status","zh-Hans":"反馈状态"},
       "全部":{en:"All","zh-Hans":"全部"},
       "待回覆":{en:"Awaiting reply","zh-Hans":"待回复"},
@@ -131,7 +131,7 @@
     document.addEventListener("change",event=>{if(event.target.closest("[data-global-language]"))syncCopy()});
     retryMember.addEventListener("click",()=>loadMember(lastAuthUser));
     refreshFeedback.addEventListener("click",()=>loadMyFeedback());
-    [["feedbackSearchLabel","搜尋回饋"],["feedbackSearchHint","查找意見、內容或管理員回覆"],["feedbackStateLabel","回饋狀態"],["feedbackFilterAll","全部"],["feedbackFilterOpen","待回覆"],["feedbackFilterReplied","已回覆"],["feedbackFilterDone","已完成"]].forEach(([id,source])=>text(document.getElementById(id),source));
+    [["feedbackSearchLabel","搜尋回饋"],["feedbackSearchHint","搜尋意見、內容或管理員回覆"],["feedbackStateLabel","回饋狀態"],["feedbackFilterAll","全部"],["feedbackFilterOpen","待回覆"],["feedbackFilterReplied","已回覆"],["feedbackFilterDone","已完成"]].forEach(([id,source])=>text(document.getElementById(id),source));
     text(clearHistoryFilters,"清除搜尋與篩選");text(loadMoreHistory,"載入更多");historyFilter.value="all";
     historySearch.addEventListener("input",()=>{historyVisibleCount=HISTORY_PAGE_SIZE;renderFeedbackHistory()});
     historyFilter.addEventListener("change",()=>{historyVisibleCount=HISTORY_PAGE_SIZE;renderFeedbackHistory()});
