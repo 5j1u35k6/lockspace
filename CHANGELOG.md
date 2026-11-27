@@ -1,3 +1,10 @@
+## 0.25.0 — 2026-11-27
+
+- Restore the last five feed records and display name after Firebase restores the same account, while checking membership in the background.
+- Keep the restored dashboard read-only until the member check succeeds; review controls still require fresh review results.
+- Limit the on-device cache to six hours and 2 million characters; clear it on logout, account mismatch, disabled/deleted membership and invalid storage. Do not cache private profile fields, birth proof, credentials or review decisions.
+- Refresh an existing feed without a blocking loading banner, including empty feeds.
+
 ## 0.24.0 — 2026-11-27
 
 - Public entry renders before login initialization; first-time and returning visitors get distinct entry modes.

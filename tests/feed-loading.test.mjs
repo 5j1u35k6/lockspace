@@ -10,7 +10,7 @@ function setup() {
   let calls=0;
   const renders=[];
   const ctx=vm.createContext({
-    state:{member:{uid:'viewer'},posts:[],reviews:[]},feedLoading:false,feedHasMore:false,feedCursor:null,feedLoadedAt:0,
+    state:{member:{uid:'viewer'},posts:[],reviews:[]},feedLoading:false,feedHasMore:false,feedCursor:null,feedLoadedAt:0,feedHasSnapshot:false,writeReturnCache(){},
     feedLoadRevision:0,reviewWriteEpoch:0,acknowledgedReviews:new Map(),reviewReady:new Set(),FEED_PAGE_SIZE:5,feedStatusKind:'',
     document:{getElementById:()=>({setAttribute(){},disabled:false})},db:{},
     collection:()=>({}),query:()=>({}),orderBy:()=>({}),limit:()=>({}),startAfter:()=>({}),where:()=>({}),
@@ -38,4 +38,12 @@ test('logout during review read cannot restore private feed state',async()=>{
 });
 test('duplicate refresh shares the current request without another database read',async()=>{
   const h=setup();const pending=h.ctx.load();await new Promise(r=>setImmediate(r));assert.equal(await h.ctx.load(),false);assert.equal(h.calls(),2);h.resolveReviews({docs:[]});await pending;
+});
+
+test('returning feed refresh keeps cached content without a blocking loading banner',async()=>{
+  const h=setup();h.ctx.feedHasSnapshot=true;
+  h.ctx.state.posts=[{id:'cached',ownerId:'author'}];
+  const pending=h.ctx.load();assert.equal(h.ctx.feedStatusKind,'');
+  assert.equal(h.ctx.state.posts[0].id,'cached');
+  await new Promise(r=>setImmediate(r));h.resolveReviews({docs:[]});await pending;
 });
