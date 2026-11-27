@@ -1,3 +1,8 @@
+## 0.25.1 — 2026-11-27
+
+- Compact phone registration: pair short fields, reduce spacing and heading size, and keep notes full-width.
+- Use two-column option menus bounded within narrow screens with 44px targets.
+
 ## 0.25.0 — 2026-11-27
 
 - Restore the last five feed records and display name after Firebase restores the same account, while checking membership in the background.
