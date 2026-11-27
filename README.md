@@ -33,3 +33,7 @@ Uploaded photos are stored in R2, not in this repository. Only registered, signe
 ChatGPT sign-in identifies an account but does not independently verify a person's age. The current flow only has an 18+ self-attestation. Keep the hosted Site owner-restricted until an appropriate age-assurance process, operating rules, and report-review process are in place. Reports are recorded in D1 but this version does not include a moderator console or automatic takedown workflow.
 
 Filled profile measurements are visible to signed-in registered members as requested. Do not use production data in local development or commit personal data, uploaded images, or credentials to GitHub.
+
+## GitHub Pages member frontend
+
+The currently deployed GitHub Pages frontend is `index.html` plus `welcome.css` (Firebase); the React/Sites application is a separate deployment. For this static frontend, run `node scripts/build-locales.mjs` after changing the existing translation sources, then `node --test tests/language-loading.test.mjs`. Serve the repository with a static HTTP server to preview. Traditional Chinese does not fetch a language bundle; other languages fetch one generated file under `locales/`. Member photos remain subject to the existing authorization rules and are not stored in a new browser cache.
