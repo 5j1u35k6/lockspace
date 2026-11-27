@@ -1,3 +1,11 @@
+## 0.24.0 — 2026-11-27
+
+- Public entry renders before login initialization; first-time and returning visitors get distinct entry modes.
+- Bundle only the used Firebase APIs on the same origin (182 KB to 116 KB gzip in the build comparison).
+- Login and profile connection failures offer retry without treating network errors as incorrect passwords or signing members out.
+- Show feed photos before reviews; keep voting unavailable until reviews arrive. Reuse the recent feed and same-day task in memory.
+- Coalesce in-flight daily task requests and discard results after an account change.
+
 ## 0.23.0 — 2026-11-27
 
 - 手機優先：今日任務與提案入口、帳號選單、可點擊尺寸與安全邊界。

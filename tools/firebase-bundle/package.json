@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "esbuild": "0.25.12",
+    "firebase": "12.3.0"
+  },
+  "private": true,
+  "scripts": {
+    "build": "esbuild entry.js --bundle --format=esm --minify --target=es2020 --legal-comments=inline --outfile=../../vendor/firebase-12.3.0.min.js"
+  }
+}
