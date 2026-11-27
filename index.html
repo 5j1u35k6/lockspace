@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="application-version" content="0.25.1">
+  <meta name="application-version" content="0.25.2">
   <link rel="icon" href="public/favicon.svg" type="image/svg+xml">
   <link rel="modulepreload" href="vendor/firebase-12.3.0.min.js">
   <title>lockspace. 會員登入</title>
@@ -286,7 +286,7 @@
       .option-menu { grid-template-columns: 1fr; }
     }
   </style>
-  <link rel="stylesheet" href="welcome.css?v=0.25.1">
+  <link rel="stylesheet" href="welcome.css?v=0.25.2">
 </head>
 <body>
   <button id="authLanguageButton" class="language-button auth-language-button" type="button" aria-label="選擇語言" title="選擇語言"><span class="globe-icon" aria-hidden="true"></span></button>
@@ -379,7 +379,7 @@
         <p id="signupError" class="error hidden" role="alert"></p>
         <button class="button primary full" type="submit" disabled data-startup-control>建立帳號並繼續</button>
       </form>
-      <p class="version-stamp">Lockspace v0.25.1</p>
+      <p class="version-stamp">Lockspace v0.25.2</p>
     </section>
   </main>
 
@@ -437,7 +437,7 @@
         <h3 class="subsection-title">鎖具識別</h3>
         <div class="field-row cols-4">
           <label>鎖具類型
-            <select name="deviceType"><option value="">請選擇</option><option>球環式</option><option>全腰帶式</option><option>穿刺固定式</option><option>客製式</option><option>其他</option></select>
+            <span class="custom-select" data-custom-select="deviceType" data-placeholder="請選擇"><input name="deviceType" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">請選擇</button><button type="button" data-value="球環式">球環式</button><button type="button" data-value="全腰帶式">全腰帶式</button><button type="button" data-value="穿刺固定式">穿刺固定式</button><button type="button" data-value="客製式">客製式</button><button type="button" data-value="其他">其他</button></span></span>
           </label>
           <label>品牌
             <span class="custom-select" data-custom-select="lockBrand" data-other-target="lockBrandOther"><input name="lockBrand" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="CB-X">CB-X</button><button type="button" data-value="Holy Trainer">Holy Trainer</button><button type="button" data-value="KINK3D">KINK3D</button><button type="button" data-value="Mature Metal">Mature Metal</button><button type="button" data-value="Steelworxx">Steelworxx</button><button type="button" data-value="Behind Barz">Behind Barz</button><button type="button" data-value="Lockd">Lockd / Chastity Cages Co</button><button type="button" data-value="無品牌／通用款">無品牌／通用款</button><button type="button" data-value="客製製作">客製製作</button><button type="button" data-value="其他">其他</button></span></span>
@@ -456,13 +456,13 @@
             <input class="other-field hidden" name="lockMaterialOther" maxlength="32" placeholder="簡要填寫材質">
           </label>
           <label>籠體形式
-            <select name="cageStyle"><option value="">請選擇</option><option>封閉式</option><option>開放式</option><option>極短／平面式</option><option>解剖曲線式</option><option>全腰帶式</option><option>其他</option></select>
+            <span class="custom-select" data-custom-select="cageStyle" data-placeholder="請選擇"><input name="cageStyle" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">請選擇</button><button type="button" data-value="封閉式">封閉式</button><button type="button" data-value="開放式">開放式</button><button type="button" data-value="極短／平面式">極短／平面式</button><button type="button" data-value="解剖曲線式">解剖曲線式</button><button type="button" data-value="全腰帶式">全腰帶式</button><button type="button" data-value="其他">其他</button></span></span>
           </label>
           <label>環型
-            <select name="ringShape"><option value="">請選擇</option><option>圓環</option><option>人體工學環</option><option>雙環</option><option>鉸鏈環</option><option>客製</option></select>
+            <span class="custom-select" data-custom-select="ringShape" data-placeholder="請選擇"><input name="ringShape" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">請選擇</button><button type="button" data-value="圓環">圓環</button><button type="button" data-value="人體工學環">人體工學環</button><button type="button" data-value="雙環">雙環</button><button type="button" data-value="鉸鏈環">鉸鏈環</button><button type="button" data-value="客製">客製</button></span></span>
           </label>
           <label>固定方式
-            <select name="fixationMethod"><option value="">請選擇</option><option>球環固定</option><option>腰帶固定</option><option>穿刺固定</option><option>其他</option></select>
+            <span class="custom-select" data-custom-select="fixationMethod" data-placeholder="請選擇"><input name="fixationMethod" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">請選擇</button><button type="button" data-value="球環固定">球環固定</button><button type="button" data-value="腰帶固定">腰帶固定</button><button type="button" data-value="穿刺固定">穿刺固定</button><button type="button" data-value="其他">其他</button></span></span>
           </label>
         </div>
         <h3 class="subsection-title">尺寸與合身</h3>
@@ -474,10 +474,10 @@
         </div>
         <div class="field-row cols-4">
           <label>合身狀態
-            <select name="fitStatus"><option value="">請選擇</option><option>合身</option><option>偏緊</option><option>偏鬆</option><option>尚在調整</option></select>
+            <span class="custom-select" data-custom-select="fitStatus" data-placeholder="請選擇"><input name="fitStatus" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">請選擇</button><button type="button" data-value="合身">合身</button><button type="button" data-value="偏緊">偏緊</button><button type="button" data-value="偏鬆">偏鬆</button><button type="button" data-value="尚在調整">尚在調整</button></span></span>
           </label>
           <label>包皮狀態（選填）
-            <select name="foreskinStatus"><option value="">不公開</option><option>已割包皮</option><option>未割包皮</option></select>
+            <span class="custom-select" data-custom-select="foreskinStatus" data-placeholder="不公開"><input name="foreskinStatus" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>不公開</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">不公開</button><button type="button" data-value="已割包皮">已割包皮</button><button type="button" data-value="未割包皮">未割包皮</button></span></span>
           </label>
           <label>未配戴長度 <span class="input-with-unit"><input name="bodyLengthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span></label>
           <label>未配戴周長 <span class="input-with-unit"><input name="bodyGirthCm" type="number" min="0" max="80" step="0.1"><span>cm</span></span></label>
@@ -489,13 +489,13 @@
             <input class="other-field hidden" name="lockingMethodOther" maxlength="32" placeholder="簡要填寫鎖定方式">
           </label>
           <label>配戴頻率
-            <select name="wearSchedule"><option value="">請選擇</option><option>偶爾配戴</option><option>白天配戴</option><option>夜間配戴</option><option>長時間配戴</option><option>24/7</option></select>
+            <span class="custom-select" data-custom-select="wearSchedule" data-placeholder="請選擇"><input name="wearSchedule" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">請選擇</button><button type="button" data-value="偶爾配戴">偶爾配戴</button><button type="button" data-value="白天配戴">白天配戴</button><button type="button" data-value="夜間配戴">夜間配戴</button><button type="button" data-value="長時間配戴">長時間配戴</button><button type="button" data-value="24/7">24/7</button></span></span>
           </label>
           <label>經驗程度
-            <select name="experienceLevel"><option value="">請選擇</option><option>初次嘗試</option><option>入門</option><option>有經驗</option><option>長期配戴</option></select>
+            <span class="custom-select" data-custom-select="experienceLevel" data-placeholder="請選擇"><input name="experienceLevel" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">請選擇</button><button type="button" data-value="初次嘗試">初次嘗試</button><button type="button" data-value="入門">入門</button><button type="button" data-value="有經驗">有經驗</button><button type="button" data-value="長期配戴">長期配戴</button></span></span>
           </label>
           <label>持鑰狀態
-            <select name="keyholderStatus"><option value="">請選擇</option><option>自主管理</option><option>有固定持鑰者</option><option>遠端持鑰</option><option>共同管理</option></select>
+            <span class="custom-select" data-custom-select="keyholderStatus" data-placeholder="請選擇"><input name="keyholderStatus" type="hidden"><button class="select-trigger" type="button" aria-expanded="false"><span>請選擇</span></button><span class="option-menu hidden" role="listbox"><button type="button" data-value="">請選擇</button><button type="button" data-value="自主管理">自主管理</button><button type="button" data-value="有固定持鑰者">有固定持鑰者</button><button type="button" data-value="遠端持鑰">遠端持鑰</button><button type="button" data-value="共同管理">共同管理</button></span></span>
           </label>
         </div>
         <div class="field-row cols-3">
@@ -571,7 +571,7 @@
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <p id="profileError" class="error hidden" role="alert" tabindex="-1"></p>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.25.1</p>
+      <p class="version-stamp">Lockspace v0.25.2</p>
     </form>
   </main>
 
@@ -619,7 +619,7 @@
         <button id="loadMoreFeedButton" class="button secondary full feed-more hidden" type="button" data-no-translate>載入更多紀錄</button>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.25.1</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.25.2</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -643,7 +643,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.25.1</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.25.2</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -689,7 +689,7 @@
     <div class="calendar-actions"><button id="calendarClose" class="button" type="button">取消</button></div>
   </dialog>
 
-  <script src="entry.js?v=0.25.1"></script>
+  <script src="entry.js?v=0.25.2"></script>
   <script type="module">
     import { readReturnCache, writeReturnCache, clearReturnCache } from "./return-cache.js";
     import { initializeApp } from "./vendor/firebase-12.3.0.min.js";
@@ -932,8 +932,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.25.1";
+    const APP_VERSION = "0.25.2";
     const RELEASE_NOTES = [
+      { version: "0.25.2", date: "2026-11-27", changes: ["註冊與會員資料的選項統一使用平台內建選單。"] },
       { version: "0.25.1", date: "2026-11-27", changes: ["手機註冊短欄位改為兩欄，減少留白與捲動。", "選單排列更緊湊，保留容易點選的大小。"] },
       { version: "0.25.0", date: "2026-11-27", changes: ["再次開啟時先顯示最近內容，再於背景更新。", "登出會清除這台裝置的最近紀錄。"] },
       { version: "0.24.0", date: "2026-11-27", changes: ["加入前即可閱讀玩法，首次註冊與回訪登入各有清楚入口。", "照片先顯示、驗證結果接著載入；返回首頁保留已讀動態。", "連線逾時可以重試，短暫斷線不會自動登出。"] },
@@ -1702,10 +1703,31 @@
         const trigger = select.querySelector(".select-trigger");
         const menu = select.querySelector(".option-menu");
         const input = select.querySelector('input[type="hidden"]');
+        const close = () => { menu.classList.add("hidden"); trigger.setAttribute("aria-expanded", "false"); };
+        const options = [...menu.querySelectorAll("[data-value]")];
+        const fieldLabel = select.closest("label")?.firstChild?.textContent?.trim() || select.dataset.customSelect;
+        menu.id = `options-${select.dataset.customSelect}`;
+        menu.setAttribute("aria-label", fieldLabel);
+        trigger.setAttribute("aria-haspopup", "listbox");
+        trigger.setAttribute("aria-controls", menu.id);
+        trigger.setAttribute("aria-label", fieldLabel);
+        options.forEach(option => { option.setAttribute("role", "option"); option.tabIndex = -1; });
+        select.addEventListener("focusout", event => { if (!select.contains(event.relatedTarget)) close(); });
+        select.addEventListener("keydown", event => {
+          if (event.key === "Escape") { event.preventDefault(); close(); trigger.focus(); return; }
+          if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+          event.preventDefault();
+          if (menu.classList.contains("hidden")) trigger.click();
+          const index = options.indexOf(document.activeElement);
+          const next = event.key === "Home" ? 0 : event.key === "End" ? options.length - 1
+            : index < 0 ? (event.key === "ArrowDown" ? 0 : options.length - 1)
+            : (index + (event.key === "ArrowDown" ? 1 : -1) + options.length) % options.length;
+          options[next]?.focus();
+        });
         trigger.addEventListener("click", event => {
           event.preventDefault();
           event.stopPropagation();
-          document.querySelectorAll(".option-menu").forEach(other => { if (other !== menu) other.classList.add("hidden"); });
+          document.querySelectorAll("[data-custom-select]").forEach(other => { if (other !== select) { other.querySelector(".option-menu").classList.add("hidden"); other.querySelector(".select-trigger").setAttribute("aria-expanded", "false"); } });
           menu.classList.toggle("hidden");
           trigger.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
         });
@@ -1713,11 +1735,13 @@
           event.preventDefault();
           event.stopPropagation();
           input.value = option.dataset.value;
-          trigger.querySelector("span").textContent = option.dataset.value;
+          trigger.querySelector("span").textContent = option.textContent;
           menu.querySelectorAll("[data-value]").forEach(item => item.setAttribute("aria-selected", String(item === option)));
           syncOtherField(select);
           menu.classList.add("hidden");
           trigger.setAttribute("aria-expanded", "false");
+          trigger.focus();
+          input.dispatchEvent(new Event("change", { bubbles: true }));
         }));
       });
       document.addEventListener("click", () => document.querySelectorAll("[data-custom-select]").forEach(select => {
@@ -1729,7 +1753,8 @@
     function syncCustomFields() {
       document.querySelectorAll("[data-custom-select]").forEach(select => {
         const value = select.querySelector('input[type="hidden"]').value;
-        select.querySelector(".select-trigger span").textContent = value || "請選擇";
+        const selected = [...select.querySelectorAll("[data-value]")].find(option => option.dataset.value === value);
+        select.querySelector(".select-trigger span").textContent = selected?.textContent || value || select.dataset.placeholder || "請選擇";
         select.querySelectorAll("[data-value]").forEach(item => item.setAttribute("aria-selected", String(item.dataset.value === value)));
         syncOtherField(select);
       });

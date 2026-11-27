@@ -1,3 +1,8 @@
+## 0.25.2 — 2026-11-27
+
+- Replace nine remaining native profile selects with platform menus, preserving every option value and the private-field empty state.
+- Synchronize displayed labels, expanded state and keyboard navigation across all profile menus.
+
 ## 0.25.1 — 2026-11-27
 
 - Compact phone registration: pair short fields, reduce spacing and heading size, and keep notes full-width.
