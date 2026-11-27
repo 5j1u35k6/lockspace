@@ -356,7 +356,7 @@
 
       <form id="loginForm" class="hidden">
         <label>帳號
-          <input name="account" autocomplete="username" pattern="[A-Za-z0-9._-]{3,24}" minlength="3" maxlength="24" required>
+          <input name="account" autocomplete="username" pattern="[A-Za-z0-9._\-]{3,24}" minlength="3" maxlength="24" required>
         </label>
         <label>密碼
           <input name="password" type="password" autocomplete="current-password" required minlength="6">
@@ -367,7 +367,7 @@
 
       <form id="quickSignupForm">
         <label>帳號
-          <input name="account" autocomplete="username" pattern="[A-Za-z0-9._-]{3,24}" minlength="3" maxlength="24" required>
+          <input name="account" autocomplete="username" pattern="[A-Za-z0-9._\-]{3,24}" minlength="3" maxlength="24" required>
         </label>
         <label>密碼
           <input name="password" type="password" autocomplete="new-password" required minlength="8" pattern="(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}" title="至少 8 個字元，包含一個英文大寫字母與一個特殊符號">
