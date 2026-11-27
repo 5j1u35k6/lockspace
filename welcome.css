@@ -225,3 +225,38 @@ input:not([type=checkbox]):not([type=radio]), select, textarea { font-size: 16px
   .member-action-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
   #dashboardPage.site-shell { padding: 24px 32px 40px; }
 }
+
+/* First visits explain the value before asking for an account. */
+.entry-intro { grid-row: 1; }
+.entry-intro h1 { margin: 16px 0 12px; font-size: clamp(28px, 7.5vw, 38px); line-height: 1.25; letter-spacing: -.035em; }
+.entry-intro p { margin: 0 0 12px; color: var(--muted); font-size: 15px; line-height: 1.75; }
+.entry-intro > a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; color: var(--lime); text-underline-offset: 4px; }
+#authPage > .auth-card { grid-row: 2; }
+#authPage > .welcome-story { grid-row: 3; }
+.startup-status { color: var(--muted); font-size: 14px; line-height: 1.6; }
+[data-startup-control]:disabled { opacity: .55; cursor: wait; }
+#authPage > .auth-card .eyebrow { margin-top: 18px; }
+#howItWorks { scroll-margin-top: 24px; }
+@media (max-width: 899px) {
+  .welcome-story > .welcome-brand, .welcome-story > .welcome-eyebrow, .welcome-story > h1,
+  .welcome-story > .welcome-intro, .welcome-story > .welcome-actions, .welcome-story > .welcome-trust { display: none; }
+  #authPage.auth-page { padding-top: 56px; gap: 20px; }
+  .welcome-features { margin-top: 16px; }
+}
+@media (min-width: 900px) {
+  .entry-intro { display: none; }
+  #authPage > .auth-card { grid-row: 1; }
+  #authPage > .welcome-story { grid-row: 1; }
+}
+html:not([lang="zh-Hant"]) .entry-intro { display: none; }
+html:not([lang="zh-Hant"]) #authPage > .auth-card { grid-row: 1; grid-column: 1; }
+.entry-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; }
+.entry-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; color: var(--lime); text-underline-offset: 4px; }
+.returning-visitor .entry-intro { display: none; }
+.returning-visitor #authPage > .auth-card { grid-row: 1; }
+@media (max-width: 899px) {
+  #authPage > .auth-card .eyebrow { display: none; }
+  #authPage > .auth-card h2 { font-size: 24px; }
+  #authPage > .auth-card .warning { padding: 8px 12px; margin: 12px 0 8px; }
+  #authPage > .auth-card .tabs { margin-top: 16px; }
+}

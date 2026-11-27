@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="application-version" content="0.23.0">
+  <meta name="application-version" content="0.24.0">
+  <link rel="icon" href="public/favicon.svg" type="image/svg+xml">
+  <link rel="modulepreload" href="vendor/firebase-12.3.0.min.js">
   <title>lockspace. 會員登入</title>
   <meta name="description" content="Lockspace 18+ 成人會員社群：每天獲得隨機任務、提交驗證，也能把自己的任務點子送進每日任務池。僅限成年人自願參與。">
   <style>
@@ -284,7 +286,7 @@
       .option-menu { grid-template-columns: 1fr; }
     }
   </style>
-  <link rel="stylesheet" href="welcome.css?v=0.23.0">
+  <link rel="stylesheet" href="welcome.css?v=0.24.0">
 </head>
 <body>
   <button id="authLanguageButton" class="language-button auth-language-button" type="button" aria-label="選擇語言" title="選擇語言"><span class="globe-icon" aria-hidden="true"></span></button>
@@ -304,23 +306,29 @@
       <section class="language-region"><h3>歐洲與其他</h3><div class="language-grid"><button class="language-option" data-language="en" type="button"><span class="language-flag">🌐</span>English</button><button class="language-option" data-language="de" type="button"><span class="language-flag">🇩🇪</span>Deutsch</button><button class="language-option" data-language="nl" type="button"><span class="language-flag">🇳🇱</span>Nederlands</button><button class="language-option" data-language="it" type="button"><span class="language-flag">🇮🇹</span>Italiano</button><button class="language-option" data-language="fr" type="button"><span class="language-flag">🇫🇷</span>Français</button><button class="language-option" data-language="eo" type="button"><span class="language-flag">🌍</span>Esperanto</button></div></section>
 <section class="language-region"><h3>亞洲</h3><div class="language-grid"><button class="language-option" data-language="hi" type="button"><span class="language-flag">🇮🇳</span>हिन्दी</button><button class="language-option" data-language="bn" type="button"><span class="language-flag">🇧🇩</span>বাংলা</button><button class="language-option" data-language="ur" type="button"><span class="language-flag">🇵🇰</span>اردو</button><button class="language-option" data-language="ar" type="button"><span class="language-flag">🇸🇦</span>العربية</button><button class="language-option" data-language="pa" type="button"><span class="language-flag">🇮🇳</span>ਪੰਜਾਬੀ</button><button class="language-option" data-language="fil" type="button"><span class="language-flag">🇵🇭</span>Filipino</button></div></section><section class="language-region"><h3>非洲</h3><div class="language-grid"><button class="language-option" data-language="sw" type="button"><span class="language-flag">🇹🇿</span>Kiswahili</button><button class="language-option" data-language="ha" type="button"><span class="language-flag">🇳🇬</span>Hausa</button><button class="language-option" data-language="pt" type="button"><span class="language-flag">🇵🇹</span>Português</button><button class="language-option" data-language="yo" type="button"><span class="language-flag">🇳🇬</span>Yorùbá</button><button class="language-option" data-language="ig" type="button"><span class="language-flag">🇳🇬</span>Igbo</button><button class="language-option" data-language="ln" type="button"><span class="language-flag">🇨🇩</span>Lingála</button><button class="language-option" data-language="am" type="button"><span class="language-flag">🇪🇹</span>አማርኛ</button></div></section><section class="language-region"><h3>歐洲</h3><div class="language-grid"><button class="language-option" data-language="ru" type="button"><span class="language-flag">🇷🇺</span>Русский</button><button class="language-option" data-language="es" type="button"><span class="language-flag">🇪🇸</span>Español</button><button class="language-option" data-language="pl" type="button"><span class="language-flag">🇵🇱</span>Polski</button><button class="language-option" data-language="uk" type="button"><span class="language-flag">🇺🇦</span>Українська</button><button class="language-option" data-language="ro" type="button"><span class="language-flag">🇷🇴</span>Română</button></div></section><section class="language-region"><h3>美洲</h3><div class="language-grid"><button class="language-option" data-language="ht" type="button"><span class="language-flag">🇭🇹</span>Kreyòl ayisyen</button><button class="language-option" data-language="jam" type="button"><span class="language-flag">🇯🇲</span>Patois</button><button class="language-option" data-language="qu" type="button"><span class="language-flag">🇵🇪</span>Runa Simi</button><button class="language-option" data-language="gn" type="button"><span class="language-flag">🇵🇾</span>Avañe'ẽ</button><button class="language-option" data-language="ay" type="button"><span class="language-flag">🇧🇴</span>Aymar aru</button></div></section><section class="language-region"><h3>大洋洲</h3><div class="language-grid"><button class="language-option" data-language="tpi" type="button"><span class="language-flag">🇵🇬</span>Tok Pisin</button><button class="language-option" data-language="sm" type="button"><span class="language-flag">🇼🇸</span>Gagana Samoa</button><button class="language-option" data-language="fj" type="button"><span class="language-flag">🇫🇯</span>Vakaviti</button><button class="language-option" data-language="hif" type="button"><span class="language-flag">🇫🇯</span>Fiji Hindi</button><button class="language-option" data-language="mi" type="button"><span class="language-flag">🇳🇿</span>Te Reo Māori</button></div></section>    </div>
   </dialog>
-  <main id="bootPage" class="boot-page">
-    <div><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div><p>正在確認登入狀態…</p></div>
+  <main id="bootPage" class="boot-page hidden">
+    <div><div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div><p id="memberLoadStatus" role="status">正在讀取你的會員資料…</p><button id="retryMemberButton" class="button primary hidden" type="button">重新連線</button></div>
   </main>
-  <main id="authPage" class="auth-page hidden">
+  <main id="authPage" class="auth-page">
+    <section class="entry-intro" data-no-translate lang="zh-Hant">
+      <span class="private-tag">18+ 成人會員社群</span>
+      <h1>每天一個挑戰，<br>照你的步調參與。</h1>
+      <p>接受任務、分享成果，也能提出自己的點子。先看看適不適合你，再決定參與。</p>
+      <div class="entry-links"><a href="#howItWorks">先了解怎麼玩 ↓</a><a id="welcomeLogin" href="#memberAccess">已有帳號？登入</a></div>
+    </section>
     <section class="welcome-story" lang="zh-Hant" data-no-translate aria-labelledby="welcomeTitle">
       <div class="welcome-brand" aria-label="Lockspace"><span class="welcome-brand-mark" aria-hidden="true">⌑</span>lockspace<span class="welcome-brand-dot" aria-hidden="true">.</span></div>
       <p class="welcome-eyebrow">18+ 成人會員社群 · 現正開放加入</p>
       <h1 id="welcomeTitle">不只接受挑戰。<br><span>你也能決定下一個任務。</span></h1>
       <p class="welcome-intro">每天獲得一個不同的任務、提交驗證、看看社群最近完成了什麼；你也可以送出自己的任務點子，通過審核後加入每日任務池。</p>
       <div class="welcome-actions">
-        <button id="welcomeSignup" type="button">立即加入 Lockspace ↗</button>
+        <button id="welcomeSignup" type="button" disabled data-startup-control>立即加入 Lockspace ↗</button>
         <a href="https://x.com/LockspaceTW" target="_blank" rel="noopener noreferrer">看看官方 X</a>
       </div>
       <div class="welcome-trust" aria-label="加入前重點"><span>🔒 登入後才可查看會員內容</span><span>🎲 每天不同任務</span><span>💡 會員也能出題</span></div>
       <p class="welcome-entry-note"><strong>18+</strong> 僅限成年人自主參與。所有任務都可自行決定是否參加，也可以隨時停止。</p>
 
-      <ul class="welcome-features" aria-label="平台功能">
+      <ul id="howItWorks" class="welcome-features" aria-label="平台功能">
         <li><span class="welcome-feature-no">01 / DAILY</span><h2>每天都有新的任務</h2><p>每天取得自己的任務，完成後可提交驗證。</p></li>
         <li><span class="welcome-feature-no">02 / CREATE</span><h2>你的點子真的能進任務池</h2><p>提出任務想法，通過審核後可能被其他會員抽到。</p></li>
         <li><span class="welcome-feature-no">03 / COMMUNITY</span><h2>不只是自己完成</h2><p>查看最新驗證紀錄，參與會員間的任務驗證與互動。</p></li>
@@ -333,18 +341,20 @@
     </section>
     <section class="auth-card" id="memberAccess" aria-labelledby="memberAccessTitle">
       <div class="brand"><span class="brand-mark">⌑</span>lockspace<span class="brand-dot">.</span></div>
-      <p class="eyebrow">MEMBER ACCESS</p>
-      <h2 id="memberAccessTitle">登入 Lockspace</h2>
-      <p class="muted">私人任務與會員驗證空間。</p>
+      <p class="eyebrow">你的參與，從這裡開始</p>
+      <h2 id="memberAccessTitle">加入 Lockspace</h2>
+      <p class="muted">建立帳號 → 完成會員資料與成年查驗 → 查看任務</p>
+      <p id="startupStatus" class="startup-status" role="status" aria-live="polite">正在準備安全登入…</p><button id="retryStartup" class="button secondary hidden" type="button">重新載入</button>
+      <noscript><p class="error">請開啟瀏覽器的 JavaScript，再重新載入以登入。</p></noscript>
       <div class="callout warning"><strong>僅限年滿 18 歲使用</strong></div>
       <div class="policy-links"><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知、條款與懲處規範</a></div>
 
       <div class="tabs" role="tablist" aria-label="會員入口">
-        <button class="tab active" id="loginTab" type="button">帳號登入</button>
-        <button class="tab" id="signupTab" type="button">註冊會員</button>
+        <button class="tab" id="loginTab" type="button" disabled data-startup-control>帳號登入</button>
+        <button class="tab active" id="signupTab" type="button" disabled data-startup-control>註冊會員</button>
       </div>
 
-      <form id="loginForm">
+      <form id="loginForm" class="hidden">
         <label>帳號
           <input name="account" autocomplete="username" pattern="[A-Za-z0-9._-]{3,24}" minlength="3" maxlength="24" required>
         </label>
@@ -352,10 +362,10 @@
           <input name="password" type="password" autocomplete="current-password" required minlength="6">
         </label>
         <p id="loginError" class="error hidden" role="alert"></p>
-        <button class="button primary full" type="submit">登入並繼續</button>
+        <button class="button primary full" type="submit" disabled data-startup-control>登入並繼續</button>
       </form>
 
-      <form id="quickSignupForm" class="hidden">
+      <form id="quickSignupForm">
         <label>帳號
           <input name="account" autocomplete="username" pattern="[A-Za-z0-9._-]{3,24}" minlength="3" maxlength="24" required>
         </label>
@@ -367,9 +377,9 @@
           <input name="confirmPassword" type="password" autocomplete="new-password" required minlength="8">
         </label>
         <p id="signupError" class="error hidden" role="alert"></p>
-        <button class="button primary full" type="submit">下一步：填寫個人資料</button>
+        <button class="button primary full" type="submit" disabled data-startup-control>建立帳號並繼續</button>
       </form>
-      <p class="version-stamp">Lockspace v0.23.0</p>
+      <p class="version-stamp">Lockspace v0.24.0</p>
     </section>
   </main>
 
@@ -561,7 +571,7 @@
       <label class="check-row"><input type="checkbox" name="publicDataConsent" required><span>我已閱讀並同意<a href="privacy.html" target="_blank">隱私權政策</a>及<a href="terms.html" target="_blank">平台使用須知、條款與懲處規範</a>；我同意標示為「公開」的已填資料顯示給平台會員，私人道具庫不包含在公開範圍內。</span></label>
       <p id="profileError" class="error hidden" role="alert" tabindex="-1"></p>
       <button id="profileSubmitButton" class="button primary full" type="submit">完成註冊並進入任務</button>
-      <p class="version-stamp">Lockspace v0.23.0</p>
+      <p class="version-stamp">Lockspace v0.24.0</p>
     </form>
   </main>
 
@@ -609,7 +619,7 @@
         <button id="loadMoreFeedButton" class="button secondary full feed-more hidden" type="button" data-no-translate>載入更多紀錄</button>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.23.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.24.0</span></footer>
   </main>
 
   <main id="taskPage" class="site-shell hidden">
@@ -633,7 +643,7 @@
         </form>
       </section>
     </div>
-    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.23.0</span></footer>
+    <footer class="site-footer"><span>僅限年滿 18 歲</span><a href="privacy.html">隱私權政策</a><a href="terms.html">平台使用須知與懲處規範</a><span>Lockspace v0.24.0</span></footer>
   </main>
 
   <dialog id="ageGateDialog" class="modal-dialog">
@@ -679,10 +689,11 @@
     <div class="calendar-actions"><button id="calendarClose" class="button" type="button">取消</button></div>
   </dialog>
 
+  <script src="entry.js?v=0.24.0"></script>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, orderBy, limit, startAfter, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    import { initializeApp } from "./vendor/firebase-12.3.0.min.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "./vendor/firebase-12.3.0.min.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, query, where, orderBy, limit, startAfter, serverTimestamp } from "./vendor/firebase-12.3.0.min.js";
 
     const LANGUAGE_KEY = "lockspace-language-v1";
     const TRANSLATIONS = {
@@ -820,6 +831,7 @@
     let translatingPage = false;
     function translatePage() {
       if (translatingPage) return;
+      if (document.documentElement.lang === "zh-Hant" && document.getElementById("languageSelect")?.value === "zh-Hant") return;
       translatingPage = true;
       const language = document.getElementById("languageSelect")?.value || "zh-Hant";
       const dictionary = language === "zh-Hant" ? {} : (TRANSLATIONS[language] || {});
@@ -919,8 +931,9 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    const APP_VERSION = "0.23.0";
+    const APP_VERSION = "0.24.0";
     const RELEASE_NOTES = [
+      { version: "0.24.0", date: "2026-11-27", changes: ["加入前即可閱讀玩法，首次註冊與回訪登入各有清楚入口。", "照片先顯示、驗證結果接著載入；返回首頁保留已讀動態。", "連線逾時可以重試，短暫斷線不會自動登出。"] },
       { version: "0.23.0", date: "2026-11-27", changes: ["手機介面更精簡，今日任務與提案更好找。", "語言按需載入，動態每批載入 5 筆，減少等待與流量。"] },
       { version: "0.22.0", date: "2026-11-03", changes: ["重新設計登入入口與會員首頁，讓每日任務、任務提案與最新驗證動態更容易找到。", "加入更清楚的功能亮點與加入引導，新會員可以更快了解 Lockspace 的玩法。", "繁體中文介面改用台灣常用詞彙，並統一會員可見的操作文字。"] },
       { version: "0.21.1", date: "2026-10-31", changes: ["後台補上會員證件查驗操作，可通過、退回補件或改回待查驗。", "儲存時核對會員與照片版本，並同步更新列表與統計。"] },
@@ -1239,6 +1252,7 @@
       document.getElementById("memberAccess").scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
       quickSignupForm.querySelector("input[name=account]")?.focus({ preventScroll: true });
     });
+    document.getElementById("welcomeLogin").addEventListener("click", () => setAuthMode("login"));
     document.getElementById("logoutButton").addEventListener("click", logout);
     document.getElementById("editProfileButton").addEventListener("click", editProfile);
     document.getElementById("openTaskButton").addEventListener("click", openTask);
@@ -1259,17 +1273,26 @@
     document.getElementById("closeTaskIdea").addEventListener("click", () => document.getElementById("taskIdeaDialog").close());
     showAgeGateIfNeeded();
 
+    let loginAttempt = null;
     loginForm.addEventListener("submit", async event => {
       event.preventDefault();
+      if (loginAttempt) { showError("loginError", "上一個登入要求仍在確認，請稍候或重新載入。"); return; }
       const data = Object.fromEntries(new FormData(loginForm).entries());
       const button = loginForm.querySelector('button[type="submit"]');
       hideError("loginError");
       button.disabled = true;
       button.textContent = "登入中…";
       try {
-        await signInWithEmailAndPassword(auth, accountEmail(data.account), data.password);
-      } catch {
-        showError("loginError", "帳號或密碼不正確。");
+        if (!loginAttempt) {
+          loginAttempt = signInWithEmailAndPassword(auth, accountEmail(data.account), data.password);
+          const currentAttempt = loginAttempt;
+          const clearAttempt = () => { if (loginAttempt === currentAttempt) loginAttempt = null; };
+          currentAttempt.then(clearAttempt, clearAttempt);
+        }
+        await withTimeout(loginAttempt, 12000, "login-timeout");
+      } catch (error) {
+        const connection = error.message === "login-timeout" || error.code === "auth/network-request-failed";
+        showError("loginError", connection ? "連線暫時不穩，尚未確認登入。請稍候再試，或重新載入頁面。" : error.code === "auth/too-many-requests" ? "嘗試次數較多，請稍候再登入。" : "帳號或密碼不正確。");
       } finally {
         button.disabled = false;
         button.textContent = "登入並繼續";
@@ -1397,6 +1420,9 @@
 
     function setAuthMode(mode) {
       const signup = mode === "signup";
+      document.getElementById("memberAccessTitle").textContent = signup ? "加入 Lockspace" : "歡迎回來";
+      loginTab.setAttribute("aria-selected", String(!signup));
+      signupTab.setAttribute("aria-selected", String(signup));
       loginTab.classList.toggle("active", !signup);
       signupTab.classList.toggle("active", signup);
       loginForm.classList.toggle("hidden", signup);
@@ -1427,7 +1453,9 @@
 
     function showLoginPage() {
       showOnly(authPage);
-      setAuthMode("login");
+      let returning = false;
+      try { returning = localStorage.getItem("lockspace-returning-member") === "true"; } catch {}
+      setAuthMode(returning ? "login" : "signup");
       showAgeGateIfNeeded();
     }
 
@@ -1459,9 +1487,10 @@
 
     async function renderDashboard() {
       const profile = state.member.profile;
+      document.getElementById("memberHeroTitle").textContent = `${profile.displayName || state.member.account}，今天想挑戰什麼？`;
       document.getElementById("memberChip").textContent = `${profile.displayName || state.member.account} · 已註冊`;
       showOnly(dashboardPage);
-      const results = await Promise.allSettled([checkAdmin(), loadSubmissions(), loadFeedbackNotifications()]);
+      const results = await Promise.allSettled([checkAdmin(), state.posts.length && Date.now() - feedLoadedAt < 60000 ? Promise.resolve(renderFeed()) : loadSubmissions(), loadFeedbackNotifications()]);
       results.forEach(result => {
         if (result.status === "rejected") console.warn("Optional dashboard data could not be loaded.", result.reason);
       });
@@ -1469,11 +1498,15 @@
 
     async function openTask() {
       const button = document.getElementById("openTaskButton");
+      const viewer = state.member?.uid;
+      if (!viewer || button.disabled) return;
       button.disabled = true;
       const label = button.querySelector("strong");
       if (label) label.textContent = "載入今日任務…";
       try {
-        state.dailyTask = await loadOrCreateDailyTask();
+        const task = await withTimeout(loadOrCreateDailyTask(), 12000, "task-load-timeout");
+        if (state.member?.uid !== viewer) return;
+        state.dailyTask = task;
         renderDailyTask();
         showOnly(taskPage);
       } catch {
@@ -1514,9 +1547,15 @@
       return { ...task, instruction };
     }
 
-    async function loadOrCreateDailyTask() {
-      const date = taipeiDate();
-      const reference = doc(db, "dailyMemberTasks", `${state.member.uid}_${date}`);
+    const pendingDailyTasks = new Map();
+    function loadOrCreateDailyTask() {
+      const uid = state.member.uid, date = taipeiDate(), key = `${uid}_${date}`;
+      if (state.dailyTask?.ownerId === uid && state.dailyTask.taskDate === date) return Promise.resolve(normalizeTask(state.dailyTask));
+      if (!pendingDailyTasks.has(key)) pendingDailyTasks.set(key, createDailyTask(uid, date).finally(() => pendingDailyTasks.delete(key)));
+      return pendingDailyTasks.get(key);
+    }
+    async function createDailyTask(uid, date) {
+      const reference = doc(db, "dailyMemberTasks", `${uid}_${date}`);
       const existing = await getDoc(reference);
       if (existing.exists()) return normalizeTask(existing.data());
       const approvedSnapshot = await getDocs(query(collection(db, "taskIdeas"), where("status", "==", "approved")));
@@ -1527,7 +1566,8 @@
       const category = categories[randomValue[0] % categories.length];
       crypto.getRandomValues(randomValue);
       const selected = category === "code" ? CODE_TASK : category === "idea" ? approved[randomValue[0] % approved.length] : generateActionTask();
-      const task = { ownerId: state.member.uid, taskDate: date, taskCode: randomTaskCode(), type: selected.type, instruction: selected.instruction, sourceIdeaId: selected.sourceIdeaId || "", createdAt: new Date().toISOString() };
+      if (state.member?.uid !== uid) throw new Error("session-changed");
+      const task = { ownerId: uid, taskDate: date, taskCode: randomTaskCode(), type: selected.type, instruction: selected.instruction, sourceIdeaId: selected.sourceIdeaId || "", createdAt: new Date().toISOString() };
       await setDoc(reference, task);
       return normalizeTask(task);
     }
@@ -1917,6 +1957,7 @@
         document.getElementById("previewFrame").classList.add("hidden");
         state.previewUrl = "";
         await renderDashboard();
+        await loadSubmissions();
       } catch {
         showError("uploadError", "提交失敗，請稍後再試。");
       } finally {
@@ -1925,6 +1966,8 @@
     }
 
     const FEED_PAGE_SIZE = 5;
+    const reviewReady = new Set();
+    let feedLoadedAt = 0;
     let feedLoadRevision = 0, feedCursor = null, feedHasMore = false, feedLoading = false, profileLoadRevision = 0;
     const reviewLocks = new Set(), acknowledgedReviews = new Map();
     let reviewWriteEpoch = 0;
@@ -1994,15 +2037,19 @@
         const constraints = [orderBy("createdAt", "desc")];
         if (append && feedCursor) constraints.push(startAfter(feedCursor));
         constraints.push(limit(FEED_PAGE_SIZE));
-        const { snapshot, reviews } = await withTimeout((async () => {
-          const snapshot = await getDocs(query(collection(db, "submissions"), ...constraints));
-          const ids = snapshot.docs.map(item => item.id);
-          const reviewSnapshot = ids.length ? await getDocs(query(collection(db, "reviews"), where("submissionId", "in", ids))) : null;
-          return { snapshot, reviews: reviewSnapshot ? reviewSnapshot.docs.map(item => ({ id:item.id, ...item.data() })) : [] };
-        })(), 12000, "feed-load-timeout");
+        const snapshot = await withTimeout(getDocs(query(collection(db, "submissions"), ...constraints)), 12000, "feed-load-timeout");
         if (revision !== feedLoadRevision || state.member?.uid !== uid) return false;
         const posts = snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
+        const ids = posts.map(post => post.id);
+        if (!append) reviewReady.clear();
+        ids.forEach(id => reviewReady.delete(id));
         state.posts = [...new Map([...(append ? state.posts : []), ...posts].map(post => [post.id, post])).values()];
+        // Show available photos immediately; voting stays unavailable until reviews arrive.
+        renderFeed();
+        const reviewSnapshot = ids.length ? await withTimeout(getDocs(query(collection(db, "reviews"), where("submissionId", "in", ids))), 12000, "review-load-timeout") : null;
+        if (revision !== feedLoadRevision || state.member?.uid !== uid) return false;
+        const reviews = reviewSnapshot ? reviewSnapshot.docs.map(item => ({ id:item.id, ...item.data() })) : [];
+        ids.forEach(id => reviewReady.add(id));
         // A read started before an acknowledged vote may still return an older snapshot.
         const loadedIds = new Set(state.posts.map(post => post.id));
         const newerVotes = [...acknowledgedReviews.values()].filter(item => item.epoch > reviewEpochAtStart && item.review.reviewerId === uid && loadedIds.has(item.review.submissionId)).map(item => item.review);
@@ -2011,6 +2058,7 @@
         feedCursor = snapshot.docs[snapshot.docs.length - 1] || (append ? feedCursor : null);
         feedHasMore = snapshot.docs.length === FEED_PAGE_SIZE;
         feedStatusKind = "";
+        feedLoadedAt = Date.now();
         renderFeed();
         return true;
       } catch (error) {
@@ -2086,7 +2134,7 @@
         const totalReviews = approved + rejected;
         const matchRate = totalReviews ? Math.round((approved / totalReviews) * 100) : 0;
         const mine = reviews.find(review => review.reviewerId === state.member.uid);
-        const reviewControls = post.ownerId === state.member.uid
+        const reviewControls = !reviewReady.has(post.id) ? `<span class="review-result">正在讀取驗證結果，照片可以先看。</span>` : post.ownerId === state.member.uid
           ? `<span class="review-result">符合率 ${matchRate}% · ${totalReviews} 人驗證</span>`
           : mine
             ? `<span class="review-result">你已選擇${mine.decision === "approved" ? "符合條件" : "不符合條件"} · 符合率 ${matchRate}% · ${totalReviews} 人驗證</span>`
@@ -2284,14 +2332,21 @@
     }
 
     let authRevision = 0;
-    onAuthStateChanged(auth, async user => {
+    async function handleAuthState(user) {
       const revision = ++authRevision;
       // Auth can notify before createUser resolves or after a failed profile write.
       // Neither callback should replace an in-progress registration draft.
       if (user && (state.registrationSaving || state.registrationDraftUid === user.uid)) return;
-      showOnly(bootPage);
+      if (user) {
+        showOnly(bootPage);
+        document.getElementById("memberLoadStatus").textContent = "正在讀取你的會員資料…";
+        document.getElementById("retryMemberButton").classList.add("hidden");
+      }
       if (!user) {
         state.member = null;
+        state.dailyTask = null;
+        reviewReady.clear();
+        feedLoadedAt = 0;
         state.registrationDraftUid = null;
         ++feedLoadRevision;
         ++profileLoadRevision;
@@ -2323,11 +2378,11 @@
       }
       let snapshot;
       try {
-        snapshot = await getDoc(doc(db, "members", user.uid));
+        snapshot = await withTimeout(getDoc(doc(db, "members", user.uid)), 10000, "member-load-timeout");
       } catch {
         if (revision !== authRevision) return;
-        state.authNotice = "無法讀取會員資料，請檢查網路後再試。";
-        await signOut(auth);
+        document.getElementById("memberLoadStatus").textContent = "連線比平常久。你的登入仍保留，請再試一次。";
+        document.getElementById("retryMemberButton").classList.remove("hidden");
         return;
       }
       if (revision !== authRevision) return;
@@ -2344,6 +2399,7 @@
         showOnly(registrationPage);
         return;
       }
+      try { localStorage.setItem("lockspace-returning-member", "true"); } catch {}
       state.member = {
         uid: user.uid,
         account: snapshot.data().username || user.email.split("@")[0],
@@ -2354,7 +2410,10 @@
       const taskProps = await loadMemberTaskProps(user.uid);
       if (revision !== authRevision || state.member?.uid !== user.uid) return;
       state.member.taskProps = taskProps;
-    });
+    }
+    onAuthStateChanged(auth, handleAuthState);
+    document.getElementById("retryMemberButton").addEventListener("click", () => void handleAuthState(auth.currentUser));
+    window.dispatchEvent(new Event("lockspace-ready"));
 
     function accountEmail(username) {
       return `${String(username).trim().toLowerCase()}@members.lockspace.app`;
