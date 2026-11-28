@@ -1,3 +1,11 @@
+## 0.26.0 — 2026-11-28
+
+- Bind admin login before optional language downloads; bundle the admin Firebase APIs locally and expose startup, sign-in, permission-check and retry states.
+- Retain admin sessions on network errors, bound database reads, and prevent duplicate in-flight sign-in requests.
+- Track report and review writes through pending, slow, failed and confirmed states; retain status across feed redraws and prevent duplicate submissions.
+- Add a five-step guide after registration, per-account progress on this device, skip/back/next controls, and a My Account entry for reopening it.
+- Validate with 25 automated tests plus mobile browser registration, onboarding, write delay/failure/retry and admin access recovery simulations.
+
 ## 0.25.2 — 2026-11-27
 
 - Replace nine remaining native profile selects with platform menus, preserving every option value and the private-field empty state.

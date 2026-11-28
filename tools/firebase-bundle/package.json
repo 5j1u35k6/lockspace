@@ -5,6 +5,7 @@
   },
   "private": true,
   "scripts": {
-    "build": "esbuild entry.js --bundle --format=esm --minify --target=es2020 --legal-comments=inline --outfile=../../vendor/firebase-12.3.0.min.js"
+    "build": "esbuild entry.js --bundle --format=esm --minify --target=es2020 --legal-comments=inline --outfile=../../vendor/firebase-12.3.0.min.js",
+    "build:admin": "esbuild admin-entry.js --bundle --format=esm --minify --target=es2020 --legal-comments=inline --outfile=../../vendor/firebase-admin-12.3.0.min.js"
   }
 }
