@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-version" content="0.22.0">
+  <meta name="application-version" content="0.26.0">
+  <link rel="icon" href="public/favicon.svg" type="image/svg+xml">
+  <link rel="modulepreload" href="vendor/firebase-admin-12.3.0.min.js">
   <title>lockspace. 後台管理</title>
   <style>
     :root{color-scheme:dark;--bg:#090a09;--panel:#121412;--line:#30352f;--text:#f5f6f3;--muted:#aeb4ab;--lime:#b6ff70;--red:#ff91a6;--amber:#efd59e}
@@ -20,14 +22,17 @@
     <form id="loginForm">
       <label>管理員帳號<input name="account" autocomplete="username" required></label>
       <label>密碼<input name="password" type="password" autocomplete="current-password" required></label>
-      <p id="loginError" class="error hidden"></p>
-      <button class="button primary" type="submit">登入</button>
+      <p id="loginError" class="error hidden" role="alert"></p>
+      <p id="adminLoginStatus" class="muted" role="status" aria-live="polite">正在準備登入…</p>
+      <button class="button primary" type="submit" disabled>準備登入…</button>
+      <button id="retryAdminAccess" class="button hidden" type="button">重新確認管理權限</button>
+      <button id="reloadLogin" class="button hidden" type="button">重新載入</button>
     </form>
-    <p class="version-stamp">Lockspace Admin v0.22.0</p>
+    <p class="version-stamp">Lockspace Admin v0.26.0</p>
   </main>
 
   <main id="dashboard" class="shell hidden">
-    <header class="top"><div><div class="brand">lockspace<b>.</b> 管理</div><span class="version-stamp">v0.22.0</span></div><div class="actions"><button id="refreshAll" class="button" type="button" data-admin-copy="refresh" data-no-translate>重新整理</button><a class="button" href="index.html">會員頁</a><button id="logout" class="button" type="button">登出</button></div></header>
+    <header class="top"><div><div class="brand">lockspace<b>.</b> 管理</div><span class="version-stamp">v0.26.0</span></div><div class="actions"><button id="refreshAll" class="button" type="button" data-admin-copy="refresh" data-no-translate>重新整理</button><a class="button" href="index.html">會員頁</a><button id="logout" class="button" type="button">登出</button></div></header>
     <p id="dashboardError" class="error hidden" role="alert" data-no-translate></p>
     <p id="actionError" class="error hidden" role="alert" data-no-translate></p>
     <p id="actionStatus" class="action-status hidden" role="status" data-no-translate></p>
@@ -53,16 +58,18 @@
     </section><div class="proof-body"><img id="proofImage" alt="證件生日照片"></div></dialog>
   <dialog id="replyDialog"><form id="replyForm"><div class="proof-head"><strong>回覆會員</strong><button id="closeReply" class="button" type="button">關閉</button></div><div class="reply-body"><label>回覆內容<textarea name="reply" maxlength="1200" required></textarea></label><p id="replyHint" class="reply-hint" role="status" data-no-translate></p><p id="replyError" class="error hidden" role="alert" data-no-translate></p></div><div class="reply-actions"><button class="button primary" type="submit">送出回覆</button></div></form></dialog>
 
-  <script src="i18n-ui-1.js"></script><script src="i18n-ui-2.js"></script><script src="i18n-ui-3.js"></script><script src="i18n-ui-4.js"></script>
-  <script src="i18n-content.js"></script>
-  <script>LockspaceI18n.init();</script>
+  <script src="admin-startup.js"></script>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-    const APP_VERSION="0.22.0";
+    import { createAdminLogin, withDeadline } from "./admin-login.js";
+    import { initializeApp } from "./vendor/firebase-admin-12.3.0.min.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "./vendor/firebase-admin-12.3.0.min.js";
+    import { getFirestore, collection, doc, getDoc as getDocRaw, getDocs as getDocsRaw, setDoc, updateDoc, deleteDoc, serverTimestamp, runTransaction } from "./vendor/firebase-admin-12.3.0.min.js";
+    const getDoc = (...args) => withDeadline(getDocRaw(...args));
+    const getDocs = (...args) => withDeadline(getDocsRaw(...args));
+    const APP_VERSION="0.26.0";
     const config={apiKey:"AIzaSyCaM21hcPsRHxJ-YdIzWpjPu0aneRPPvOI",authDomain:"lockspace-19edc.firebaseapp.com",projectId:"lockspace-19edc",storageBucket:"lockspace-19edc.firebasestorage.app",messagingSenderId:"726438557640",appId:"1:726438557640:web:d0e51ec0280cd1066e32fd"};
-    const app=initializeApp(config,"lockspace-admin"),auth=getAuth(app),db=getFirestore(app);await setPersistence(auth,browserSessionPersistence);
+    const app=initializeApp(config,"lockspace-admin"),auth=getAuth(app),db=getFirestore(app);
+    const persistenceReady = setPersistence(auth,browserSessionPersistence);
     const login=document.getElementById("login"),dashboard=document.getElementById("dashboard"),rows=document.getElementById("memberRows"),taskRows=document.getElementById("taskRows"),ideaRows=document.getElementById("ideaRows"),feedbackRows=document.getElementById("feedbackRows");
     // New controls use Traditional Chinese, Simplified Chinese, or English fallback.
     // Keeping their copy out of the document translator prevents mixed-language strings.
@@ -285,7 +292,18 @@
     });
     document.querySelector("[data-global-language] select")?.addEventListener("change", () => { syncAdminCopy(); });
     syncAdminCopy();
-    document.getElementById("loginForm").addEventListener("submit",async event=>{event.preventDefault();const data=Object.fromEntries(new FormData(event.target));try{await signInWithEmailAndPassword(auth,accountEmail(data.account),data.password)}catch{showError("帳號、密碼或管理權限不正確。")}});
+    const adminLogin = createAdminLogin({
+      auth, signIn: (account, password) => signInWithEmailAndPassword(auth, accountEmail(account), password),
+      signOut: () => signOut(auth), checkAccess: async user => (await getDoc(doc(db, "admins", user.uid))).exists(),
+      showLogin: () => { resetProofViewer(); login.classList.remove("hidden"); dashboard.classList.add("hidden"); },
+      showDashboard: () => { login.classList.add("hidden"); dashboard.classList.remove("hidden"); loadAll().catch(error => console.warn("Admin data load failed", error)); },
+      showError: message => { showError(message); document.getElementById("reloadLogin").classList.toggle("hidden", !message); },
+      setStatus: message => { document.getElementById("adminLoginStatus").textContent = message; },
+      setBusy: busy => { const button = document.querySelector('#loginForm button[type="submit"]'); button.disabled = busy; button.textContent = busy ? "正在確認…" : "登入"; },
+      setRetry: visible => document.getElementById("retryAdminAccess").classList.toggle("hidden", !visible)
+    });
+    document.getElementById("loginForm").addEventListener("submit", event => { event.preventDefault(); const data = Object.fromEntries(new FormData(event.target)); void adminLogin.submit(data.account, data.password); });
+    document.getElementById("retryAdminAccess").addEventListener("click", () => void adminLogin.verify(auth.currentUser));
     document.getElementById("logout").addEventListener("click",()=>signOut(auth));
     document.getElementById("closeProof").addEventListener("click", closeProofViewer);
     document.getElementById("proofDialog").addEventListener("cancel", event => { event.preventDefault(); closeProofViewer(); });
@@ -298,7 +316,10 @@
     document.getElementById("replyDialog").addEventListener("cancel", closeReplyDraft);
     document.getElementById("replyForm").elements.reply.addEventListener("input", () => { adminMessage("replyError", ""); updateReplyState(); });
     document.getElementById("replyForm").addEventListener("submit",submitFeedbackReply);
-    onAuthStateChanged(auth,async user=>{if(!user){resetProofViewer();login.classList.remove("hidden");dashboard.classList.add("hidden");return}if(proofViewer.adminUid && proofViewer.adminUid!==user.uid)resetProofViewer();try{const admin=await getDoc(doc(db,"admins",user.uid));if(!admin.exists()){showError("這個帳號沒有管理權限。");await signOut(auth);return}login.classList.add("hidden");dashboard.classList.remove("hidden");await loadAll()}catch{await signOut(auth);showError("管理資料載入失敗，請檢查網路後再試。")}});
+    persistenceReady.then(() => {
+      window.dispatchEvent(new CustomEvent("lockspace-admin-ready"));
+      onAuthStateChanged(auth, user => void adminLogin.verify(user));
+    }).catch(() => window.dispatchEvent(new CustomEvent("lockspace-admin-ready", { detail: { failed: true } })));
     function verificationState(member) {
       const status = member.verification?.status;
       return ["pending", "approved", "rejected"].includes(status) ? status : "unknown";
@@ -620,7 +641,7 @@
     }
     async function deleteFeedback(button){if(!confirm("確定刪除這筆回饋？此操作無法復原。"))return;button.disabled=true;const original=button.textContent;button.textContent="刪除中…";try{await deleteDoc(doc(db,"feedback",button.dataset.feedbackDelete));await loadFeedback()}catch(error){button.disabled=false;button.textContent=original;alert(`回饋刪除失敗：${error.message||"請稍後再試"}`)}}
     function formatDate(value){if(!value)return "—";const date=new Date(value);return Number.isNaN(date.getTime())?String(value):date.toLocaleString("zh-TW",{timeZone:"Asia/Taipei"})}
-    function showError(message){const box=document.getElementById("loginError");box.textContent=message;box.classList.remove("hidden")}
+    function showError(message){const box=document.getElementById("loginError");box.textContent=message;box.classList.toggle("hidden", !message)}
     function accountEmail(username){return `${String(username).trim().toLowerCase()}@members.lockspace.app`}
     function esc(value){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[char])}
   </script>

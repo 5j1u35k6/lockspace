@@ -291,3 +291,23 @@ html:not([lang="zh-Hant"]) #authPage > .auth-card { grid-row: 1; grid-column: 1;
   #profileForm .prop-options { gap: 2px 8px; }
   #profileForm .check-row { margin: 10px 0; line-height: 1.5; }
 }
+
+.guide-dialog { width: min(520px, calc(100vw - 24px)); padding: 0; border-radius: 12px; max-height: calc(100dvh - 32px); overflow: auto; }
+.guide-head, .guide-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; }
+.guide-head { border-bottom: 1px solid var(--line); font-size: 14px; }
+.guide-head b { margin-left: 8px; color: var(--lime); }
+.guide-content { padding: 20px; }
+.guide-content h2 { margin-top: 14px; font-size: 23px; line-height: 1.4; }
+.guide-content p { line-height: 1.8; font-size: 16px; }
+.guide-icon { color: var(--lime); font-size: 28px; }
+.guide-entry { color: var(--muted); }
+.guide-example { padding: 15px; border: 1px solid var(--line); border-radius: 6px; color: var(--lime); background: #b6ff7008; font-weight: 700; }
+.guide-actions { border-top: 1px solid var(--line); }
+.guide-dialog button { min-height: 44px; }
+.guide-actions button { flex: 1; }
+.guide-actions button:disabled { opacity: .4; cursor: default; }
+.guide-dialog { border: 1px solid var(--line); background: var(--panel); color: var(--text); }
+.guide-dialog::backdrop { background: #000b; }
+.guide-content h2:focus { outline: none; }
+.guide-head { position: sticky; top: 0; z-index: 1; background: var(--panel); }
+.guide-actions { position: sticky; bottom: 0; background: var(--panel); }
